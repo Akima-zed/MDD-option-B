@@ -1,0 +1,142 @@
+# Documentation et rapport du projet MDD
+
+**Auteur** : [Nom et prénom de l’étudiant]  
+**Version** : [ex. 1.0.0]  
+**Date** : [JJ/MM/AAAA]  
+
+---
+
+## 1. Présentation générale du projet
+
+### 1.1 Objectifs du projet
+Brièvement, présentez le but du projet, les besoins métiers et les principales fonctionnalités développées.  
+Expliquez le contexte de l’entreprise et la valeur ajoutée attendue du produit.
+
+#### Analyse initiale (Étape 1)
+
+**Flux utilisateurs principaux du MVP :**
+1. Inscription d’un utilisateur
+2. Connexion (authentification JWT)
+3. Consultation et modification du profil utilisateur
+4. Consultation de la liste des thèmes, abonnement/désabonnement à un thème
+5. Création d’un article (auteur et date générés automatiquement)
+6. Consultation d’un article
+7. Consultation du fil d’actualité (liste d’articles triés)
+8. Ajout d’un commentaire sous un article
+
+**Entités principales du domaine :**
+- **Utilisateur** : informations personnelles, identifiants, rôles, abonnements, articles publiés, commentaires
+- **Thème** : nom, description, liste d’abonnés
+- **Article** : titre, contenu, auteur, date de création, thème associé, liste de commentaires
+- **Commentaire** : contenu, auteur, date, article associé
+
+Ces éléments serviront de base à la conception technique et à la modélisation des données lors de l’étape suivante.
+
+### 1.2 Périmètre fonctionnel
+Présentez les fonctionnalités livrées (liste synthétique), en précisant leur état (terminée / en cours / à venir).
+
+| Fonctionnalités                | Description                              | Statut        |
+|---------------------------------|------------------------------------------|---------------|
+| Création d’un compte utilisateur | Formulaire et validation d’inscription   |               |
+| Publication d’un article        | Gestion CRUD via API                     |               |
+| Commentaires                    | Association article/commentaires         |               |
+| Authentification                | Sécurisation JWT                         |               |
+
+---
+
+## 2. Architecture et conception technique
+
+### 2.1 Schéma global de l’architecture
+![Diagramme de l'architecture](lien_vers_diagramme)
+
+Intégrez un diagramme d’architecture (UML, C4 ou équivalent) illustrant les liens entre :
+
+- Le front-end,
+- L’API,
+- Le back-end et la base de données,
+- Les outils externes ou services tiers.
+
+Ajoutez une légende explicative et précisez les choix d’organisation technique (modules, dossiers, conventions internes).
+
+### 2.2 Choix techniques
+Présentez ici chaque choix structurant du projet.
+
+| Éléments choisis   | Type                | Objectif du choix                           | Justification                                   |
+|--------------------|---------------------|---------------------------------------------|-------------------------------------------------|
+| Angular 19         | Framework front-end | Structuration de l’application et gestion de la réactivité | Respect des standards du parcours et cohérence avec les maquettes Figma |
+
+### 2.3 API et schémas de données
+Présentez ici la conception et la structuration de votre API :
+
+| Endpoint         | Méthode | Description                     | Corps / Réponse           |
+|------------------|---------|---------------------------------|---------------------------|
+| /api/articles    | GET     | Récupère la liste des articles  | JSON – liste d’articles   |
+| /api/users/{id}  | GET     | Détail d’un utilisateur         | JSON – profil utilisateur |
+| /api/login       | POST    | Authentifie un utilisateur      | Token JWT                 |
+
+Ajoutez une représentation visuelle des relations (UML / diagramme de classes ou entités).
+
+---
+
+## 3. Tests, performance et qualité
+
+### 3.1 Stratégie de test
+Décrivez les tests mis en place :  
+- unitaires, d’intégration, end-to-end,  
+- frameworks utilisés,  
+- taux de couverture.
+
+| Type de test   | Outil / framework | Portée                  | Résultats               |
+|----------------|-------------------|-------------------------|-------------------------|
+| Test unitaire  | JUnit             | Services du back-end     |                         |
+| Test d’intégration | [Framework]     | [Détails]               |                         |
+| Test e2e       | [Framework]        | [Détails]               |                         |
+
+### 3.2 Rapport de performance et optimisation
+Décrivez les actions menées pour améliorer la performance du code et du rendu.
+
+Exemple :  
+"Après audit Lighthouse, la performance du front est passée de 65 à 91/100 grâce à l’optimisation des images et du lazy-loading des modules Angular."
+
+### 3.3 Revue technique
+Présentez une synthèse critique du code :
+
+**Points forts**  
+- Structure, modularité, lisibilité
+
+**Points à améliorer**  
+- Complexité, dette technique, sécurité
+
+**Actions correctives appliquées**  
+- Refactorisation via héritage de service parent.
+
+---
+
+## 4. Documentation utilisateur et supervision
+
+### 4.1 FAQ utilisateur
+Rédigez une courte section d’aide destinée aux utilisateurs internes ou finaux.
+
+**Q : Comment créer un compte ?**  
+**R :** Cliquez sur “S’inscrire”, remplissez le formulaire et validez. Vous recevrez un email de confirmation.
+
+**Q : Que faire si l’application ne charge pas ?**  
+**R :** Rafraîchissez la page. Si le problème persiste, contactez le support technique.
+
+### 4.2 Supervision et tâches déléguées à l’IA
+Décrivez les tâches confiées à l’IA, et comment vous avez vérifié, validé ou corrigé son travail.
+
+| Tâche déléguée         | Outil / collaborateur  | Objectif                            | Vérification effectuée  |
+|------------------------|------------------------|-------------------------------------|-------------------------|
+| Génération de tests unitaires | GitHub Copilot        | Gain de temps sur les tests basiques | Revue et correction des assertions |
+
+---
+
+## 5. Annexes
+
+- Captures d’écran de l’UI et vues principales.  
+- Analyse des besoins front-end (liens avec les spécifications ou maquettes).  
+- Définition des données (schémas, formats, règles de validation et sécurisation).  
+- Rapports de couverture et de tests (exports ou impressions d’écran).  
+- Rapport de revue technique (version complète, datée et signée si applicable).
+
