@@ -32,6 +32,10 @@ Expliquez le contexte de l’entreprise et la valeur ajoutée attendue du produi
 
 Ces éléments serviront de base à la conception technique et à la modélisation des données lors de l’étape suivante.
 
+#### Exemple de diagramme de séquence — Inscription utilisateur
+
+![alt text][imageCapture]
+
 ### 1.2 Périmètre fonctionnel
 Présentez les fonctionnalités livrées (liste synthétique), en précisant leur état (terminée / en cours / à venir).
 
@@ -140,3 +144,6 @@ Décrivez les tâches confiées à l’IA, et comment vous avez vérifié, valid
 - Rapports de couverture et de tests (exports ou impressions d’écran).  
 - Rapport de revue technique (version complète, datée et signée si applicable).
 
+
+
+[imageCapture]: <Capture d'écran 2025-12-12 130614.png>
