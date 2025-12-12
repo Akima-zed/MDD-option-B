@@ -53,6 +53,30 @@ Présentez les fonctionnalités livrées (liste synthétique), en précisant leu
 ### 2.1 Schéma global de l’architecture
 ![Diagramme de l'architecture](lien_vers_diagramme)
 
+#### Description de l’architecture globale (Étape 2)
+
+L’application Monde de Dév (MDD) est structurée selon une architecture en trois couches :
+
+- **Front-end** : Application Angular (TypeScript), responsable de l’interface utilisateur, de la navigation et de la gestion de l’état. Elle communique exclusivement avec l’API via HTTP(S) et gère l’authentification via JWT (stocké en mémoire ou localStorage).
+
+- **Back-end** : Application Spring Boot (Java 17+), exposant une API REST sécurisée. Elle gère la logique métier, la validation, la sécurité (Spring Security + JWT), et l’accès aux données via Spring Data JPA.
+
+- **Base de données** : MySQL, stockant les utilisateurs, articles, thèmes, abonnements et commentaires. L’accès se fait uniquement via le back-end.
+
+**Sécurité** :
+- Authentification et autorisation via JWT (JSON Web Token)
+- Endpoints sécurisés (sauf /register et /login)
+- Rôles utilisateurs gérés côté back-end
+- Données sensibles jamais exposées côté front
+
+**Flux principal** :
+1. L’utilisateur interagit avec le front (Angular)
+2. Le front appelle l’API REST (Spring Boot)
+3. Le back traite la requête, accède à la BDD si besoin, et renvoie la réponse
+4. Le front affiche le résultat à l’utilisateur
+
+Un schéma visuel (Draw.io) sera ajouté pour illustrer ces interactions.
+
 Intégrez un diagramme d’architecture (UML, C4 ou équivalent) illustrant les liens entre :
 
 - Le front-end,
@@ -71,6 +95,53 @@ Présentez ici chaque choix structurant du projet.
 
 ### 2.3 API et schémas de données
 Présentez ici la conception et la structuration de votre API :
+
+#### Modèle de données — Entités principales et relations
+
+**Utilisateur**
+- id (PK)
+- username
+- email
+- motDePasse (hashé)
+- roles
+- dateInscription
+- abonnements (liste de Thèmes)
+- articles (liste d’Articles)
+- commentaires (liste de Commentaires)
+
+**Thème**
+- id (PK)
+- nom
+- description
+- abonnés (liste d’Utilisateurs)
+- articles (liste d’Articles)
+
+**Article**
+- id (PK)
+- titre
+- contenu
+- dateCreation
+- auteur (Utilisateur)
+- theme (Thème)
+- commentaires (liste de Commentaires)
+
+**Commentaire**
+- id (PK)
+- contenu
+- dateCreation
+- auteur (Utilisateur)
+- article (Article)
+
+**Relations principales**
+- Un Utilisateur peut s’abonner à plusieurs Thèmes (relation N-N)
+- Un Thème peut avoir plusieurs abonnés (N-N)
+- Un Utilisateur peut écrire plusieurs Articles (1-N)
+- Un Article appartient à un Thème (N-1)
+- Un Article a plusieurs Commentaires (1-N)
+- Un Commentaire appartient à un Article (N-1)
+- Un Commentaire a un auteur (N-1)
+
+Un schéma UML (Draw.io) sera ajouté pour illustrer ces entités et relations.
 
 | Endpoint         | Méthode | Description                     | Corps / Réponse           |
 |------------------|---------|---------------------------------|---------------------------|
