@@ -88,16 +88,20 @@ Présentez les fonctionnalités livrées (liste synthétique), en précisant leu
 
 | Fonctionnalités                | Description                              | Statut        |
 |---------------------------------|------------------------------------------|---------------|
-| Création d’un compte utilisateur | Formulaire et validation d’inscription   |               |
-| Publication d’un article        | Gestion CRUD via API                     |               |
-| Commentaires                    | Association article/commentaires         |               |
-| Authentification                | Sécurisation JWT                         |               |
+| Création d’un compte utilisateur | Formulaire et validation d’inscription   | À venir       |
+| Publication d’un article        | Gestion CRUD via API                     | À venir       |
+| Commentaires                    | Association article/commentaires         | À venir       |
+| Authentification                | Sécurisation JWT                         | À venir       |
+| **Structure front/pages**       | Pages Angular générées, routing conforme | **Terminée**  |
 
 ---
 
 ## 2. Architecture et conception technique
 
 ### 2.1 Schéma global de l’architecture
+
+**Mise à jour front-end** :  
+La structure des pages Angular (register, login, feed, article, article-create, themes, profile, home) et le routing associé sont en place, conformément aux maquettes Figma. Le projet est prêt pour l’intégration fonctionnelle et graphique.
 ![Diagramme de l'architecture](lien_vers_diagramme)
 
 #### Description de l’architecture globale (Étape 2)
