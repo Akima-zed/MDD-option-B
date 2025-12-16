@@ -1,25 +1,36 @@
-# P6-Full-Stack-reseau-dev
+# MDD - Monde de Dév
 
-## Front
+## Guide rapide de démarrage
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
+### 1. Clonage du projet
+```powershell
+git clone https://github.com/Akima-zed/MDD-option-B.git
+cd MDD-option-B
+```
 
-Don't forget to install your node_modules before starting (`npm install`).
+### 2. Lancement du back-end (Spring Boot)
+Dans le dossier `back/` :
+```powershell
+# Définir les variables d’environnement (PowerShell)
+$env:DB_URL="jdbc:mysql://localhost:3306/mdd"
+$env:DB_USER="root"
+$env:DB_PASSWORD="votre_mot_de_passe"
 
-### Development server
+# Lancer le serveur
+./mvnw spring-boot:run
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 3. Lancement du front-end (Angular)
+Dans le dossier `front/` :
+```powershell
+npm install
+ng serve
+```
 
-### Build
+### 4. Accès à l’application
+- API : http://localhost:8080/api
+- Front : http://localhost:4200
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-### Where to start
-
-As you may have seen if you already started the app, a simple home page containing a logo, a title and a button is available. If you take a look at its code (in the `home.component.html`) you will see that an external UI library is already configured in the project.
-
-This library is `@angular/material`, it's one of the most famous in the angular ecosystem. As you can see on their docs (https://material.angular.io/), it contains a lot of highly customizable components that will help you design your interfaces quickly.
-
-Note: I recommend to use material however it's not mandatory, if you prefer you can get rid of it.
-
-Good luck!
+Pour la documentation complète et le rapport détaillé, voir le fichier `# Documentation et rapport du projet MDD.md` à la racine du projet.

@@ -1,5 +1,38 @@
 # Documentation et rapport du projet MDD
 
+## Guide rapide de démarrage
+
+### 1. Clonage du projet
+```powershell
+git clone https://github.com/Akima-zed/MDD-option-B.git
+cd MDD-option-B
+```
+
+### 2. Lancement du back-end (Spring Boot)
+Dans le dossier `back/` :
+```powershell
+# Définir les variables d’environnement (PowerShell)
+$env:DB_URL="jdbc:mysql://localhost:3306/mdd"
+$env:DB_USER="root"
+$env:DB_PASSWORD="votre_mot_de_passe"
+
+# Lancer le serveur
+./mvnw spring-boot:run
+```
+
+### 3. Lancement du front-end (Angular)
+Dans le dossier `front/` :
+```powershell
+npm install
+ng serve
+```
+
+### 4. Accès à l’application
+- API : http://localhost:8080/api
+- Front : http://localhost:4200
+
+---
+
 **Auteur** : [Nom et prénom de l’étudiant]  
 **Version** : [ex. 1.0.0]  
 **Date** : [JJ/MM/AAAA]  
@@ -95,6 +128,32 @@ Présentez ici chaque choix structurant du projet.
 
 ### 2.3 API et schémas de données
 Présentez ici la conception et la structuration de votre API :
+
+#### Instructions pratiques pour lancer le projet
+
+**Back-end**
+1. Ouvre un terminal PowerShell dans le dossier `back/`.
+2. Définis les variables d’environnement pour la base de données :
+	```powershell
+	$env:DB_URL="jdbc:mysql://localhost:3306/mdd"
+	$env:DB_USER="root"
+	$env:DB_PASSWORD="ton_mot_de_passe"
+	```
+3. Lance le back-end :
+	```powershell
+	./mvnw spring-boot:run
+	```
+
+**Front-end**
+1. Depuis le dossier `front/` :
+	```powershell
+	npm install
+	ng serve
+	```
+
+**Accès**
+- API : http://localhost:8080/api
+- Front : http://localhost:4200
 
 #### Endpoints REST — Tableau récapitulatif
 
