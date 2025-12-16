@@ -96,6 +96,145 @@ Présentez ici chaque choix structurant du projet.
 ### 2.3 API et schémas de données
 Présentez ici la conception et la structuration de votre API :
 
+#### Endpoints REST — Tableau récapitulatif
+
+| Endpoint | Méthode | Description |
+|----------|---------|-------------|
+| /api/auth/register | POST | Inscription d’un nouvel utilisateur |
+| /api/auth/login | POST | Connexion, retourne un JWT |
+| /api/users/me | GET | Récupérer le profil de l’utilisateur connecté |
+| /api/users/me | PUT | Modifier le profil de l’utilisateur connecté |
+| /api/users/{id} | GET | Détail d’un utilisateur (admin ou public limité) |
+| /api/articles | GET | Liste des articles (fil d’actualité) |
+| /api/articles | POST | Créer un article |
+| /api/articles/{id} | GET | Détail d’un article |
+| /api/articles/{id} | PUT | Modifier un article (auteur ou admin) |
+| /api/articles/{id} | DELETE | Supprimer un article (auteur ou admin) |
+| /api/themes | GET | Liste des thèmes |
+| /api/themes/{id} | GET | Détail d’un thème |
+| /api/themes/{id}/subscribe | POST | S’abonner à un thème |
+| /api/themes/{id}/unsubscribe | POST | Se désabonner d’un thème |
+| /api/articles/{id}/comments | POST | Ajouter un commentaire à un article |
+| /api/articles/{id}/comments | GET | Liste des commentaires d’un article |
+| /api/users/me/subscriptions | GET | Liste des thèmes suivis par l’utilisateur |
+| /api/themes/{id}/subscribers | GET | Liste des abonnés d’un thème |
+
+#### Exemples de requêtes et réponses JSON
+
+**POST /api/auth/register**
+Requête :
+```json
+{
+	"username": "johndoe",
+	"email": "john@example.com",
+	"password": "MotDePasse123"
+}
+```
+Réponse :
+```json
+{
+	"id": 1,
+	"username": "johndoe",
+	"email": "john@example.com",
+	"roles": ["USER"],
+	"dateInscription": "2025-12-16"
+}
+```
+
+**POST /api/auth/login**
+Requête :
+```json
+{
+	"email": "john@example.com",
+	"password": "MotDePasse123"
+}
+```
+Réponse :
+```json
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**GET /api/users/me**
+Réponse :
+```json
+{
+	"id": 1,
+	"username": "johndoe",
+	"email": "john@example.com",
+	"roles": ["USER"],
+	"dateInscription": "2025-12-16"
+}
+```
+
+**POST /api/articles**
+Requête :
+```json
+{
+	"titre": "Mon premier article",
+	"contenu": "Contenu de l’article...",
+	"themeId": 2
+}
+```
+Réponse :
+```json
+{
+	"id": 10,
+	"titre": "Mon premier article",
+	"contenu": "Contenu de l’article...",
+	"dateCreation": "2025-12-16",
+	"auteur": { "id": 1, "username": "johndoe" },
+	"theme": { "id": 2, "nom": "Java" }
+}
+```
+
+**GET /api/articles**
+Réponse :
+```json
+[
+	{
+		"id": 10,
+		"titre": "Mon premier article",
+		"dateCreation": "2025-12-16",
+		"auteur": { "id": 1, "username": "johndoe" },
+		"theme": { "id": 2, "nom": "Java" }
+	}
+]
+```
+
+**GET /api/themes**
+Réponse :
+```json
+[
+	{ "id": 1, "nom": "Java", "description": "Tout sur Java" },
+	{ "id": 2, "nom": "Angular", "description": "Front-end moderne" }
+]
+```
+
+**POST /api/themes/2/subscribe**
+Réponse :
+```json
+{ "message": "Abonnement au thème réussi." }
+```
+
+**POST /api/articles/10/comments**
+Requête :
+```json
+{
+	"contenu": "Bravo pour cet article !"
+}
+```
+Réponse :
+```json
+{
+	"id": 5,
+	"contenu": "Bravo pour cet article !",
+	"dateCreation": "2025-12-16",
+	"auteur": { "id": 1, "username": "johndoe" }
+}
+```
+
 #### Modèle de données — Entités principales et relations
 
 **Utilisateur**
