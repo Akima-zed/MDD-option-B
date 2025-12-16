@@ -31,9 +31,23 @@ ng serve
 - API : http://localhost:8080/api
 - Front : http://localhost:4200
 
----
 
 **Auteur** : [Nom et prénom de l’étudiant]  
+
+---
+
+## Préparation de l’environnement de développement (Étape 3)
+
+- Repository GitHub unique, structuré (`back/`, `front/`), versionné et prêt pour la collaboration.
+- Projets importés dans VS Code, lancement du back-end et du front-end fonctionnels.
+- Base de données MySQL installée, tables générées automatiquement par JPA/Hibernate.
+- Données de test insérées automatiquement au démarrage grâce à un composant Java (`DataInitializer`), permettant de valider le modèle et de tester les endpoints dès le début.
+- Accès aux maquettes Figma pour préparer l’intégration graphique.
+- Dépendances installées et fichiers de configuration complets.
+- Workflow Git respecté : branches de feature, commits réguliers, pas de travail direct sur `main`.
+
+**Conclusion** :  
+L’environnement de développement est prêt, la base de données est cohérente et peuplée, le projet est structuré et versionné, tout est conforme aux attentes de l’étape 3.
 **Version** : [ex. 1.0.0]  
 **Date** : [JJ/MM/AAAA]  
 
