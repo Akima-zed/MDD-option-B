@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="app-header">
+  <div class="header-container">
+    <div class="logo-section">
+      <img src="/assets/logo_p6.png" alt="MDD Logo" class="logo" />
+    </div>
+
+    <nav class="nav-links">
+      <button mat-button (click)="goToFeed()">Articles</button>
+      <button mat-button (click)="goToThemes()">Thèmes</button>
+    </nav>
+
+    <div class="user-section">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="goToProfile()">
+          <mat-icon>person</mat-icon>
+          <span>Profil</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Se déconnecter</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
