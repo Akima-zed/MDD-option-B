@@ -20,5 +20,7 @@ export interface LoginRequest {
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  id: number;
+  username: string;
+  email: string;
 }
