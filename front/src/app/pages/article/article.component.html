@@ -1,1 +1,74 @@
-<p>article works!</p>
+<div class="article-container">
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+    <button mat-raised-button (click)="goBack()">Retour au fil</button>
+  </div>
+
+  <div *ngIf="!isLoading && article" class="article-content">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <mat-card class="article-detail-card">
+      <mat-card-header>
+        <mat-card-title>{{ article.titre }}</mat-card-title>
+        <mat-card-subtitle>
+          Par {{ article.auteur.username }} | {{ article.dateCreation | date: 'dd/MM/yyyy à HH:mm' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="article-theme">
+          <mat-icon>label</mat-icon>
+          <span>{{ article.theme.nom }}</span>
+        </div>
+        <div class="article-body">
+          {{ article.contenu }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="comments-section">
+      <h2>Commentaires ({{ comments.length }})</h2>
+
+      <mat-card class="comment-form-card">
+        <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ajouter un commentaire</mat-label>
+            <textarea matInput formControlName="contenu" rows="3" required></textarea>
+            <mat-error *ngIf="commentForm.get('contenu')?.hasError('required')">
+              Le commentaire est requis
+            </mat-error>
+            <mat-error *ngIf="commentForm.get('contenu')?.hasError('minlength')">
+              Minimum 3 caractères
+            </mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="commentForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'Envoi...' : 'Publier' }}
+          </button>
+        </form>
+      </mat-card>
+
+      <div class="comments-list">
+        <mat-card *ngFor="let comment of comments" class="comment-card">
+          <mat-card-header>
+            <mat-card-subtitle>
+              <strong>{{ comment.auteur.username }}</strong> - {{ comment.dateCreation | date: 'dd/MM/yyyy à HH:mm' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            {{ comment.contenu }}
+          </mat-card-content>
+        </mat-card>
+
+        <div *ngIf="comments.length === 0" class="no-comments">
+          Aucun commentaire pour le moment. Soyez le premier à commenter !
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

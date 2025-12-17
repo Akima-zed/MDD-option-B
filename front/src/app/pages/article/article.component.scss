@@ -1,0 +1,118 @@
+.article-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.error-message {
+  text-align: center;
+  padding: 24px;
+  color: #f44336;
+  background-color: #ffebee;
+  border-radius: 4px;
+
+  button {
+    margin-top: 16px;
+  }
+}
+
+.article-content {
+  position: relative;
+}
+
+.back-button {
+  margin-bottom: 16px;
+}
+
+.article-detail-card {
+  margin-bottom: 32px;
+}
+
+.article-theme {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #3f51b5;
+  font-weight: 500;
+  margin-bottom: 16px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.article-body {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #424242;
+  white-space: pre-wrap;
+}
+
+.comments-section {
+  h2 {
+    margin-bottom: 16px;
+    color: #424242;
+  }
+}
+
+.comment-form-card {
+  margin-bottom: 24px;
+  padding: 16px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  button {
+    align-self: flex-end;
+  }
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-card {
+  mat-card-header {
+    margin-bottom: 8px;
+  }
+
+  mat-card-subtitle {
+    font-size: 13px;
+    color: #757575;
+
+    strong {
+      color: #424242;
+    }
+  }
+
+  mat-card-content {
+    padding: 0 16px 16px;
+    color: #424242;
+    line-height: 1.6;
+  }
+}
+
+.no-comments {
+  text-align: center;
+  padding: 32px;
+  color: #9e9e9e;
+  font-style: italic;
+}
