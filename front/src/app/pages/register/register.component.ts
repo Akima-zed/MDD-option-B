@@ -58,8 +58,15 @@ export class RegisterComponent implements OnInit {
     const registerData: RegisterRequest = this.registerForm.value;
 
     this.authService.register(registerData).subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
+      next: (response) => {
+        // Stocker le token automatiquement après l'inscription
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify({
+          id: response.id,
+          username: response.username,
+          email: response.email
+        }));
+        this.router.navigate(['/feed']);
       },
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;

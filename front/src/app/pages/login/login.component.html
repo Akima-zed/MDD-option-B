@@ -14,8 +14,8 @@
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>E-mail ou nom d'utilisateur</mat-label>
-          <input matInput type="email" formControlName="email" required>
+          <mat-label>Adresse e-mail</mat-label>
+          <input matInput type="email" formControlName="email" required autocomplete="email">
           <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
             L'email est requis
           </mat-error>

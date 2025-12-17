@@ -25,12 +25,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  user = {
-    username: 'Utilisateur',
-    email: 'user@example.com'
-  };
-
-  subscribedThemes: string[] = ['JavaScript', 'Angular', 'TypeScript'];
+  user: any = null;
+  subscribedThemes: string[] = [];
 
   constructor(
     private authService: AuthService,
@@ -38,7 +34,15 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // TODO: Charger les infos utilisateur et abonnements depuis le backend
+    // Récupérer les infos utilisateur du localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      this.user = JSON.parse(userStr);
+    } else {
+      // Rediriger vers login si pas d'utilisateur
+      this.router.navigate(['/login']);
+    }
+    // TODO: Charger les abonnements depuis le backend
   }
 
   logout(): void {

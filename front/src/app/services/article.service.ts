@@ -34,6 +34,11 @@ export class ArticleService {
    * @returns Observable avec l'article créé
    */
   createArticle(data: CreateArticleRequest): Observable<Article> {
-    return this.http.post<Article>(this.apiUrl, data);
+    const payload = {
+      title: data.titre,
+      content: data.contenu,
+      themeId: data.themeId
+    };
+    return this.http.post<Article>(this.apiUrl, payload);
   }
 }

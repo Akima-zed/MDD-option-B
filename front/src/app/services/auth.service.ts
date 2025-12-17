@@ -28,17 +28,23 @@ export class AuthService {
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
       tap(response => {
-        // Stocke le token dans le localStorage
+        // Stocke le token et les infos utilisateur dans le localStorage
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify({
+          id: response.id,
+          username: response.username,
+          email: response.email
+        }));
       })
     );
   }
 
   /**
-   * Déconnecte l'utilisateur en supprimant le token
+   * Déconnecte l'utilisateur en supprimant le token et les infos
    */
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   /**
