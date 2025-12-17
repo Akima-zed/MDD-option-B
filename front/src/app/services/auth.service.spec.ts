@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { RegisterRequest, LoginRequest, AuthResponse } from '../models/user.model';
 
@@ -47,7 +48,7 @@ describe('AuthService (TDD)', () => {
         }
       };
 
-      service.register(registerData).subscribe(response => {
+      service.register(registerData).subscribe((response: AuthResponse) => {
         expect(response).toEqual(mockResponse);
         expect(response.token).toBe('fake-jwt-token');
       });
@@ -67,7 +68,7 @@ describe('AuthService (TDD)', () => {
 
       service.register(registerData).subscribe(
         () => fail('should have failed'),
-        error => {
+        (error: HttpErrorResponse) => {
           expect(error.status).toBe(400);
           expect(error.error).toContain('Email already exists');
         }
@@ -95,7 +96,7 @@ describe('AuthService (TDD)', () => {
         }
       };
 
-      service.login(loginData).subscribe(response => {
+      service.login(loginData).subscribe((response: AuthResponse) => {
         expect(response).toEqual(mockResponse);
         expect(localStorage.getItem('token')).toBe('fake-jwt-token');
       });
@@ -113,7 +114,7 @@ describe('AuthService (TDD)', () => {
 
       service.login(loginData).subscribe(
         () => fail('should have failed'),
-        error => {
+        (error: HttpErrorResponse) => {
           expect(error.status).toBe(401);
         }
       );
