@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../models/article.model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -19,7 +20,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HeaderComponent
   ],
   templateUrl: './themes.component.html',
   styleUrls: ['./themes.component.scss']

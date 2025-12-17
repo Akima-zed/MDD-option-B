@@ -1,37 +1,42 @@
+<app-header></app-header>
+
 <div class="themes-container">
-  <h1>Thèmes</h1>
+  <div class="themes-content">
+    <h1>Thèmes</h1>
 
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
-  </div>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
 
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
 
-  <div class="themes-grid" *ngIf="!isLoading && themes.length > 0">
-    <mat-card *ngFor="let theme of themes" class="theme-card">
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon>label</mat-icon>
-          {{ theme.nom }}
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ theme.description }}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button 
-                [color]="isSubscribed(theme.id) ? 'warn' : 'primary'"
-                (click)="toggleSubscription(theme.id)">
-          <mat-icon>{{ isSubscribed(theme.id) ? 'remove_circle' : 'add_circle' }}</mat-icon>
-          {{ isSubscribed(theme.id) ? 'Se désabonner' : 'S\'abonner' }}
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+    <div class="themes-grid" *ngIf="!isLoading && themes.length > 0">
+      <mat-card *ngFor="let theme of themes" class="theme-card">
+        <mat-card-header>
+          <div class="theme-header">
+            <mat-icon class="theme-icon">label</mat-icon>
+            <mat-card-title>{{ theme.nom }}</mat-card-title>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="theme-description">{{ theme.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button 
+                  [color]="isSubscribed(theme.id) ? 'accent' : 'primary'"
+                  (click)="toggleSubscription(theme.id)"
+                  class="subscribe-button">
+            {{ isSubscribed(theme.id) ? 'Se désabonner' : 'S\'abonner' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
 
-  <div *ngIf="!isLoading && themes.length === 0" class="empty-state">
-    <p>Aucun thème disponible</p>
+    <div *ngIf="!isLoading && themes.length === 0" class="empty-state">
+      <mat-icon>category</mat-icon>
+      <p>Aucun thème disponible</p>
+    </div>
   </div>
 </div>
