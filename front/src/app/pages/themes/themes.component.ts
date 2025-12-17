@@ -36,6 +36,7 @@ export class ThemesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadThemes();
+    this.loadUserSubscriptions();
   }
 
   loadThemes(): void {
@@ -49,6 +50,22 @@ export class ThemesComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  loadUserSubscriptions(): void {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      // Charger les abonnements de l'utilisateur depuis le backend
+      this.themeService.getUserSubscriptions(user.id).subscribe({
+        next: (themes: Theme[]) => {
+          this.subscribedThemeIds = themes.map(theme => theme.id);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Erreur chargement abonnements:', error);
+        }
+      });
+    }
   }
 
   isSubscribed(themeId: number): boolean {

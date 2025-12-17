@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class CommentRequest {
     
     @NotBlank(message = "Le contenu du commentaire est obligatoire")
+    @JsonProperty("contenu")
     private String content;
 
     public CommentRequest() {}

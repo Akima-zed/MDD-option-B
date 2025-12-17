@@ -14,19 +14,16 @@
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Adresse e-mail</mat-label>
-          <input matInput type="email" formControlName="email" required autocomplete="email">
-          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-            L'email est requis
-          </mat-error>
-          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-            Email invalide
+          <mat-label>E-mail ou nom d'utilisateur</mat-label>
+          <input matInput formControlName="emailOrUsername" required autocomplete="username">
+          <mat-error *ngIf="loginForm.get('emailOrUsername')?.hasError('required')">
+            L'email ou nom d'utilisateur est requis
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" formControlName="password" required>
+          <input matInput type="password" formControlName="password" required autocomplete="current-password">
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
             Le mot de passe est requis
           </mat-error>

@@ -7,25 +7,25 @@ import javax.validation.constraints.NotBlank;
  */
 public class LoginRequest {
     
-    @NotBlank(message = "L'email est obligatoire")
-    private String email;
+    @NotBlank(message = "L'email ou nom d'utilisateur est obligatoire")
+    private String emailOrUsername;
     
     @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
 
     public LoginRequest() {}
 
-    public LoginRequest(String email, String password) {
-        this.email = email;
+    public LoginRequest(String emailOrUsername, String password) {
+        this.emailOrUsername = emailOrUsername;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailOrUsername() {
+        return emailOrUsername;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailOrUsername(String emailOrUsername) {
+        this.emailOrUsername = emailOrUsername;
     }
 
     public String getPassword() {

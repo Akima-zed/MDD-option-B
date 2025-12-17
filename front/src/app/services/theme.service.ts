@@ -45,4 +45,13 @@ export class ThemeService {
   unsubscribe(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/unsubscribe`, {});
   }
+
+  /**
+   * Récupère les abonnements d'un utilisateur
+   * @param userId - ID de l'utilisateur
+   * @returns Observable avec la liste des thèmes auxquels l'utilisateur est abonné
+   */
+  getUserSubscriptions(userId: number): Observable<Theme[]> {
+    return this.http.get<Theme[]>(`http://localhost:8081/api/users/${userId}/subscriptions`);
+  }
 }

@@ -78,14 +78,16 @@ public class AuthController {
     /**
      * Connexion d'un utilisateur existant.
      * 
-     * @param request DTO contenant email et password
+     * @param request DTO contenant emailOrUsername et password
      * @return AuthResponse avec token JWT et infos utilisateur
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
-            User user = userService.findByEmail(request.getEmail())
-                .orElse(null);
+            // Chercher l'utilisateur par email ou username
+            User user = userService.findByEmail(request.getEmailOrUsername())
+                .orElse(userService.findByUsername(request.getEmailOrUsername())
+                    .orElse(null));
 
             if (user == null) {
                 Map<String, String> error = new HashMap<>();
