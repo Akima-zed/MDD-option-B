@@ -30,7 +30,7 @@
                 <mat-chip *ngFor="let theme of subscribedThemes" 
                           [removable]="true"
                           (removed)="unsubscribe(theme)">
-                  {{ theme }}
+                  {{ theme.nom }}
                   <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
               </mat-chip-list>

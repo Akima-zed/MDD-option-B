@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { Theme } from '../../models/article.model';
 
 @Component({
   selector: 'app-profile',
@@ -26,10 +28,11 @@ import { AuthService } from '../../services/auth.service';
 })
 export class ProfileComponent implements OnInit {
   user: any = null;
-  subscribedThemes: string[] = [];
+  subscribedThemes: Theme[] = [];
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -38,11 +41,23 @@ export class ProfileComponent implements OnInit {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       this.user = JSON.parse(userStr);
+      // Charger les abonnements depuis le backend
+      this.loadSubscriptions();
     } else {
       // Rediriger vers login si pas d'utilisateur
       this.router.navigate(['/login']);
     }
-    // TODO: Charger les abonnements depuis le backend
+  }
+
+  loadSubscriptions(): void {
+    this.userService.getUserSubscriptions(this.user.id).subscribe({
+      next: (themes: Theme[]) => {
+        this.subscribedThemes = themes;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des abonnements:', error);
+      }
+    });
   }
 
   logout(): void {
@@ -50,8 +65,8 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  unsubscribe(theme: string): void {
-    this.subscribedThemes = this.subscribedThemes.filter(t => t !== theme);
+  unsubscribe(theme: Theme): void {
     // TODO: Appeler le backend pour se désabonner
+    this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
   }
 }

@@ -40,12 +40,9 @@ describe('AuthService (TDD)', () => {
 
       const mockResponse: AuthResponse = {
         token: 'fake-jwt-token',
-        user: {
-          id: 1,
-          username: 'testuser',
-          email: 'test@example.com',
-          roles: ['USER']
-        }
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com'
       };
 
       service.register(registerData).subscribe((response: AuthResponse) => {
@@ -89,11 +86,9 @@ describe('AuthService (TDD)', () => {
 
       const mockResponse: AuthResponse = {
         token: 'fake-jwt-token',
-        user: {
-          id: 1,
-          username: 'testuser',
-          email: 'test@example.com'
-        }
+        id: 1,
+        username: 'testuser',
+        email: 'test@example.com'
       };
 
       service.login(loginData).subscribe((response: AuthResponse) => {

@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,14 +14,17 @@ public class Article {
     private Long id;
 
     @Column(nullable = false)
+    @JsonProperty("titre")
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("contenu")
     private String content;
 
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties({"password", "articles", "commentaires", "abonnements"})
+    @JsonProperty("auteur")
     private User author;
 
     @ManyToOne(optional = false)
@@ -31,6 +35,7 @@ public class Article {
     @JsonIgnoreProperties({"article"})
     private Set<Comment> commentaires = new HashSet<>();
 
+    @JsonProperty("dateCreation")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and setters

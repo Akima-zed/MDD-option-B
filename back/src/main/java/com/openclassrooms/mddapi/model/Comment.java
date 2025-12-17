@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -11,10 +12,12 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @JsonProperty("contenu")
     private String content;
 
     @ManyToOne(optional = false)
     @JsonIgnoreProperties({"password", "articles", "commentaires", "abonnements"})
+    @JsonProperty("auteur")
     private User author;
 
     @ManyToOne(optional = false)
