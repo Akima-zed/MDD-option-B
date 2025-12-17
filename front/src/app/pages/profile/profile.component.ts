@@ -51,4 +51,3 @@ export class ProfileComponent implements OnInit {
     // TODO: Appeler le backend pour se désabonner
   }
 }
-}

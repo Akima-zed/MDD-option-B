@@ -26,15 +26,14 @@
           <div class="subscriptions-section">
             <h2>Abonnements</h2>
             <div class="themes-chips" *ngIf="subscribedThemes.length > 0">
-              <mat-chip-set aria-label="Thèmes abonnés">
+              <mat-chip-list aria-label="Thèmes abonnés">
                 <mat-chip *ngFor="let theme of subscribedThemes" 
+                          [removable]="true"
                           (removed)="unsubscribe(theme)">
                   {{ theme }}
-                  <button matChipRemove aria-label="Se désabonner">
-                    <mat-icon>cancel</mat-icon>
-                  </button>
+                  <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
-              </mat-chip-set>
+              </mat-chip-list>
             </div>
             <p *ngIf="subscribedThemes.length === 0" class="no-subscriptions">
               Vous n'êtes abonné à aucun thème.
