@@ -3,8 +3,8 @@ package com.openclassrooms.mddapi.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
@@ -15,27 +15,18 @@ import java.util.Arrays;
 public class WebConfig {
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        
-        // Origine autorisée (frontend Angular)
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        
-        // Méthodes HTTP autorisées
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        
-        // Headers autorisés
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        
-        // Permettre l'envoi de credentials (cookies, tokens)
-        configuration.setAllowCredentials(true);
-        
-        // Durée de cache de la configuration CORS (1 heure)
-        configuration.setMaxAge(3600L);
-        
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        CorsConfiguration config = new CorsConfiguration();
         
-        return source;
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setMaxAge(3600L);
+        
+        source.registerCorsConfiguration("/**", config);
+        
+        return new CorsFilter(source);
     }
 }
