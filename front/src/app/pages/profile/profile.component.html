@@ -1,35 +1,54 @@
+<app-header></app-header>
+
 <div class="profile-container">
-  <mat-card class="profile-card">
-    <mat-card-header>
-      <mat-icon class="profile-icon">account_circle</mat-icon>
-      <mat-card-title>Mon Profil</mat-card-title>
-    </mat-card-header>
+  <div class="profile-content">
+    <button mat-icon-button routerLink="/feed" class="back-button" aria-label="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
 
-    <mat-card-content>
-      <div class="profile-info">
-        <div class="info-row">
-          <mat-icon>person</mat-icon>
-          <div class="info-content">
-            <label>Nom d'utilisateur</label>
-            <span>{{ user.username }}</span>
+    <h1>Profil utilisateur</h1>
+
+    <mat-card class="profile-card">
+      <mat-card-content>
+        <div class="user-info">
+          <div class="info-section">
+            <h2>Informations</h2>
+            <div class="info-row">
+              <span class="label">Nom :</span>
+              <span class="value">{{ user.username }}</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Email :</span>
+              <span class="value">{{ user.email }}</span>
+            </div>
+          </div>
+
+          <div class="subscriptions-section">
+            <h2>Abonnements</h2>
+            <div class="themes-chips" *ngIf="subscribedThemes.length > 0">
+              <mat-chip-set aria-label="Thèmes abonnés">
+                <mat-chip *ngFor="let theme of subscribedThemes" 
+                          (removed)="unsubscribe(theme)">
+                  {{ theme }}
+                  <button matChipRemove aria-label="Se désabonner">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+            <p *ngIf="subscribedThemes.length === 0" class="no-subscriptions">
+              Vous n'êtes abonné à aucun thème.
+            </p>
           </div>
         </div>
 
-        <div class="info-row">
-          <mat-icon>email</mat-icon>
-          <div class="info-content">
-            <label>Email</label>
-            <span>{{ user.email }}</span>
-          </div>
+        <div class="actions">
+          <button mat-raised-button color="warn" (click)="logout()" class="logout-button">
+            <mat-icon>logout</mat-icon>
+            Se déconnecter
+          </button>
         </div>
-      </div>
-    </mat-card-content>
-
-    <mat-card-actions>
-      <button mat-raised-button color="warn" (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        Se déconnecter
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
