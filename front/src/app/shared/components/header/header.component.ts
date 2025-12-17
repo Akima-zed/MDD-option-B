@@ -22,6 +22,8 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  isMenuOpen = false;
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -42,5 +44,9 @@ export class HeaderComponent {
 
   goToThemes(): void {
     this.router.navigate(['/themes']);
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

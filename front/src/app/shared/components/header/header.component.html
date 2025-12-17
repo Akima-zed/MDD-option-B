@@ -4,7 +4,13 @@
       <img src="/assets/logo_p6.png" alt="MDD Logo" class="logo" />
     </div>
 
-    <div class="right-section">
+    <!-- Menu hamburger pour mobile -->
+    <button mat-icon-button class="menu-button" (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <!-- Navigation desktop -->
+    <div class="right-section desktop-nav">
       <button mat-button class="logout-button" (click)="logout()">
         Se déconnecter
       </button>
@@ -26,3 +32,28 @@
     </div>
   </div>
 </mat-toolbar>
+
+<!-- Menu mobile (sidenav) -->
+<div class="mobile-menu" [class.open]="isMenuOpen">
+  <div class="mobile-menu-overlay" (click)="toggleMenu()"></div>
+  <div class="mobile-menu-content">
+    <button mat-button class="mobile-menu-item logout" (click)="logout(); toggleMenu()">
+      Se déconnecter
+    </button>
+    <button mat-button class="mobile-menu-item" (click)="goToFeed(); toggleMenu()">
+      Articles
+    </button>
+    <button mat-button class="mobile-menu-item" (click)="goToThemes(); toggleMenu()">
+      Thèmes
+    </button>
+    <div class="mobile-profile" (click)="goToProfile(); toggleMenu()">
+      <svg width="40" height="40" viewBox="0 0 48 48" class="profile-icon-mobile">
+        <circle cx="24" cy="24" r="24" fill="#E0E0E0"/>
+        <g fill="none" stroke="#757575" stroke-width="2">
+          <circle cx="24" cy="18" r="6"/>
+          <path d="M12 36c0-6.6 5.4-10 12-10s12 3.4 12 10"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
