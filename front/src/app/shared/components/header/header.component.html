@@ -1,28 +1,28 @@
-<mat-toolbar color="primary" class="app-header">
+<mat-toolbar class="app-header">
   <div class="header-container">
-    <div class="logo-section">
+    <div class="left-section">
       <img src="/assets/logo_p6.png" alt="MDD Logo" class="logo" />
     </div>
 
-    <nav class="nav-links">
-      <button mat-button (click)="goToFeed()">Articles</button>
-      <button mat-button (click)="goToThemes()">Thèmes</button>
-    </nav>
-
-    <div class="user-section">
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
+    <div class="right-section">
+      <button mat-button class="logout-button" (click)="logout()">
+        Se déconnecter
       </button>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="goToProfile()">
-          <mat-icon>person</mat-icon>
-          <span>Profil</span>
-        </button>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Se déconnecter</span>
-        </button>
-      </mat-menu>
+      <button mat-button class="articles-button" (click)="goToFeed()">
+        Articles
+      </button>
+      <button mat-button class="themes-button" (click)="goToThemes()">
+        Thèmes
+      </button>
+      <div class="profile-button" (click)="goToProfile()">
+        <svg width="48" height="48" viewBox="0 0 48 48" class="profile-icon">
+          <circle cx="24" cy="24" r="24" fill="#E0E0E0"/>
+          <g fill="none" stroke="#757575" stroke-width="2">
+            <circle cx="24" cy="18" r="6"/>
+            <path d="M12 36c0-6.6 5.4-10 12-10s12 3.4 12 10"/>
+          </g>
+        </svg>
+      </div>
     </div>
   </div>
 </mat-toolbar>

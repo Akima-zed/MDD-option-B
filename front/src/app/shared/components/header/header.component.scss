@@ -2,7 +2,11 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: white;
+  height: 80px;
+  min-height: 80px;
 }
 
 .header-container {
@@ -10,38 +14,74 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
+  height: 100%;
+  padding: 0 24px;
 }
 
-.logo-section {
+.left-section {
   display: flex;
   align-items: center;
 
   .logo {
-    height: 40px;
+    height: 75px;
     width: auto;
     cursor: pointer;
   }
 }
 
-.nav-links {
+.right-section {
   display: flex;
-  gap: 8px;
-  flex: 1;
-  justify-content: center;
+  align-items: center;
+  gap: 0;
 
-  button {
+  .logout-button {
+    color: #b71c1c;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: none;
+    min-width: auto;
+    padding: 0 8px;
+  }
+
+  .articles-button {
+    color: #5A67D8;
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: none;
+    min-width: auto;
+    padding: 0 8px;
+  }
+
+  .themes-button {
+    color: #000000;
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: none;
+    min-width: auto;
+    padding: 0 8px;
+  }
+
+  .profile-button {
+    margin-left: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: none;
+    
+    .profile-icon {
+      display: block;
+    }
+    
+    &:hover .profile-icon circle:first-child {
+      fill: #d0d0d0;
+    }
   }
 }
 
-.user-section {
-  display: flex;
-  align-items: center;
-}
+
 
 // Responsive - Mobile
 @media (max-width: 768px) {
