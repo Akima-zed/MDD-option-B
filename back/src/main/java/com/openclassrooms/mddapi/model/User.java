@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -31,12 +32,15 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "theme_id")
     )
+    @JsonIgnoreProperties({"abonnes", "articles"})
     private Set<Theme> abonnements = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
+    @JsonIgnoreProperties({"author", "commentaires"})
     private Set<Article> articles = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
+    @JsonIgnoreProperties({"author", "article"})
     private Set<Comment> commentaires = new HashSet<>();
 
     // Getters and setters

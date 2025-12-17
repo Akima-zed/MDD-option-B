@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -19,12 +20,15 @@ public class Article {
 
 
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({"password", "articles", "commentaires", "abonnements"})
     private User author;
 
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({"articles", "abonnes"})
     private Theme theme;
 
     @OneToMany(mappedBy = "article")
+    @JsonIgnoreProperties({"article"})
     private Set<Comment> commentaires = new HashSet<>();
 
     private LocalDateTime createdAt = LocalDateTime.now();

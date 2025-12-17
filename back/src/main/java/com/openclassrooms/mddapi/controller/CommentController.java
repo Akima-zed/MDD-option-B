@@ -1,39 +1,102 @@
 package com.openclassrooms.mddapi.controller;
 
+import com.openclassrooms.mddapi.dto.CommentRequest;
+import com.openclassrooms.mddapi.model.Article;
 import com.openclassrooms.mddapi.model.Comment;
+import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.service.ArticleService;
 import com.openclassrooms.mddapi.service.CommentService;
+import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Contrôleur REST pour la gestion des commentaires.
+ */
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/articles")
 public class CommentController {
+    
     @Autowired
     private CommentService commentService;
+    
+    @Autowired
+    private ArticleService articleService;
+    
+    @Autowired
+    private UserService userService;
 
-    @GetMapping
-    public List<Comment> getAllComments() {
-        return commentService.findAll();
+    /**
+     * Ajoute un commentaire à un article.
+     */
+    @PostMapping("/{articleId}/comments")
+    public ResponseEntity<?> addComment(@PathVariable Long articleId,
+                                        @Valid @RequestBody CommentRequest request,
+                                        @RequestHeader("Authorization") String token) {
+        try {
+            // Vérifier que l'article existe
+            Optional<Article> article = articleService.findById(articleId);
+            if (!article.isPresent()) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Article non trouvé");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            }
+            
+            // Extraire l'utilisateur du token
+            Long userId = extractUserIdFromToken(token);
+            Optional<User> user = userService.findById(userId);
+            if (!user.isPresent()) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Utilisateur non trouvé");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            }
+            
+            // Créer le commentaire
+            Comment comment = new Comment();
+            comment.setContent(request.getContent());
+            comment.setAuthor(user.get());
+            comment.setArticle(article.get());
+            
+            Comment savedComment = commentService.save(comment);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
+            
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Erreur lors de l'ajout du commentaire: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable Long id) {
+    /**
+     * Supprime un commentaire.
+     */
+    @DeleteMapping("/comments/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         Optional<Comment> comment = commentService.findById(id);
-        return comment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Comment createComment(@RequestBody Comment comment) {
-        return commentService.save(comment);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        
+        if (!comment.isPresent()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Commentaire non trouvé");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+        
         commentService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    /**
+     * Extrait l'ID utilisateur du token JWT (version simplifiée).
+     */
+    private Long extractUserIdFromToken(String token) {
+        String cleanToken = token.replace("Bearer ", "").replace("jwt-token-", "");
+        return Long.parseLong(cleanToken);
     }
 }

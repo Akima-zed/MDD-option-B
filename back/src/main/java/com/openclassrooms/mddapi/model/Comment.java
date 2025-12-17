@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -13,9 +14,11 @@ public class Comment {
     private String content;
 
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({"password", "articles", "commentaires", "abonnements"})
     private User author;
 
     @ManyToOne(optional = false)
+    @JsonIgnoreProperties({"commentaires"})
     private Article article;
 
     private LocalDate dateCreation = LocalDate.now();
