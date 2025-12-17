@@ -1,36 +1,69 @@
 # MDD - Monde de Dév
 
-## Guide rapide de démarrage
+Application de réseau social pour développeurs.
 
-### 1. Clonage du projet
-```powershell
+## Prérequis
+
+- Java 17+
+- Node.js 18+ (ou 22+ pour ng serve)
+- MySQL 8.0+
+- Maven 3.8+
+
+## Installation
+
+### 1. Cloner le projet
+```bash
 git clone https://github.com/Akima-zed/MDD-option-B.git
 cd MDD-option-B
 ```
 
-### 2. Lancement du back-end (Spring Boot)
-Dans le dossier `back/` :
-```powershell
-# Définir les variables d’environnement (PowerShell)
-$env:DB_URL="jdbc:mysql://localhost:3306/mdd"
-$env:DB_USER="root"
-$env:DB_PASSWORD="votre_mot_de_passe"
+### 2. Créer la base de données MySQL
 
-# Lancer le serveur
-./mvnw spring-boot:run
+> Note : Credentials de démonstration pour environnement local uniquement.
+
+```sql
+mysql -u root -p
+
+CREATE DATABASE MDD_db;
+CREATE USER 'mdd_user'@'localhost' IDENTIFIED BY 'mdd_password';
+GRANT ALL PRIVILEGES ON MDD_db.* TO 'mdd_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
 ```
 
-### 3. Lancement du front-end (Angular)
-Dans le dossier `front/` :
+### 3. Lancer le backend (Spring Boot)
+
+Windows PowerShell :
 ```powershell
+cd back
+$env:DB_USER="mdd_user"
+$env:DB_PASSWORD="mdd_password"
+.\mvnw.cmd spring-boot:run
+```
+
+Linux/Mac :
+```bash
+cd back
+DB_USER=mdd_user DB_PASSWORD=mdd_password ./mvnw spring-boot:run
+```
+
+Backend : http://localhost:8081
+
+### 4. Lancer le frontend (Angular)
+
+```bash
+cd front
 npm install
-ng serve
+npm start
 ```
 
-### 4. Accès à l’application
-- API : http://localhost:8080/api
-- Front : http://localhost:4200
+Frontend : http://localhost:4200
+
+## Technologies
+
+- Backend : Spring Boot 3, Spring Security + JWT, MySQL
+- Frontend : Angular 14, Angular Material, TypeScript
 
 ---
 
-Pour la documentation complète et le rapport détaillé, voir le fichier `# Documentation et rapport du projet MDD.md` à la racine du projet.
+Documentation complète : voir "Documentation et rapport du projet MDD.md"
