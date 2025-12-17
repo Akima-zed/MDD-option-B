@@ -17,6 +17,10 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
+    public List<Article> findAllOrderByCreatedAtDesc() {
+        return articleRepository.findAllByOrderByCreatedAtDesc();
+    }
+
     public Optional<Article> findById(Long id) {
         return articleRepository.findById(id);
     }
