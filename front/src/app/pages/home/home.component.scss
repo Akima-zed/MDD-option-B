@@ -1,7 +1,63 @@
-.center {
+.home-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  background-color: #ffffff;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 20px;
+
+    .logo {
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .action-button {
+        min-width: 130px;
+        padding: 8px 24px;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: none;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+      }
+    }
+  }
+
+  // Responsive - Mobile
+  @media (max-width: 768px) {
+    .content {
+      gap: 32px;
+
+      .logo {
+        max-width: 180px;
+      }
+
+      .button-group {
+        flex-direction: column;
+        width: 100%;
+        max-width: 280px;
+
+        .action-button {
+          width: 100%;
+        }
+      }
+    }
+  }
 }

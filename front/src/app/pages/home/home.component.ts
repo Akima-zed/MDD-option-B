@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  start() {
-    alert('Commencez par lire le README et à vous de jouer !');
+  constructor(private router: Router) {}
+
+  login(): void {
+    this.router.navigate(['/login']);
+  }
+
+  register(): void {
+    this.router.navigate(['/register']);
   }
 }
