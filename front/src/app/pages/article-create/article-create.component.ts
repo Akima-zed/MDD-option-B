@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ArticleService } from '../../services/article.service';
 import { ThemeService } from '../../services/theme.service';
 import { CreateArticleRequest, Theme } from '../../models/article.model';
@@ -26,7 +27,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatButtonModule,
     MatSelectModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    HeaderComponent
   ],
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.scss']

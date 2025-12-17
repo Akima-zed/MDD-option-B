@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ArticleService } from '../../services/article.service';
 import { CommentService } from '../../services/comment.service';
 import { Article } from '../../models/article.model';
@@ -27,7 +28,9 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HeaderComponent,
+    DatePipe
   ],
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss']
