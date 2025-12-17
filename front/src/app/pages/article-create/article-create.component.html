@@ -1,1 +1,60 @@
-<p>article-create works!</p>
+<div class="create-container">
+  <mat-card class="create-card">
+    <mat-card-header>
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <mat-card-title>Créer un article</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Titre</mat-label>
+          <input matInput formControlName="titre" required>
+          <mat-error *ngIf="articleForm.get('titre')?.hasError('required')">
+            Le titre est requis
+          </mat-error>
+          <mat-error *ngIf="articleForm.get('titre')?.hasError('minlength')">
+            Minimum 3 caractères
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Thème</mat-label>
+          <mat-select formControlName="themeId" required>
+            <mat-option *ngFor="let theme of themes" [value]="theme.id">
+              {{ theme.nom }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="articleForm.get('themeId')?.hasError('required')">
+            Le thème est requis
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contenu</mat-label>
+          <textarea matInput formControlName="contenu" rows="10" required></textarea>
+          <mat-error *ngIf="articleForm.get('contenu')?.hasError('required')">
+            Le contenu est requis
+          </mat-error>
+          <mat-error *ngIf="articleForm.get('contenu')?.hasError('minlength')">
+            Minimum 10 caractères
+          </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="goBack()">Annuler</button>
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="articleForm.invalid || isLoading">
+            {{ isLoading ? 'Création...' : 'Créer' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
