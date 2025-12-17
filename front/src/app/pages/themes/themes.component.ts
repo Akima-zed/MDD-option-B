@@ -72,32 +72,17 @@ export class ThemesComponent implements OnInit {
     return this.subscribedThemeIds.includes(themeId);
   }
 
-  toggleSubscription(themeId: number): void {
-    if (this.isSubscribed(themeId)) {
-      this.unsubscribe(themeId);
-    } else {
-      this.subscribe(themeId);
-    }
-  }
-
   subscribe(themeId: number): void {
+    if (this.isSubscribed(themeId)) {
+      return; // Déjà abonné
+    }
+    
     this.themeService.subscribe(themeId).subscribe({
       next: () => {
         this.subscribedThemeIds.push(themeId);
       },
       error: (error: HttpErrorResponse) => {
         console.error('Erreur abonnement', error);
-      }
-    });
-  }
-
-  unsubscribe(themeId: number): void {
-    this.themeService.unsubscribe(themeId).subscribe({
-      next: () => {
-        this.subscribedThemeIds = this.subscribedThemeIds.filter(id => id !== themeId);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Erreur désabonnement', error);
       }
     });
   }

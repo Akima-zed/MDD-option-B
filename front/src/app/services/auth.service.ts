@@ -62,4 +62,13 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.getToken() !== null;
   }
+
+  /**
+   * Récupère le token avec le préfixe Bearer pour les requêtes HTTP
+   * @returns Le token avec préfixe Bearer ou null
+   */
+  getAuthToken(): string | null {
+    const token = this.getToken();
+    return token ? `Bearer ${token}` : null;
+  }
 }

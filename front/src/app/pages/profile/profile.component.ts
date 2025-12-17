@@ -66,7 +66,14 @@ export class ProfileComponent implements OnInit {
   }
 
   unsubscribe(theme: Theme): void {
-    // TODO: Appeler le backend pour se désabonner
-    this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
+    this.authService.getAuthToken(); // Vérifier que l'utilisateur est connecté
+    this.userService.unsubscribeFromTheme(this.user.id, theme.id).subscribe({
+      next: () => {
+        this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
+      },
+      error: (error) => {
+        console.error('Erreur lors du désabonnement:', error);
+      }
+    });
   }
 }

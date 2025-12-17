@@ -25,10 +25,11 @@
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button 
-                  [color]="isSubscribed(theme.id) ? 'accent' : 'primary'"
-                  (click)="toggleSubscription(theme.id)"
+                  [color]="isSubscribed(theme.id) ? '' : 'primary'"
+                  [disabled]="isSubscribed(theme.id)"
+                  (click)="subscribe(theme.id)"
                   class="subscribe-button">
-            {{ isSubscribed(theme.id) ? 'Se désabonner' : 'S\'abonner' }}
+            {{ isSubscribed(theme.id) ? 'Déjà abonné' : 'S\'abonner' }}
           </button>
         </mat-card-actions>
       </mat-card>
