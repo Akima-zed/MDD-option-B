@@ -7,7 +7,7 @@ import { RegisterRequest, LoginRequest, AuthResponse } from '../models/user.mode
 describe('AuthService (TDD)', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'http://localhost:8080/api/auth';
+  const apiUrl = 'http://localhost:8081/api/auth';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

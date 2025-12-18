@@ -7,7 +7,7 @@ import { Article, CreateArticleRequest } from '../models/article.model';
 describe('ArticleService (TDD)', () => {
   let service: ArticleService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'http://localhost:8080/api/articles';
+  const apiUrl = 'http://localhost:8081/api/articles';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

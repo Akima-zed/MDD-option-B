@@ -7,7 +7,7 @@ import { Comment, CreateCommentRequest } from '../models/comment.model';
 describe('CommentService (TDD)', () => {
   let service: CommentService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'http://localhost:8080/api/articles';
+  const apiUrl = 'http://localhost:8081/api/articles';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

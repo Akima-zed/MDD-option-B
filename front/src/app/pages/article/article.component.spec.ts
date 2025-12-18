@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { ArticleComponent } from './article.component';
 
 describe('ArticleComponent', () => {
@@ -8,7 +11,14 @@ describe('ArticleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArticleComponent ]
+      imports: [ ArticleComponent, HttpClientTestingModule ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { params: of({ id: '1' }) }
+        }
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
 
