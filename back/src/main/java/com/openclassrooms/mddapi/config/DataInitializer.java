@@ -2,9 +2,11 @@ package com.openclassrooms.mddapi.config;
 
 import com.openclassrooms.mddapi.model.*;
 import com.openclassrooms.mddapi.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +14,10 @@ import java.util.Collections;
 
 @Configuration
 public class DataInitializer {
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Bean
     CommandLineRunner initData(UserRepository userRepo, ThemeRepository themeRepo, ArticleRepository articleRepo, CommentRepository commentRepo) {
         return args -> {
@@ -29,7 +35,8 @@ public class DataInitializer {
                 User user = new User();
                 user.setUsername("johndoe");
                 user.setEmail("john@example.com");
-                user.setPassword("$2a$10$hashdemotdepasse"); // bcrypt hash fictif
+                // Hasher le mot de passe "password123" avec BCrypt
+                user.setPassword(passwordEncoder.encode("password123"));
                 user.setRoles(Collections.singleton("USER"));
                 user.setDateInscription(LocalDate.now());
                 userRepo.save(user);

@@ -4,10 +4,12 @@ import com.openclassrooms.mddapi.dto.AuthResponse;
 import com.openclassrooms.mddapi.dto.LoginRequest;
 import com.openclassrooms.mddapi.dto.RegisterRequest;
 import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.security.JwtUtil;
 import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +26,12 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * Inscription d'un nouvel utilisateur.
@@ -52,12 +60,13 @@ public class AuthController {
             User user = new User();
             user.setUsername(request.getUsername());
             user.setEmail(request.getEmail());
-            user.setPassword(request.getPassword()); // TODO: Hasher avec BCrypt
+            // Hasher le mot de passe avec BCrypt
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
             
             User savedUser = userService.save(user);
 
-            // Générer le token JWT (simplifié pour l'instant)
-            String token = "jwt-token-" + savedUser.getId();
+            // Générer un vrai token JWT signé
+            String token = jwtUtil.generateToken(savedUser.getId());
 
             AuthResponse response = new AuthResponse(
                 token,
@@ -95,15 +104,15 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Vérifier le mot de passe (TODO: utiliser BCrypt)
-            if (!user.getPassword().equals(request.getPassword())) {
+            // Vérifier le mot de passe avec BCrypt
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 Map<String, String> error = new HashMap<>();
                 error.put("message", "Identifiants invalides");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Générer le token JWT
-            String token = "jwt-token-" + user.getId();
+            // Générer un vrai token JWT signé
+            String token = jwtUtil.generateToken(user.getId());
 
             AuthResponse response = new AuthResponse(
                 token,
