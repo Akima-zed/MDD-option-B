@@ -7,10 +7,12 @@ import { AuthService } from '../services/auth.service';
 describe('AuthInterceptor (TDD)', () => {
   let httpMock: HttpTestingController;
   let httpClient: HttpClient;
-  let authService: jasmine.SpyObj<AuthService>;
+  let authService: jest.Mocked<AuthService>;
 
   beforeEach(() => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['getToken']);
+    const authServiceSpy = {
+      getToken: jest.fn()
+    } as any;
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -26,7 +28,7 @@ describe('AuthInterceptor (TDD)', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     httpClient = TestBed.inject(HttpClient);
-    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
   });
 
   afterEach(() => {
@@ -35,7 +37,7 @@ describe('AuthInterceptor (TDD)', () => {
 
   it('should add Authorization header when token exists', () => {
     const mockToken = 'fake-jwt-token-12345';
-    authService.getToken.and.returnValue(mockToken);
+    authService.getToken.mockReturnValue(mockToken);
 
     httpClient.get('/api/test').subscribe();
 
@@ -46,7 +48,7 @@ describe('AuthInterceptor (TDD)', () => {
   });
 
   it('should NOT add Authorization header when token is null', () => {
-    authService.getToken.and.returnValue(null);
+    authService.getToken.mockReturnValue(null);
 
     httpClient.get('/api/test').subscribe();
 
@@ -56,7 +58,7 @@ describe('AuthInterceptor (TDD)', () => {
   });
 
   it('should NOT add Authorization header when token is empty string', () => {
-    authService.getToken.and.returnValue('');
+    authService.getToken.mockReturnValue('');
 
     httpClient.get('/api/test').subscribe();
 
@@ -67,7 +69,7 @@ describe('AuthInterceptor (TDD)', () => {
 
   it('should work with POST requests', () => {
     const mockToken = 'another-jwt-token';
-    authService.getToken.and.returnValue(mockToken);
+    authService.getToken.mockReturnValue(mockToken);
 
     httpClient.post('/api/articles', { title: 'Test' }).subscribe();
 
@@ -79,7 +81,7 @@ describe('AuthInterceptor (TDD)', () => {
 
   it('should work with PUT requests', () => {
     const mockToken = 'jwt-for-put';
-    authService.getToken.and.returnValue(mockToken);
+    authService.getToken.mockReturnValue(mockToken);
 
     httpClient.put('/api/users/1', { username: 'Updated' }).subscribe();
 
@@ -91,7 +93,7 @@ describe('AuthInterceptor (TDD)', () => {
 
   it('should work with DELETE requests', () => {
     const mockToken = 'jwt-for-delete';
-    authService.getToken.and.returnValue(mockToken);
+    authService.getToken.mockReturnValue(mockToken);
 
     httpClient.delete('/api/themes/1').subscribe();
 

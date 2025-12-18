@@ -5,12 +5,16 @@ import { AuthService } from '../services/auth.service';
 
 describe('AuthGuard (TDD)', () => {
   let guard: AuthGuard;
-  let authService: jasmine.SpyObj<AuthService>;
-  let router: jasmine.SpyObj<Router>;
+  let authService: jest.Mocked<AuthService>;
+  let router: jest.Mocked<Router>;
 
   beforeEach(() => {
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated']);
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const authServiceSpy = {
+      isAuthenticated: jest.fn()
+    } as any;
+    const routerSpy = {
+      navigate: jest.fn()
+    } as any;
 
     TestBed.configureTestingModule({
       providers: [
@@ -21,8 +25,8 @@ describe('AuthGuard (TDD)', () => {
     });
 
     guard = TestBed.inject(AuthGuard);
-    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
+    router = TestBed.inject(Router) as jest.Mocked<Router>;
   });
 
   it('should be created', () => {
@@ -31,7 +35,7 @@ describe('AuthGuard (TDD)', () => {
 
   describe('canActivate()', () => {
     it('should allow access when user is authenticated', () => {
-      authService.isAuthenticated.and.returnValue(true);
+      authService.isAuthenticated.mockReturnValue(true);
 
       const result = guard.canActivate();
 
@@ -41,7 +45,7 @@ describe('AuthGuard (TDD)', () => {
     });
 
     it('should redirect to login when user is not authenticated', () => {
-      authService.isAuthenticated.and.returnValue(false);
+      authService.isAuthenticated.mockReturnValue(false);
 
       const result = guard.canActivate();
 

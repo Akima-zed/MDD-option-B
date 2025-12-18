@@ -7,7 +7,7 @@ import { Theme } from '../models/article.model';
 describe('ThemeService (TDD)', () => {
   let service: ThemeService;
   let httpMock: HttpTestingController;
-  const apiUrl = 'http://localhost:8080/api/themes';
+  const apiUrl = 'http://localhost:8081/api/themes';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
