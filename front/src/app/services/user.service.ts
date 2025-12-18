@@ -29,4 +29,14 @@ export class UserService {
   unsubscribeFromTheme(userId: number, themeId: number): Observable<void> {
     return this.http.delete<void>(`http://localhost:8081/api/themes/${themeId}/subscribe`);
   }
+
+  /**
+   * Met à jour les informations d'un utilisateur (username et email)
+   * @param userId - ID de l'utilisateur
+   * @param userData - Nouvelles données (username, email)
+   * @returns Observable avec l'utilisateur mis à jour
+   */
+  updateUser(userId: number, userData: { username?: string; email?: string }): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${userId}`, userData);
+  }
 }

@@ -12,15 +12,68 @@
       <mat-card-content>
         <div class="user-info">
           <div class="info-section">
-            <h2>Informations</h2>
-            <div class="info-row">
-              <span class="label">Nom :</span>
-              <span class="value">{{ user.username }}</span>
+            <div class="section-header">
+              <h2>Informations</h2>
+              <button mat-raised-button 
+                      color="primary" 
+                      (click)="toggleEditMode()"
+                      *ngIf="!isEditMode">
+                <mat-icon>edit</mat-icon>
+                Modifier
+              </button>
             </div>
-            <div class="info-row">
-              <span class="label">Email :</span>
-              <span class="value">{{ user.email }}</span>
+
+            <!-- Mode lecture -->
+            <div *ngIf="!isEditMode">
+              <div class="info-row">
+                <span class="label">Nom :</span>
+                <span class="value">{{ user.username }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Email :</span>
+                <span class="value">{{ user.email }}</span>
+              </div>
             </div>
+
+            <!-- Mode édition -->
+            <form [formGroup]="profileForm" *ngIf="isEditMode" class="edit-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nom d'utilisateur</mat-label>
+                <input matInput formControlName="username" placeholder="Nom d'utilisateur">
+                <mat-error *ngIf="profileForm.get('username')?.hasError('required')">
+                  Le nom d'utilisateur est requis
+                </mat-error>
+                <mat-error *ngIf="profileForm.get('username')?.hasError('minlength')">
+                  Minimum 3 caractères
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="Email">
+                <mat-error *ngIf="profileForm.get('email')?.hasError('required')">
+                  L'email est requis
+                </mat-error>
+                <mat-error *ngIf="profileForm.get('email')?.hasError('email')">
+                  Format email invalide
+                </mat-error>
+              </mat-form-field>
+
+              <div class="form-actions">
+                <button mat-raised-button 
+                        color="primary" 
+                        (click)="saveProfile()"
+                        [disabled]="profileForm.invalid">
+                  <mat-icon>save</mat-icon>
+                  Enregistrer
+                </button>
+                <button mat-raised-button 
+                        (click)="toggleEditMode()">
+                  <mat-icon>cancel</mat-icon>
+                  Annuler
+                </button>
+              </div>
+            </form>
           </div>
 
           <div class="subscriptions-section">
