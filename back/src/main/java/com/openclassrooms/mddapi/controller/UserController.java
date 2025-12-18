@@ -53,6 +53,21 @@ public class UserController {
         return userService.save(user);
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur (username et email uniquement).
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
+        try {
+            User updatedUser = userService.update(id, user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
