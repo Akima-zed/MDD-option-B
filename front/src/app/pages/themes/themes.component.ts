@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../models/article.model';
@@ -21,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatChipsModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     HeaderComponent
   ],
   templateUrl: './themes.component.html',
@@ -32,7 +34,10 @@ export class ThemesComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadThemes();
@@ -62,7 +67,7 @@ export class ThemesComponent implements OnInit {
           this.subscribedThemeIds = themes.map(theme => theme.id);
         },
         error: (error: HttpErrorResponse) => {
-          console.error('Erreur chargement abonnements:', error);
+          // Erreur silencieuse - l'utilisateur verra une liste vide
         }
       });
     }
@@ -80,9 +85,19 @@ export class ThemesComponent implements OnInit {
     this.themeService.subscribe(themeId).subscribe({
       next: () => {
         this.subscribedThemeIds.push(themeId);
+        const theme = this.themes.find(t => t.id === themeId);
+        this.snackBar.open('Abonné au thème ' + (theme?.nom || ''), 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Erreur abonnement', error);
+        this.snackBar.open('Erreur lors de l\'abonnement', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }

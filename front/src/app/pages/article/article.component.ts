@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ArticleService } from '../../services/article.service';
 import { CommentService } from '../../services/comment.service';
@@ -29,6 +30,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
     HeaderComponent,
     DatePipe
   ],
@@ -48,7 +50,8 @@ export class ArticleComponent implements OnInit {
     private router: Router,
     private articleService: ArticleService,
     private commentService: CommentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +85,7 @@ export class ArticleComponent implements OnInit {
         this.comments = comments;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Erreur chargement commentaires', error);
+        // Erreur silencieuse - affichage d'une liste vide
       }
     });
   }
@@ -103,6 +106,11 @@ export class ArticleComponent implements OnInit {
         this.comments.push(comment);
         this.commentForm.reset();
         this.isSubmitting = false;
+        this.snackBar.open('Commentaire ajouté avec succès !', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting = false;

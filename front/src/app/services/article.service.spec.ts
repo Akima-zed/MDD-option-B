@@ -131,7 +131,12 @@ describe('ArticleService (TDD)', () => {
 
       const req = httpMock.expectOne(apiUrl);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual(createData);
+      // Le service transforme titre -> title et contenu -> content
+      expect(req.request.body).toEqual({
+        title: createData.titre,
+        content: createData.contenu,
+        themeId: createData.themeId
+      });
       req.flush(mockResponse);
     });
 
