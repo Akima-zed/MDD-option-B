@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ArticleService } from '../../services/article.service';
 import { ThemeService } from '../../services/theme.service';
@@ -28,6 +29,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     MatSelectModule,
     MatCardModule,
     MatIconModule,
+    MatSnackBarModule,
     HeaderComponent
   ],
   templateUrl: './article-create.component.html',
@@ -43,7 +45,8 @@ export class ArticleCreateComponent implements OnInit {
     private fb: FormBuilder,
     private articleService: ArticleService,
     private themeService: ThemeService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -79,6 +82,11 @@ export class ArticleCreateComponent implements OnInit {
 
     this.articleService.createArticle(articleData).subscribe({
       next: () => {
+        this.snackBar.open('Article créé avec succès !', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.router.navigate(['/feed']);
       },
       error: (error: HttpErrorResponse) => {
