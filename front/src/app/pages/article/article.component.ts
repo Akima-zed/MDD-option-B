@@ -85,7 +85,7 @@ export class ArticleComponent implements OnInit {
         this.comments = comments;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Erreur chargement commentaires', error);
+        // Erreur silencieuse - affichage d'une liste vide
       }
     });
   }

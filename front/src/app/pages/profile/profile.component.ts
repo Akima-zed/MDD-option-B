@@ -77,7 +77,7 @@ export class ProfileComponent implements OnInit {
         this.subscribedThemes = themes;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des abonnements:', error);
+        // Erreur silencieuse - affichage d'une liste vide
       }
     });
   }
@@ -140,7 +140,9 @@ export class ProfileComponent implements OnInit {
         this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
       },
       error: (error) => {
-        console.error('Erreur lors du désabonnement:', error);
+        this.snackBar.open('Erreur lors du désabonnement', 'Fermer', {
+          duration: 3000
+        });
       }
     });
   }

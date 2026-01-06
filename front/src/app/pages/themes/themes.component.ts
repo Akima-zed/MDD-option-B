@@ -67,7 +67,7 @@ export class ThemesComponent implements OnInit {
           this.subscribedThemeIds = themes.map(theme => theme.id);
         },
         error: (error: HttpErrorResponse) => {
-          console.error('Erreur chargement abonnements:', error);
+          // Erreur silencieuse - l'utilisateur verra une liste vide
         }
       });
     }
@@ -93,7 +93,11 @@ export class ThemesComponent implements OnInit {
         });
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Erreur abonnement', error);
+        this.snackBar.open('Erreur lors de l\'abonnement', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }

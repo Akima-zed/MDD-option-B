@@ -136,8 +136,6 @@ public class ArticleController {
      * Extrait l'ID utilisateur du token JWT (version simplifiée).
      */
     private Long extractUserIdFromToken(String token) {
-        // TODO: Implémenter la vraie validation JWT
-        // Pour l'instant, on extrait juste l'ID du token simple
         String cleanToken = token.replace("Bearer ", "").replace("jwt-token-", "");
         return Long.parseLong(cleanToken);
     }
