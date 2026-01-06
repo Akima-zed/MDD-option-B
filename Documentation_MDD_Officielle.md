@@ -373,12 +373,41 @@ npm run cypress:run
 - Guard d'authentification pour protéger les routes et éviter les appels API inutiles
 - Interceptor HTTP pour ajouter automatiquement le token JWT (évite la duplication de code)
 - Stockage du token dans localStorage pour persistance entre sessions
+- Design responsive avec Angular Material et media queries
+- Grilles CSS adaptatives (auto-fill, minmax) pour les listes
+- Menu mobile avec overlay pour écrans < 768px
 
 **Actions menées** :
 - Configuration de la compression Gzip côté serveur
 - Minification et bundling des assets front-end
 - Mise en cache des ressources statiques
 - Optimisation des requêtes SQL avec indices appropriés
+
+**Tests de compatibilité responsive** (validés le 6 janvier 2026) :
+
+L'application a été testée sur différentes résolutions pour garantir une expérience utilisateur optimale sur tous les appareils :
+
+| Résolution | Appareil | Résultat | Notes |
+|------------|----------|----------|-------|
+| 390 x 844 | iPhone 12 Pro | ✅ Validé | Menu hamburger fonctionnel, formulaires accessibles |
+| 360 x 800 | Galaxy S20 | ✅ Validé | Grilles adaptées en 1 colonne, navigation fluide |
+| 820 x 1180 | iPad Air (Portrait) | ✅ Validé | Grilles en 2-3 colonnes, utilisation optimale de l'espace |
+| 1180 x 820 | iPad Air (Paysage) | ✅ Validé | Layout desktop, toutes fonctionnalités accessibles |
+
+**Points validés** :
+- ✅ Meta viewport configuré (`width=device-width, initial-scale=1`)
+- ✅ Media queries implémentées (`@media max-width: 768px`)
+- ✅ Menu mobile avec hamburger pour navigation
+- ✅ Grilles CSS responsive (`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`)
+- ✅ Flexbox pour layouts adaptatifs
+- ✅ Angular Material composants responsive par défaut
+- ✅ Formulaires accessibles sur mobile avec clavier adapté
+- ✅ Touch targets de taille appropriée (min 44x44px)
+- ✅ Pas de débordement horizontal (overflow-x)
+- ✅ Texte lisible sans zoom (min 16px)
+- ✅ Images et cartes responsive (max-width: 100%)
+
+**Méthode de test** : Tests manuels avec Chrome DevTools en mode Device Toolbar sur les 4 résolutions. Documentation complète disponible dans [TESTS_RESPONSIVE.md](TESTS_RESPONSIVE.md).
 
 ### 3.3 Revue technique
 
