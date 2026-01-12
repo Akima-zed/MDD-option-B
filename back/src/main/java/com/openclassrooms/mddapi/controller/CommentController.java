@@ -39,8 +39,7 @@ public class CommentController {
      */
     @PostMapping("/{articleId}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long articleId,
-                                        @Valid @RequestBody CommentRequest request,
-                                        @RequestHeader("Authorization") String token) {
+                                        @Valid @RequestBody CommentRequest request) {
         try {
             // Vérifier que l'article existe
             Optional<Article> article = articleService.findById(articleId);
@@ -50,8 +49,14 @@ public class CommentController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
             }
             
-            // Extraire l'utilisateur du token
-            Long userId = extractUserIdFromToken(token);
+            // Récupérer l'utilisateur courant depuis SecurityContext
+            Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
+            if (userId == null) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Utilisateur non authentifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            }
+
             Optional<User> user = userService.findById(userId);
             if (!user.isPresent()) {
                 Map<String, String> error = new HashMap<>();
@@ -92,11 +97,4 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
     
-    /**
-     * Extrait l'ID utilisateur du token JWT (version simplifiée).
-     */
-    private Long extractUserIdFromToken(String token) {
-        String cleanToken = token.replace("Bearer ", "").replace("jwt-token-", "");
-        return Long.parseLong(cleanToken);
-    }
 }

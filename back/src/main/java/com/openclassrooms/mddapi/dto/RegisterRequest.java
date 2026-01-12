@@ -2,6 +2,7 @@ package com.openclassrooms.mddapi.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -18,7 +19,9 @@ public class RegisterRequest {
     private String email;
     
     @NotBlank(message = "Le mot de passe est obligatoire")
-    @Size(min = 6, message = "Le mot de passe doit contenir au moins 6 caractères")
+    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).+$",
+             message = "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial")
     private String password;
 
     public RegisterRequest() {}
