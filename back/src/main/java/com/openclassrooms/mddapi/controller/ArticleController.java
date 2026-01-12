@@ -63,12 +63,17 @@ public class ArticleController {
      * Crée un nouvel article.
      */
     @PostMapping
-    public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest request,
-                                           @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest request) {
         try {
-            // Extraire l'ID utilisateur du token (simplifié)
-            Long userId = extractUserIdFromToken(token);
-            
+            // Récupérer l'utilisateur courant depuis SecurityContext
+            Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
+
+            if (userId == null) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Utilisateur non authentifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            }
+
             Optional<User> user = userService.findById(userId);
             if (!user.isPresent()) {
                 Map<String, String> error = new HashMap<>();
@@ -132,11 +137,4 @@ public class ArticleController {
         return ResponseEntity.noContent().build();
     }
     
-    /**
-     * Extrait l'ID utilisateur du token JWT (version simplifiée).
-     */
-    private Long extractUserIdFromToken(String token) {
-        String cleanToken = token.replace("Bearer ", "").replace("jwt-token-", "");
-        return Long.parseLong(cleanToken);
-    }
 }
