@@ -96,7 +96,9 @@ Créez un fichier `.env` à la racine du dossier `back/` ou utilisez les variabl
 DB_USER=mdd_user
 DB_PASSWORD=mdd_password
 DB_URL=jdbc:mysql://localhost:3306/MDD_db
-JWT_SECRET=votre_secret_jwt_super_securise_min_256_bits
+# JWT_SECRET doit être une clé HMAC (au moins 256 bits) encodée en Base64.
+# Exemple : JWT_SECRET=Base64.getEncoder().encodeToString(your_32_bytes_secret)
+JWT_SECRET=votre_base64_secret_jwt_256bits
 ```
 
 ### Configuration MySQL
@@ -238,6 +240,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 - **Durée de validité** : 24 heures
+
+- **Politique de mot de passe** : Minimum 8 caractères, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial. La validation est appliquée côté **backend** et côté **frontend** à l'inscription.
+
+- **SecurityContext** : Les contrôleurs récupèrent désormais l'utilisateur authentifié via le `SecurityContext` (utilitaire `SecurityUtils.getCurrentUserId()`), au lieu de parser manuellement le JWT dans chaque contrôleur.
 - **Algorithme** : HMAC SHA-256
 - **Claim** : `userId` (Long)
 
