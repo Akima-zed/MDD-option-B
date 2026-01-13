@@ -101,48 +101,31 @@ public class ThemeController {
     /**
      * Se désabonner d'un thème.
      */
-    @DeleteMapping("/{themeId}/subscribe")
-    public ResponseEntity<?> unsubscribeFromTheme(@PathVariable Long themeId) {
-        try {
-            Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
-            if (userId == null) {
-                Map<String, String> error = new HashMap<>();
-                error.put("message", "Utilisateur non authentifié");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-            }
-
-            Optional<User> userOpt = userService.findById(userId);
-            
-            if (!userOpt.isPresent()) {
-                Map<String, String> error = new HashMap<>();
-                error.put("message", "Utilisateur non trouvé");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-            }
-            
-            Optional<Theme> themeOpt = themeService.findById(themeId);
-            if (!themeOpt.isPresent()) {
-                Map<String, String> error = new HashMap<>();
-                error.put("message", "Thème non trouvé");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-            }
-            
-            User user = userOpt.get();
-            Theme theme = themeOpt.get();
-            
-            // Retirer le thème des abonnements
-            user.getAbonnements().remove(theme);
-            userService.save(user);
-            
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Désabonnement réussi");
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "Erreur lors du désabonnement: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    @PostMapping("/{themeId}/unsubscribe")
+public ResponseEntity<?> unsubscribeFromTheme(@PathVariable Long themeId) {
+    try {
+        Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Utilisateur non authentifié"));
         }
+
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        Theme theme = themeService.findById(themeId)
+                .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
+
+        user.getAbonnements().remove(theme);
+        userService.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "Désabonnement réussi"));
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("message", "Erreur lors du désabonnement: " + e.getMessage()));
     }
+}
 
     /**
      * Crée un nouveau thème (admin uniquement - à sécuriser).
