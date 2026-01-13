@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,30 +38,38 @@ public class User {
     private Set<Theme> abonnements = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
-    @JsonIgnoreProperties({"author", "commentaires"})
+    @JsonIgnoreProperties({"author", "comments"})
     private Set<Article> articles = new HashSet<>();
 
     @OneToMany(mappedBy = "author")
     @JsonIgnoreProperties({"author", "article"})
-    private Set<Comment> commentaires = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
 
-    // Getters and setters
+    // Getters / Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
     public Set<String> getRoles() { return roles; }
     public void setRoles(Set<String> roles) { this.roles = roles; }
+
     public LocalDate getDateInscription() { return dateInscription; }
     public void setDateInscription(LocalDate dateInscription) { this.dateInscription = dateInscription; }
+
     public Set<Theme> getAbonnements() { return abonnements; }
     public void setAbonnements(Set<Theme> abonnements) { this.abonnements = abonnements; }
+
     public Set<Article> getArticles() { return articles; }
     public void setArticles(Set<Article> articles) { this.articles = articles; }
-    public Set<Comment> getCommentaires() { return commentaires; }
-    public void setCommentaires(Set<Comment> commentaires) { this.commentaires = commentaires; }
+
+    public Set<Comment> getComments() { return comments; }
+    public void setComments(Set<Comment> comments) { this.comments = comments; }
 }

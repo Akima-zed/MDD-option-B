@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 public class Article {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,9 +22,8 @@ public class Article {
     @JsonProperty("contenu")
     private String content;
 
-
     @ManyToOne(optional = false)
-    @JsonIgnoreProperties({"password", "articles", "commentaires", "abonnements"})
+    @JsonIgnoreProperties({"password", "articles", "comments", "abonnements"})
     @JsonProperty("auteur")
     private User author;
 
@@ -31,26 +31,33 @@ public class Article {
     @JsonIgnoreProperties({"articles", "abonnes"})
     private Theme theme;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"article"})
-    private Set<Comment> commentaires = new HashSet<>();
+    @JsonProperty("comments")
+    private Set<Comment> comments = new HashSet<>();
 
     @JsonProperty("dateCreation")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Getters and setters
+    // Getters / Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
     public User getAuthor() { return author; }
     public void setAuthor(User author) { this.author = author; }
+
     public Theme getTheme() { return theme; }
     public void setTheme(Theme theme) { this.theme = theme; }
-    public Set<Comment> getCommentaires() { return commentaires; }
-    public void setCommentaires(Set<Comment> commentaires) { this.commentaires = commentaires; }
+
+    public Set<Comment> getComments() { return comments; }
+    public void setComments(Set<Comment> comments) { this.comments = comments; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
