@@ -55,11 +55,16 @@ public class ThemeController {
      * S'abonner à un thème.
      */
     @PostMapping("/{themeId}/subscribe")
-    public ResponseEntity<?> subscribeToTheme(@PathVariable Long themeId,
-                                              @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> subscribeToTheme(@PathVariable Long themeId) {
         try {
-            // Extraire l'utilisateur du token
-            Long userId = extractUserIdFromToken(token);
+            // Récupérer l'utilisateur courant depuis SecurityContext
+            Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
+            if (userId == null) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Utilisateur non authentifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            }
+
             Optional<User> userOpt = userService.findById(userId);
             
             if (!userOpt.isPresent()) {
@@ -97,10 +102,15 @@ public class ThemeController {
      * Se désabonner d'un thème.
      */
     @DeleteMapping("/{themeId}/subscribe")
-    public ResponseEntity<?> unsubscribeFromTheme(@PathVariable Long themeId,
-                                                  @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> unsubscribeFromTheme(@PathVariable Long themeId) {
         try {
-            Long userId = extractUserIdFromToken(token);
+            Long userId = com.openclassrooms.mddapi.security.SecurityUtils.getCurrentUserId();
+            if (userId == null) {
+                Map<String, String> error = new HashMap<>();
+                error.put("message", "Utilisateur non authentifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+            }
+
             Optional<User> userOpt = userService.findById(userId);
             
             if (!userOpt.isPresent()) {
@@ -166,11 +176,4 @@ public class ThemeController {
         return ResponseEntity.noContent().build();
     }
     
-    /**
-     * Extrait l'ID utilisateur du token JWT (version simplifiée).
-     */
-    private Long extractUserIdFromToken(String token) {
-        String cleanToken = token.replace("Bearer ", "").replace("jwt-token-", "");
-        return Long.parseLong(cleanToken);
-    }
 }

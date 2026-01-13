@@ -58,7 +58,7 @@ class AuthControllerIntegrationTest {
         testUser.setId(1L);
         testUser.setUsername("johndoe");
         testUser.setEmail("john@test.com");
-        testUser.setPassword(passwordEncoder.encode("password123"));
+        testUser.setPassword(passwordEncoder.encode("Password123!"));
     }
 
     @Test
@@ -68,7 +68,7 @@ class AuthControllerIntegrationTest {
         RegisterRequest request = new RegisterRequest();
         request.setUsername("newuser");
         request.setEmail("newuser@test.com");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         User savedUser = new User();
         savedUser.setId(2L);
@@ -97,7 +97,7 @@ class AuthControllerIntegrationTest {
         RegisterRequest request = new RegisterRequest();
         request.setUsername("newuser");
         request.setEmail("existing@test.com");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         when(userService.existsByEmail("existing@test.com")).thenReturn(true);
 
@@ -116,7 +116,7 @@ class AuthControllerIntegrationTest {
         RegisterRequest request = new RegisterRequest();
         request.setUsername("existinguser");
         request.setEmail("new@test.com");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         when(userService.existsByEmail(anyString())).thenReturn(false);
         when(userService.existsByUsername("existinguser")).thenReturn(true);
@@ -135,7 +135,7 @@ class AuthControllerIntegrationTest {
         // Given
         LoginRequest request = new LoginRequest();
         request.setEmailOrUsername("john@test.com");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         when(userService.findByEmail("john@test.com")).thenReturn(Optional.of(testUser));
         when(jwtUtil.generateToken(1L)).thenReturn("fake-jwt-token");
@@ -174,7 +174,7 @@ class AuthControllerIntegrationTest {
         // Given
         LoginRequest request = new LoginRequest();
         request.setEmailOrUsername("notfound@test.com");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         when(userService.findByEmail(anyString())).thenReturn(Optional.empty());
         when(userService.findByUsername(anyString())).thenReturn(Optional.empty());
@@ -188,12 +188,28 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("POST /api/auth/register - Should reject weak/invalid password")
+    void testRegister_WeakPassword() throws Exception {
+        // Given
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("weakuser");
+        request.setEmail("weak@test.com");
+        request.setPassword("weak"); // too short and missing required classes
+
+        // When & Then
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("POST /api/auth/login - Should login with username instead of email")
     void testLogin_WithUsername() throws Exception {
         // Given
         LoginRequest request = new LoginRequest();
         request.setEmailOrUsername("johndoe");
-        request.setPassword("password123");
+        request.setPassword("Password123!");
 
         when(userService.findByEmail("johndoe")).thenReturn(Optional.empty());
         when(userService.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
