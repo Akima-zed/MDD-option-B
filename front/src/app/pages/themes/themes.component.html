@@ -2,7 +2,7 @@
 
 <div class="themes-container">
   <div class="themes-content">
-    <h1>Thèmes</h1>
+    <h1>Themes</h1>
 
     <div *ngIf="isLoading" class="loading-container">
       <mat-spinner></mat-spinner>
@@ -17,19 +17,21 @@
         <mat-card-header>
           <div class="theme-header">
             <mat-icon class="theme-icon">label</mat-icon>
-            <mat-card-title>{{ theme.nom }}</mat-card-title>
+            <mat-card-title>{{ theme.name }}</mat-card-title>
           </div>
         </mat-card-header>
+
         <mat-card-content>
           <p class="theme-description">{{ theme.description }}</p>
         </mat-card-content>
+
         <mat-card-actions>
-          <button mat-raised-button 
+          <button mat-raised-button
                   [color]="isSubscribed(theme.id) ? '' : 'primary'"
                   [disabled]="isSubscribed(theme.id)"
                   (click)="subscribe(theme.id)"
                   class="subscribe-button">
-            {{ isSubscribed(theme.id) ? 'Déjà abonné' : 'S\'abonner' }}
+            {{ isSubscribed(theme.id) ? 'Already subscribed' : 'Subscribe' }}
           </button>
         </mat-card-actions>
       </mat-card>
@@ -37,7 +39,7 @@
 
     <div *ngIf="!isLoading && themes.length === 0" class="empty-state">
       <mat-icon>category</mat-icon>
-      <p>Aucun thème disponible</p>
+      <p>No themes available</p>
     </div>
   </div>
 </div>

@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -41,9 +40,9 @@ export class ArticleComponent implements OnInit {
   article: Article | null = null;
   comments: Comment[] = [];
   commentForm!: FormGroup;
-  isLoading: boolean = true;
-  isSubmitting: boolean = false;
-  errorMessage: string = '';
+  isLoading = true;
+  isSubmitting = false;
+  errorMessage = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -56,7 +55,7 @@ export class ArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.commentForm = this.fb.group({
-      content: ['', [Validators.required, Validators.minLength(3)]]
+      content: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/\S+/)]]
     });
 
     const articleId = this.route.snapshot.paramMap.get('id');
@@ -72,8 +71,8 @@ export class ArticleComponent implements OnInit {
         this.article = article;
         this.isLoading = false;
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage = 'Article introuvable';
+      error: () => {
+        this.errorMessage = 'Article not found';
         this.isLoading = false;
       }
     });
@@ -83,21 +82,17 @@ export class ArticleComponent implements OnInit {
     this.commentService.getCommentsByArticleId(articleId).subscribe({
       next: (comments: Comment[]) => {
         this.comments = comments;
-      },
-      error: (error: HttpErrorResponse) => {
-        // Erreur silencieuse - affichage d'une liste vide
       }
     });
   }
 
   onSubmitComment(): void {
-    if (this.commentForm.invalid || !this.article) {
-      return;
-    }
+    if (this.commentForm.invalid || !this.article) return;
 
     this.isSubmitting = true;
+
     const commentData: CreateCommentRequest = {
-      content: this.commentForm.value.content,
+      content: this.commentForm.value.content.trim(),
       articleId: this.article.id
     };
 
@@ -106,13 +101,13 @@ export class ArticleComponent implements OnInit {
         this.comments.push(comment);
         this.commentForm.reset();
         this.isSubmitting = false;
-        this.snackBar.open('Commentaire ajouté avec succès !', 'Fermer', {
+        this.snackBar.open('Comment added successfully!', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
         });
       },
-      error: (error: HttpErrorResponse) => {
+      error: () => {
         this.isSubmitting = false;
       }
     });

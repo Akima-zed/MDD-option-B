@@ -15,25 +15,25 @@ public class Article {
     private Long id;
 
     @Column(nullable = false)
-    @JsonProperty("titre")
+    @JsonProperty("title")
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    @JsonProperty("contenu")
+    @JsonProperty("content")
     private String content;
 
     @ManyToOne(optional = false)
-    @JsonIgnoreProperties({"password", "articles", "comments", "abonnements"})
-    @JsonProperty("auteur")
+    @JsonProperty("author")
+    @JsonIgnoreProperties({"password", "articles", "comments", "subscriptions"})
     private User author;
 
     @ManyToOne(optional = false)
-    @JsonIgnoreProperties({"articles", "abonnes"})
+    @JsonIgnoreProperties({"articles", "subscribers"})
     private Theme theme;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"article"})
     @JsonProperty("comments")
+    @JsonIgnoreProperties({"article"}) // 🔥 Empêche la boucle inverse
     private Set<Comment> comments = new HashSet<>();
 
     @JsonProperty("dateCreation")

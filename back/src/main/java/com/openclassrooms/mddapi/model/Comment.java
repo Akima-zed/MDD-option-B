@@ -1,7 +1,8 @@
 package com.openclassrooms.mddapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -13,18 +14,19 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    @JsonProperty("contenu")
+    @JsonProperty("content")
     private String content;
 
     @ManyToOne(optional = false)
-    @JsonIgnoreProperties({"password", "articles", "comments", "abonnements"})
-    @JsonProperty("auteur")
+    @JsonProperty("author")
+    @JsonIgnoreProperties({"password", "articles", "comments", "subscriptions"})
     private User author;
 
     @ManyToOne(optional = false)
-    @JsonIgnoreProperties({"comments"})
+    @JsonIgnore // 🔥 Empêche la boucle infinie Article → Comments → Article
     private Article article;
 
+    @JsonProperty("dateCreation")
     private LocalDate dateCreation = LocalDate.now();
 
     // Getters / Setters

@@ -7,53 +7,58 @@
 
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
-    <button mat-raised-button color="primary" (click)="goBack()">Retour au fil</button>
+    <button mat-raised-button color="primary" (click)="goBack()">Back to feed</button>
   </div>
 
   <div *ngIf="!isLoading && article" class="article-content">
-    <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Retour">
+    <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Back">
       <mat-icon>arrow_back</mat-icon>
     </button>
 
     <article class="article-main">
       <header class="article-header">
-        <h1 class="article-title">{{ article.titre }}</h1>
+        <h1 class="article-title">{{ article.title }}</h1>
+
         <div class="article-meta">
           <div class="article-theme">
             <mat-icon>label</mat-icon>
-            <span>{{ article.theme.nom }}</span>
+            <span>{{ article.theme.name }}</span>
           </div>
+
           <div class="article-info">
-            <span class="author">Par {{ article.auteur.username }}</span>
+            <span class="author">By {{ article.author.username }}</span>
             <span class="separator"> • </span>
             <span class="date">{{ article.dateCreation | date: 'dd MMMM yyyy' }}</span>
           </div>
         </div>
       </header>
+
       <div class="article-body">
-        <p>{{ article.contenu }}</p>
+        <p>{{ article.content }}</p>
       </div>
     </article>
 
     <section class="comments-section">
-      <h2 class="comments-title">Commentaires</h2>
+      <h2 class="comments-title">Comments</h2>
 
       <mat-card class="comment-form-card">
         <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Entrez le votre commentaire</mat-label>
-            <textarea matInput formControlName="contenu" rows="4" required></textarea>
-            <mat-error *ngIf="commentForm.get('contenu')?.hasError('required')">
-              Le commentaire est requis
+            <mat-label>Write your comment</mat-label>
+            <textarea matInput formControlName="content" rows="4" required></textarea>
+
+            <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
+              Comment is required
             </mat-error>
-            <mat-error *ngIf="commentForm.get('contenu')?.hasError('minlength')">
-              Minimum 3 caractères
+            <mat-error *ngIf="commentForm.get('content')?.hasError('minlength')">
+              Minimum 3 characters
             </mat-error>
           </mat-form-field>
+
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" 
+            <button mat-raised-button color="primary" type="submit"
                     [disabled]="commentForm.invalid || isSubmitting">
-              {{ isSubmitting ? 'Envoi...' : 'Envoyer' }}
+              {{ isSubmitting ? 'Sending...' : 'Send' }}
             </button>
           </div>
         </form>
@@ -62,15 +67,16 @@
       <div class="comments-list">
         <mat-card *ngFor="let comment of comments" class="comment-card">
           <div class="comment-header">
-            <span class="comment-author">{{ comment.auteur.username }}</span>
+            <span class="comment-author">{{ comment.author.username }}</span>
             <span class="comment-date">{{ comment.dateCreation | date: 'dd/MM/yyyy' }}</span>
           </div>
+
           <p class="comment-content">{{ comment.content }}</p>
         </mat-card>
 
         <div *ngIf="comments.length === 0" class="no-comments">
           <mat-icon>chat_bubble_outline</mat-icon>
-          <p>Aucun commentaire pour le moment.</p>
+          <p>No comments yet.</p>
         </div>
       </div>
     </section>

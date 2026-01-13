@@ -11,34 +11,15 @@ export class ArticleService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Récupère la liste de tous les articles (fil d'actualité)
-   * @returns Observable avec la liste des articles
-   */
   getArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(this.apiUrl);
   }
 
-  /**
-   * Récupère un article par son ID
-   * @param id - ID de l'article
-   * @returns Observable avec l'article
-   */
   getArticleById(id: number): Observable<Article> {
     return this.http.get<Article>(`${this.apiUrl}/${id}`);
   }
 
-  /**
-   * Crée un nouvel article
-   * @param data - Données de l'article (titre, contenu, themeId)
-   * @returns Observable avec l'article créé
-   */
   createArticle(data: CreateArticleRequest): Observable<Article> {
-    const payload = {
-      title: data.titre,
-      content: data.contenu,
-      themeId: data.themeId
-    };
-    return this.http.post<Article>(this.apiUrl, payload);
+    return this.http.post<Article>(this.apiUrl, data);
   }
 }

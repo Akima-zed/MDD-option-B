@@ -47,7 +47,7 @@ public class CommentController {
 
 
             Comment comment = new Comment();
-            comment.setContent(request.getContent());
+            comment.setContent(request.getContent().trim());
             comment.setAuthor(user);
             comment.setArticle(article.get());
 

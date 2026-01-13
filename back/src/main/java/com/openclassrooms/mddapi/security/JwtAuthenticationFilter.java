@@ -42,10 +42,8 @@ protected void doFilterInternal(
         String path = request.getServletPath();
 
         // 🔓 Routes publiques → on laisse passer immédiatement
-        if (path.startsWith("/api/auth")
-                || path.startsWith("/api/themes")
-                || path.startsWith("/api/articles")) {
-            filterChain.doFilter(request, response);
+        if (path.startsWith("/api/auth")) {
+        filterChain.doFilter(request, response);
             return;
         }
 

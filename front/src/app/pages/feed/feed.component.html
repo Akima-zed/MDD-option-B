@@ -29,16 +29,16 @@
     <mat-card *ngFor="let article of articles" class="article-card">
       <mat-card-header>
         <mat-card-title (click)="viewArticle(article.id)" style="cursor: pointer;">
-          {{ article.titre }}
+          {{ article.title }}
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="article-meta">
           <span class="date">{{ article.dateCreation | date: 'dd/MM/yyyy' }}</span>
-          <span class="author">{{ article.auteur.username }}</span>
+          <span class="author">{{ article.author.username }}</span>
         </div>
         <p class="article-content">
-          Content: {{ article.contenu || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.' | slice:0:200 }}<span *ngIf="(article.contenu || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.').length > 200">...</span>
+          Content: {{ article.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.' | slice:0:200 }}<span *ngIf="(article.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.').length > 200">...</span>
         </p>
       </mat-card-content>
     </mat-card>

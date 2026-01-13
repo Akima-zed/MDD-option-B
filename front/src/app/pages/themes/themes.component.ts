@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ThemeService } from '../../services/theme.service';
-import { Theme } from '../../models/article.model';
+import { Theme } from '../../models/theme.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -31,8 +30,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ThemesComponent implements OnInit {
   themes: Theme[] = [];
   subscribedThemeIds: number[] = [];
-  isLoading: boolean = true;
-  errorMessage: string = '';
+  isLoading = true;
+  errorMessage = '';
 
   constructor(
     private themeService: ThemeService,
@@ -50,8 +49,8 @@ export class ThemesComponent implements OnInit {
         this.themes = themes;
         this.isLoading = false;
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage = 'Erreur lors du chargement des thèmes';
+      error: () => {
+        this.errorMessage = 'Error loading themes';
         this.isLoading = false;
       }
     });
@@ -61,13 +60,10 @@ export class ThemesComponent implements OnInit {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      // Charger les abonnements de l'utilisateur depuis le backend
+
       this.themeService.getUserSubscriptions(user.id).subscribe({
         next: (themes: Theme[]) => {
-          this.subscribedThemeIds = themes.map(theme => theme.id);
-        },
-        error: (error: HttpErrorResponse) => {
-          // Erreur silencieuse - l'utilisateur verra une liste vide
+          this.subscribedThemeIds = themes.map(t => t.id);
         }
       });
     }
@@ -78,22 +74,25 @@ export class ThemesComponent implements OnInit {
   }
 
   subscribe(themeId: number): void {
-    if (this.isSubscribed(themeId)) {
-      return; // Déjà abonné
-    }
-    
+    if (this.isSubscribed(themeId)) return;
+
     this.themeService.subscribe(themeId).subscribe({
       next: () => {
         this.subscribedThemeIds.push(themeId);
         const theme = this.themes.find(t => t.id === themeId);
-        this.snackBar.open('Abonné au thème ' + (theme?.nom || ''), 'Fermer', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+
+        this.snackBar.open(
+          'Subscribed to theme ' + (theme?.name || ''),
+          'Close',
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }
+        );
       },
-      error: (error: HttpErrorResponse) => {
-        this.snackBar.open('Erreur lors de l\'abonnement', 'Fermer', {
+      error: () => {
+        this.snackBar.open('Error subscribing to theme', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'

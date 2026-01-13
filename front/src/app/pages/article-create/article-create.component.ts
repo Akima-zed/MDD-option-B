@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -38,8 +37,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ArticleCreateComponent implements OnInit {
   articleForm!: FormGroup;
   themes: Theme[] = [];
-  isLoading: boolean = false;
-  errorMessage: string = '';
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -51,8 +50,8 @@ export class ArticleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
-      titre: ['', [Validators.required, Validators.minLength(3)]],
-      contenu: ['', [Validators.required, Validators.minLength(10)]],
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      content: ['', [Validators.required, Validators.minLength(10)]],
       themeId: ['', [Validators.required]]
     });
 
@@ -64,16 +63,14 @@ export class ArticleCreateComponent implements OnInit {
       next: (themes: Theme[]) => {
         this.themes = themes;
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage = 'Erreur lors du chargement des thèmes';
+      error: () => {
+        this.errorMessage = 'Error loading themes';
       }
     });
   }
 
   onSubmit(): void {
-    if (this.articleForm.invalid) {
-      return;
-    }
+    if (this.articleForm.invalid) return;
 
     this.isLoading = true;
     this.errorMessage = '';
@@ -82,7 +79,7 @@ export class ArticleCreateComponent implements OnInit {
 
     this.articleService.createArticle(articleData).subscribe({
       next: () => {
-        this.snackBar.open('Article créé avec succès !', 'Fermer', {
+        this.snackBar.open('Article created successfully!', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -91,7 +88,7 @@ export class ArticleCreateComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Erreur lors de la création de l\'article';
+        this.errorMessage = error.error?.message || 'Error creating article';
       },
       complete: () => {
         this.isLoading = false;

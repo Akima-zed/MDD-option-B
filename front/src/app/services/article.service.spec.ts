@@ -33,7 +33,7 @@ describe('ArticleService (TDD)', () => {
         {
           id: 1,
           titre: 'Article 1',
-          contenu: 'Contenu 1',
+          content: 'Content 1',
           dateCreation: '2025-12-17',
           auteur: { id: 1, username: 'user1', email: 'user1@test.com' },
           theme: { id: 1, nom: 'Java' }
@@ -41,7 +41,7 @@ describe('ArticleService (TDD)', () => {
         {
           id: 2,
           titre: 'Article 2',
-          contenu: 'Contenu 2',
+          content: 'Content 2',
           dateCreation: '2025-12-16',
           auteur: { id: 2, username: 'user2', email: 'user2@test.com' },
           theme: { id: 2, nom: 'Angular' }
@@ -77,7 +77,7 @@ describe('ArticleService (TDD)', () => {
       const mockArticle: Article = {
         id: 1,
         titre: 'Article Test',
-        contenu: 'Contenu test',
+        content: 'Content test',
         dateCreation: '2025-12-17',
         auteur: { id: 1, username: 'testuser', email: 'test@test.com' },
         theme: { id: 1, nom: 'Java' }
@@ -111,14 +111,14 @@ describe('ArticleService (TDD)', () => {
     it('should create a new article and return it', () => {
       const createData: CreateArticleRequest = {
         titre: 'Nouvel article',
-        contenu: 'Contenu du nouvel article',
+        content: 'Contenu du nouvel article',
         themeId: 1
       };
 
       const mockResponse: Article = {
         id: 10,
         titre: 'Nouvel article',
-        contenu: 'Contenu du nouvel article',
+        content: 'Contenu du nouvel article',
         dateCreation: '2025-12-17',
         auteur: { id: 1, username: 'currentuser', email: 'current@test.com' },
         theme: { id: 1, nom: 'Java' }
@@ -134,7 +134,7 @@ describe('ArticleService (TDD)', () => {
       // Le service transforme titre -> title et contenu -> content
       expect(req.request.body).toEqual({
         title: createData.titre,
-        content: createData.contenu,
+        content: createData.content,
         themeId: createData.themeId
       });
       req.flush(mockResponse);
@@ -143,7 +143,7 @@ describe('ArticleService (TDD)', () => {
     it('should handle error when creation fails', () => {
       const createData: CreateArticleRequest = {
         titre: '',
-        contenu: 'Contenu',
+        content: 'Content',
         themeId: 1
       };
 

@@ -2,21 +2,21 @@ import { User } from './user.model';
 
 export interface Theme {
   id: number;
-  nom: string;
+  name: string;
   description?: string;
 }
 
 export interface Article {
   id: number;
-  titre: string;
-  contenu: string;
+  title: string;
+  content: string;
   dateCreation: string;
-  auteur: User;
+  author: User;
   theme: Theme;
 }
 
 export interface CreateArticleRequest {
-  titre: string;
-  contenu: string;
+  title: string;
+  content: string;
   themeId: number;
 }

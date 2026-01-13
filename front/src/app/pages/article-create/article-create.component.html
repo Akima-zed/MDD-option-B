@@ -3,45 +3,46 @@
 <div class="create-container">
   <div class="create-content">
     <div class="create-header">
-      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Retour">
+      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Back">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1>Créer un nouvel article</h1>
+      <h1>Create a new article</h1>
     </div>
 
     <mat-card class="create-card">
       <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Titre de l'article</mat-label>
-          <input matInput formControlName="titre" required>
-          <mat-error *ngIf="articleForm.get('titre')?.hasError('required')">
-            Le titre est requis
+          <mat-label>Article title</mat-label>
+          <input matInput formControlName="title" required>
+          <mat-error *ngIf="articleForm.get('title')?.hasError('required')">
+            Title is required
           </mat-error>
-          <mat-error *ngIf="articleForm.get('titre')?.hasError('minlength')">
-            Minimum 3 caractères
+          <mat-error *ngIf="articleForm.get('title')?.hasError('minlength')">
+            Minimum 3 characters
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Sélectionnez un thème</mat-label>
+          <mat-label>Select a theme</mat-label>
           <mat-select formControlName="themeId" required>
             <mat-option *ngFor="let theme of themes" [value]="theme.id">
-              {{ theme.nom }}
+              {{ theme.name }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="articleForm.get('themeId')?.hasError('required')">
-            Le thème est requis
+            Theme is required
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contenu de l'article</mat-label>
-          <textarea matInput formControlName="contenu" rows="12" required></textarea>
-          <mat-error *ngIf="articleForm.get('contenu')?.hasError('required')">
-            Le contenu est requis
+          <mat-label>Article content</mat-label>
+          <textarea matInput formControlName="content" rows="12" required></textarea>
+          <mat-error *ngIf="articleForm.get('content')?.hasError('required')">
+            Content is required
           </mat-error>
-          <mat-error *ngIf="articleForm.get('contenu')?.hasError('minlength')">
-            Minimum 10 caractères
+          <mat-error *ngIf="articleForm.get('content')?.hasError('minlength')">
+            Minimum 10 characters
           </mat-error>
         </mat-form-field>
 
@@ -50,12 +51,13 @@
         </div>
 
         <div class="form-actions">
-          <button mat-stroked-button type="button" (click)="goBack()">Annuler</button>
-          <button mat-raised-button color="primary" type="submit" 
+          <button mat-stroked-button type="button" (click)="goBack()">Cancel</button>
+          <button mat-raised-button color="primary" type="submit"
                   [disabled]="articleForm.invalid || isLoading">
-            {{ isLoading ? 'Création...' : 'Créer' }}
+            {{ isLoading ? 'Creating...' : 'Create' }}
           </button>
         </div>
+
       </form>
     </mat-card>
   </div>

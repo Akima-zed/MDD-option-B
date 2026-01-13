@@ -4,7 +4,7 @@ export interface Comment {
   id: number;
   content: string;
   dateCreation: string;
-  auteur: User;
+  author: User;
   articleId: number;
 }
 
