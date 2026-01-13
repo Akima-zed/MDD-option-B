@@ -9,7 +9,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../models/theme.model';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-themes',
@@ -28,8 +27,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./themes.component.scss']
 })
 export class ThemesComponent implements OnInit {
+
   themes: Theme[] = [];
-  subscribedThemeIds: number[] = [];
   isLoading = true;
   errorMessage = '';
 
@@ -40,13 +39,12 @@ export class ThemesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadThemes();
-    this.loadUserSubscriptions();
   }
 
   loadThemes(): void {
     this.themeService.getThemes().subscribe({
       next: (themes: Theme[]) => {
-        this.themes = themes;
+        this.themes = themes; // 🔥 contient déjà "subscribed"
         this.isLoading = false;
       },
       error: () => {
@@ -56,33 +54,14 @@ export class ThemesComponent implements OnInit {
     });
   }
 
-  loadUserSubscriptions(): void {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
+  subscribe(theme: Theme): void {
+    if (theme.subscribed) return;
 
-      this.themeService.getUserSubscriptions(user.id).subscribe({
-        next: (themes: Theme[]) => {
-          this.subscribedThemeIds = themes.map(t => t.id);
-        }
-      });
-    }
-  }
-
-  isSubscribed(themeId: number): boolean {
-    return this.subscribedThemeIds.includes(themeId);
-  }
-
-  subscribe(themeId: number): void {
-    if (this.isSubscribed(themeId)) return;
-
-    this.themeService.subscribe(themeId).subscribe({
+    this.themeService.subscribe(theme.id).subscribe({
       next: () => {
-        this.subscribedThemeIds.push(themeId);
-        const theme = this.themes.find(t => t.id === themeId);
-
+        theme.subscribed = true; // 🔥 met à jour l’état local
         this.snackBar.open(
-          'Subscribed to theme ' + (theme?.name || ''),
+          'Subscribed to theme ' + theme.name,
           'Close',
           {
             duration: 3000,

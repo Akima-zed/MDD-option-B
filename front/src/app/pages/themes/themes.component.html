@@ -27,11 +27,11 @@
 
         <mat-card-actions>
           <button mat-raised-button
-                  [color]="isSubscribed(theme.id) ? '' : 'primary'"
-                  [disabled]="isSubscribed(theme.id)"
-                  (click)="subscribe(theme.id)"
+                  [disabled]="theme.subscribed"
+                  [color]="theme.subscribed ? '' : 'primary'"
+                  (click)="subscribe(theme)"
                   class="subscribe-button">
-            {{ isSubscribed(theme.id) ? 'Already subscribed' : 'Subscribe' }}
+            {{ theme.subscribed ? 'Already subscribed' : 'Subscribe' }}
           </button>
         </mat-card-actions>
       </mat-card>

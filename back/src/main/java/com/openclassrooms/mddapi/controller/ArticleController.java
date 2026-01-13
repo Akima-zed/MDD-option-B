@@ -142,7 +142,8 @@ public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest reques
         ThemeResponse themeDto = new ThemeResponse(
                 theme.getId(),
                 theme.getNom(),
-                theme.getDescription()
+                theme.getDescription(),
+                false
         );
 
         UserSummary authorDto = new UserSummary(
