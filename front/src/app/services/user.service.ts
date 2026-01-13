@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Theme } from '../models/article.model';
+import { UserProfile } from '../models/userProfile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,32 +11,18 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Récupère les abonnements (thèmes) d'un utilisateur
-   * @param userId - ID de l'utilisateur
-   * @returns Observable avec la liste des thèmes auxquels l'utilisateur est abonné
-   */
-  getUserSubscriptions(userId: number): Observable<Theme[]> {
-    return this.http.get<Theme[]>(`${this.apiUrl}/${userId}/subscriptions`);
+  /** Désabonne un utilisateur d'un thème */
+  unsubscribeFromTheme(themeId: number): Observable<void> {
+    return this.http.post<void>(`http://localhost:8081/api/themes/${themeId}/unsubscribe`, {});
   }
 
-  /**
-   * Désabonne un utilisateur d'un thème
-   * @param userId - ID de l'utilisateur
-   * @param themeId - ID du thème
-   * @returns Observable vide
-   */
-  unsubscribeFromTheme(userId: number, themeId: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8081/api/themes/${themeId}/subscribe`);
+  /** Met à jour le profil utilisateur */
+  updateUser(userId: number, userData: { username?: string; email?: string }): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.apiUrl}/${userId}`, userData);
   }
 
-  /**
-   * Met à jour les informations d'un utilisateur (username et email)
-   * @param userId - ID de l'utilisateur
-   * @param userData - Nouvelles données (username, email)
-   * @returns Observable avec l'utilisateur mis à jour
-   */
-  updateUser(userId: number, userData: { username?: string; email?: string }): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${userId}`, userData);
+  /** Récupère le profil complet de l'utilisateur connecté */
+  getCurrentUser(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/me`);
   }
 }

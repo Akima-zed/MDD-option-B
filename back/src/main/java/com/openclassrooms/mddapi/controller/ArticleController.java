@@ -6,7 +6,6 @@ import com.openclassrooms.mddapi.model.Theme;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.service.ArticleService;
 import com.openclassrooms.mddapi.service.ThemeService;
-import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +21,6 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ThemeService themeService;

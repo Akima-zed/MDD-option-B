@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -13,7 +12,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
-import { Theme } from '../../models/article.model';
+import { Theme } from '../../models/theme.model';
+import { UserProfile } from '../../models/userProfile.model';
 
 @Component({
   selector: 'app-profile',
@@ -35,9 +35,10 @@ import { Theme } from '../../models/article.model';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  user: any = null;
+
+  user!: UserProfile;
   subscribedThemes: Theme[] = [];
-  isEditMode: boolean = false;
+  isEditMode = false;
   profileForm: FormGroup;
 
   constructor(
@@ -54,38 +55,26 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Récupérer les infos utilisateur du localStorage
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      this.user = JSON.parse(userStr);
-      // Initialiser le formulaire avec les données actuelles
-      this.profileForm.patchValue({
-        username: this.user.username,
-        email: this.user.email
-      });
-      // Charger les abonnements depuis le backend
-      this.loadSubscriptions();
-    } else {
-      // Rediriger vers login si pas d'utilisateur
-      this.router.navigate(['/login']);
-    }
-  }
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.user = user;
+        this.subscribedThemes = user.abonnements;
 
-  loadSubscriptions(): void {
-    this.userService.getUserSubscriptions(this.user.id).subscribe({
-      next: (themes: Theme[]) => {
-        this.subscribedThemes = themes;
+        this.profileForm.patchValue({
+          username: user.username,
+          email: user.email
+        });
       },
-      error: (error) => {
-        // Erreur silencieuse - affichage d'une liste vide
+      error: () => {
+        this.router.navigate(['/login']);
       }
     });
   }
 
   toggleEditMode(): void {
     this.isEditMode = !this.isEditMode;
+
     if (!this.isEditMode) {
-      // Réinitialiser le formulaire si on annule
       this.profileForm.patchValue({
         username: this.user.username,
         email: this.user.email
@@ -95,35 +84,19 @@ export class ProfileComponent implements OnInit {
 
   saveProfile(): void {
     if (this.profileForm.invalid) {
-      this.snackBar.open('Veuillez corriger les erreurs du formulaire', 'Fermer', {
-        duration: 3000
-      });
+      this.snackBar.open('Veuillez corriger les erreurs du formulaire', 'Fermer', { duration: 3000 });
       return;
     }
 
-    const updatedData = this.profileForm.value;
-    
-    this.userService.updateUser(this.user.id, updatedData).subscribe({
+    this.userService.updateUser(this.user.id, this.profileForm.value).subscribe({
       next: (updatedUser) => {
-        // Mettre à jour les données locales
-        this.user.username = updatedUser.username;
-        this.user.email = updatedUser.email;
-        
-        // Mettre à jour le localStorage
-        localStorage.setItem('user', JSON.stringify(this.user));
-        
-        // Quitter le mode édition
+        this.user = updatedUser;
         this.isEditMode = false;
-        
-        this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', {
-          duration: 3000
-        });
+
+        this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', { duration: 3000 });
       },
-      error: (error) => {
-        const errorMessage = error.error?.message || 'Erreur lors de la mise à jour du profil';
-        this.snackBar.open(errorMessage, 'Fermer', {
-          duration: 5000
-        });
+      error: () => {
+        this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', { duration: 5000 });
       }
     });
   }
@@ -134,15 +107,12 @@ export class ProfileComponent implements OnInit {
   }
 
   unsubscribe(theme: Theme): void {
-    this.authService.getAuthToken(); // Vérifier que l'utilisateur est connecté
-    this.userService.unsubscribeFromTheme(this.user.id, theme.id).subscribe({
+    this.userService.unsubscribeFromTheme(theme.id).subscribe({
       next: () => {
         this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
       },
-      error: (error) => {
-        this.snackBar.open('Erreur lors du désabonnement', 'Fermer', {
-          duration: 3000
-        });
+      error: () => {
+        this.snackBar.open('Erreur lors du désabonnement', 'Fermer', { duration: 3000 });
       }
     });
   }
