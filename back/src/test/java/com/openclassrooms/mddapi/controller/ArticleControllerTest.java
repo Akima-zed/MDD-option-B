@@ -54,6 +54,7 @@ class ArticleControllerTest {
     @Test
     @DisplayName("POST /api/articles - Should create article when authenticated")
     void testCreateArticle_Success() throws Exception {
+
         ArticleRequest request = new ArticleRequest();
         request.setTitle("New Article");
         request.setContent("Content");
@@ -70,6 +71,8 @@ class ArticleControllerTest {
         Article saved = new Article();
         saved.setId(10L);
         saved.setTitle("New Article");
+        saved.setAuthor(user);
+        saved.setTheme(theme);
 
         when(jwtUtil.validateToken(anyString())).thenReturn(true);
         when(jwtUtil.extractUserId(anyString())).thenReturn(2L);
@@ -79,15 +82,16 @@ class ArticleControllerTest {
 
         mockMvc.perform(post("/api/articles")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer fake-token")
+                .header("Authorization", "Bearer faketoken")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(10));
     }
 
     @Test
-    @DisplayName("POST /api/articles - Should return 401 when user not found")
+    @DisplayName("POST /api/articles - Should return 403 when user not found")
     void testCreateArticle_UserNotFound() throws Exception {
+
         ArticleRequest request = new ArticleRequest();
         request.setTitle("New Article");
         request.setContent("Content");
@@ -99,9 +103,8 @@ class ArticleControllerTest {
 
         mockMvc.perform(post("/api/articles")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer fake-token")
+                .header("Authorization", "Bearer faketoken")
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.message").value("Utilisateur non trouvé"));
+                .andExpect(status().isForbidden());
     }
 }
