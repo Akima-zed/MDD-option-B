@@ -56,7 +56,7 @@ export class ArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.commentForm = this.fb.group({
-      contenu: ['', [Validators.required, Validators.minLength(3)]]
+      content: ['', [Validators.required, Validators.minLength(3)]]
     });
 
     const articleId = this.route.snapshot.paramMap.get('id');
@@ -97,7 +97,7 @@ export class ArticleComponent implements OnInit {
 
     this.isSubmitting = true;
     const commentData: CreateCommentRequest = {
-      contenu: this.commentForm.value.contenu,
+      content: this.commentForm.value.content,
       articleId: this.article.id
     };
 

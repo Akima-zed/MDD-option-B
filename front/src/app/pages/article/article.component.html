@@ -65,7 +65,7 @@
             <span class="comment-author">{{ comment.auteur.username }}</span>
             <span class="comment-date">{{ comment.dateCreation | date: 'dd/MM/yyyy' }}</span>
           </div>
-          <p class="comment-content">{{ comment.contenu }}</p>
+          <p class="comment-content">{{ comment.content }}</p>
         </mat-card>
 
         <div *ngIf="comments.length === 0" class="no-comments">

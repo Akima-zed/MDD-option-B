@@ -6,6 +6,7 @@ import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.service.ArticleService;
 import com.openclassrooms.mddapi.service.CommentService;
+import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -25,6 +27,9 @@ public class CommentController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/{articleId}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long articleId,
                                         @Valid @RequestBody CommentRequest request) {
@@ -35,7 +40,11 @@ public class CommentController {
                         .body(Map.of("message", "Article non trouvé"));
             }
 
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            // récupération de l’utilisateur via SecurityContextHolder
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
 
             Comment comment = new Comment();
             comment.setContent(request.getContent());

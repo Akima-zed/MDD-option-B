@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class CommentRequest {
     
     @NotBlank(message = "Le contenu du commentaire est obligatoire")
-    @JsonProperty("contenu")
+    @JsonProperty("content")
     private String content;
 
     public CommentRequest() {}
