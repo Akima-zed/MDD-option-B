@@ -2,7 +2,6 @@ package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.dto.ThemeResponse;
 import com.openclassrooms.mddapi.dto.UserResponse;
-import com.openclassrooms.mddapi.model.Theme;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.security.SecurityUtils;
 import com.openclassrooms.mddapi.service.UserService;
