@@ -44,12 +44,19 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
 
         .authorizeHttpRequests(auth -> auth
-            // 🔓 Seules les routes d'authentification sont publiques
-            .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
 
-            // 🔐 Tout le reste nécessite un token
-            .anyRequest().authenticated()
-        )
+    // Auth public
+    .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+
+    // Lecture publique
+    .requestMatchers(new AntPathRequestMatcher("/api/themes/**")).permitAll()
+    .requestMatchers(new AntPathRequestMatcher("/api/articles/**")).permitAll()
+
+    // Tout le reste nécessite un token
+    .anyRequest().authenticated()
+)
+
+
 
         .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

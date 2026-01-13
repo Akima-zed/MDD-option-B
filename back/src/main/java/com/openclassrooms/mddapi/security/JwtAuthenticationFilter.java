@@ -32,44 +32,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserService userService;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+protected void doFilterInternal(
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
+) throws ServletException, IOException {
 
-        try {
-            String jwt = extractJwtFromRequest(request);
+    try {
+        String path = request.getServletPath();
 
-            if (jwt != null && jwtUtil.validateToken(jwt)) {
-
-                Long userId = jwtUtil.extractUserId(jwt);
-
-                // Charger l'utilisateur depuis la base
-                User user = userService.findById(userId).orElse(null);
-
-                if (user != null) {
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    user,
-                                    null,
-                                    new ArrayList<>()
-                            );
-
-                    authentication.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request)
-                    );
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("Erreur dans JwtAuthenticationFilter", e);
+        // 🔓 Routes publiques → on laisse passer immédiatement
+        if (path.startsWith("/api/auth")
+                || path.startsWith("/api/themes")
+                || path.startsWith("/api/articles")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        filterChain.doFilter(request, response);
+        // 🔐 Routes protégées → on valide le token
+        String jwt = extractJwtFromRequest(request);
+
+        if (jwt != null && jwtUtil.validateToken(jwt)) {
+
+            Long userId = jwtUtil.extractUserId(jwt);
+
+            User user = userService.findById(userId).orElse(null);
+
+            if (user != null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                user,
+                                null,
+                                new ArrayList<>()
+                        );
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+
+    } catch (Exception e) {
+        logger.error("Erreur dans JwtAuthenticationFilter", e);
     }
+
+    filterChain.doFilter(request, response);
+}
+
 
     /**
      * Extrait le token JWT depuis le header Authorization.
