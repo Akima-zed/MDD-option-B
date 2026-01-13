@@ -32,22 +32,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserService userService;
 
     @Override
-protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
-) throws ServletException, IOException {
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
+        throws ServletException, IOException {
 
     try {
         String path = request.getServletPath();
 
-        // 🔓 Routes publiques → on laisse passer immédiatement
+        // Routes publiques
         if (path.startsWith("/api/auth")) {
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // 🔐 Routes protégées → on valide le token
         String jwt = extractJwtFromRequest(request);
 
         if (jwt != null && jwtUtil.validateToken(jwt)) {

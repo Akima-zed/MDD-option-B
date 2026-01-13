@@ -4,6 +4,7 @@ import com.openclassrooms.mddapi.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -11,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
@@ -31,42 +31,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http
-        .cors(cors -> cors.configurationSource(request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowCredentials(true);
-            config.setAllowedOrigins(List.of("http://localhost:4200"));
-            config.setAllowedHeaders(List.of("*"));
-            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-            return config;
-        }))
-
-        .csrf(csrf -> csrf.disable())
-
-        .authorizeHttpRequests(auth -> auth
-
-    // Auth public
-    .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
-
-    // Lecture publique
-    .requestMatchers(new AntPathRequestMatcher("/api/themes/**")).permitAll()
-    .requestMatchers(new AntPathRequestMatcher("/api/articles/**")).permitAll()
-
-    // Tout le reste nécessite un token
-    .anyRequest().authenticated()
-)
-
-
-
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http
+            .cors(cors -> cors.configurationSource(request -> {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowCredentials(true);
+                config.setAllowedOrigins(List.of("http://localhost:4200"));
+                config.setAllowedHeaders(List.of("*"));
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                return config;
+            }))
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+            .mvcMatchers("/api/auth/**").permitAll()
+            .mvcMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
+            .mvcMatchers(HttpMethod.GET, "/api/themes/**").permitAll()
+            .anyRequest().authenticated()
         )
-
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
-
-
-           
