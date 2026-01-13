@@ -1,6 +1,9 @@
 package com.openclassrooms.mddapi.security;
 
+import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,8 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Filtre Spring Security pour extraire et valider le token JWT sur chaque requête.
- * S'exécute une seule fois par requête.
+ * Filtre JWT exécuté à chaque requête.
+ * Valide le token, extrait l'utilisateur et remplit le SecurityContext.
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -25,30 +28,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                   HttpServletResponse response, 
-                                   FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
+
         try {
-            // Extraire le token depuis le header Authorization
             String jwt = extractJwtFromRequest(request);
 
-            // Si un token est présent et valide
             if (jwt != null && jwtUtil.validateToken(jwt)) {
-                // Extraire l'ID utilisateur du token
+
                 Long userId = jwtUtil.extractUserId(jwt);
 
-                // Créer une authentication avec l'userId comme principal
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
-                
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // Charger l'utilisateur depuis la base
+                User user = userService.findById(userId).orElse(null);
 
-                // Définir l'authentication dans le contexte de sécurité
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (user != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    user,
+                                    null,
+                                    new ArrayList<>()
+                            );
+
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
+
         } catch (Exception e) {
-            logger.error("Impossible de définir l'authentification utilisateur: {}", e);
+            logger.error("Erreur dans JwtAuthenticationFilter", e);
         }
 
         filterChain.doFilter(request, response);
@@ -56,15 +73,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * Extrait le token JWT depuis le header Authorization.
-     * Format attendu: "Bearer <token>"
      */
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // Retirer "Bearer "
+            return bearerToken.substring(7);
         }
-        
+
         return null;
     }
 }
