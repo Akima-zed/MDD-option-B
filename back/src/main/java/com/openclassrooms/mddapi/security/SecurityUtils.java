@@ -11,18 +11,18 @@ public class SecurityUtils {
      * Retourne null si aucun utilisateur n'est connecté.
      */
     public static Long getCurrentUserId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth == null || auth.getPrincipal() == null) {
-            return null;
-        }
-
-        Object principal = auth.getPrincipal();
-
-        if (principal instanceof User) {
-            return ((User) principal).getId();
-        }
-
+    if (auth == null || auth.getPrincipal() == null) {
         return null;
     }
+
+    Object principal = auth.getPrincipal();
+
+    if (principal instanceof User) {
+        return ((User) principal).getId();
+    }
+
+    return null;
+}
 }
