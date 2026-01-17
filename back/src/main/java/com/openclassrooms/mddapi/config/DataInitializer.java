@@ -13,6 +13,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+/**
+ * Classe utilisée uniquement en développement pour insérer
+ * quelques données de test au démarrage de l'application.
+ * Elle est désactivée pendant les tests grâce au profil "!test".
+ */
+
+
 @Configuration
 @Profile("!test")
 public class DataInitializer {
@@ -22,7 +29,9 @@ public class DataInitializer {
     
     @Bean
     CommandLineRunner initData(UserRepository userRepo, ThemeRepository themeRepo, ArticleRepository articleRepo, CommentRepository commentRepo) {
-        return args -> {
+                return args -> {
+
+            // Ajout de thèmes si la table est vide
             if (themeRepo.count() == 0) {
                 Theme java = new Theme();
                 java.setNom("Java");
@@ -33,16 +42,21 @@ public class DataInitializer {
                 themeRepo.save(java);
                 themeRepo.save(angular);
             }
+
+            // Ajout d'un utilisateur de test
             if (userRepo.count() == 0) {
                 User user = new User();
                 user.setUsername("johndoe");
                 user.setEmail("john@example.com");
-                // Hasher le mot de passe "password123" avec BCrypt
-                user.setPassword(passwordEncoder.encode("password123"));
+
+                //Mot de passe conforme à lasécurité
+                user.setPassword(passwordEncoder.encode("Password123!"));
                 user.setRoles(Collections.singleton("USER"));
                 user.setDateInscription(LocalDate.now());
                 userRepo.save(user);
             }
+
+            // Ajout d'un article de test
             if (articleRepo.count() == 0) {
                 User user = userRepo.findAll().get(0);
                 Theme java = themeRepo.findAll().stream().filter(t -> t.getNom().equals("Java")).findFirst().orElse(null);
@@ -54,6 +68,8 @@ public class DataInitializer {
                 article.setCreatedAt(LocalDateTime.now());
                 articleRepo.save(article);
             }
+
+            // Ajout d'un commentaire de test
             if (commentRepo.count() == 0) {
                 User user = userRepo.findAll().get(0);
                 Article article = articleRepo.findAll().get(0);

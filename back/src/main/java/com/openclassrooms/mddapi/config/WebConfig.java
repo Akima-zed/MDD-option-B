@@ -1,4 +1,4 @@
-package com.openclassrooms.mddapi.config;
+/**package com.openclassrooms.mddapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Configuration CORS pour autoriser les requêtes du frontend Angular.
  */
-@Configuration
+/**@Configuration
 public class WebConfig {
 
     @Bean
@@ -30,3 +30,4 @@ public class WebConfig {
         return new CorsFilter(source);
     }
 }
+*/
