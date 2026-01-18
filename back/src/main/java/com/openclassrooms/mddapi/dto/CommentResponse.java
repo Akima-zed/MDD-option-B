@@ -2,6 +2,9 @@ package com.openclassrooms.mddapi.dto;
 
 import java.time.LocalDate;
 
+/**
+ * Représente les informations d'un commentaire renvoyées au client.
+ */
 public class CommentResponse {
     private Long id;
     private String content;

@@ -3,7 +3,7 @@ package com.openclassrooms.mddapi.dto;
 import javax.validation.constraints.NotBlank;
 
 /**
- * DTO pour la requête de connexion.
+ * Représente les informations nécessaires pour une tentative de connexion.
  */
 public class LoginRequest {
     

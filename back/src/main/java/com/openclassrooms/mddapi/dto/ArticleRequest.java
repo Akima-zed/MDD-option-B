@@ -4,7 +4,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * DTO pour la création d'un nouvel article.
+ * Représente les données nécessaires à la création d'un nouvel article.
+ * Ce DTO est utilisé pour recevoir les informations envoyées par le client.
  */
 public class ArticleRequest {
     

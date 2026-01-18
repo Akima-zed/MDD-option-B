@@ -3,6 +3,10 @@ package com.openclassrooms.mddapi.dto;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * Représente les informations complètes du profil utilisateur renvoyées au client.
+ * Ce DTO inclut les données personnelles ainsi que la liste des thèmes suivis.
+ */
 public class UserResponse {
 
     private Long id;

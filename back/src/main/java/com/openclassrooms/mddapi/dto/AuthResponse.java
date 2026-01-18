@@ -1,7 +1,8 @@
 package com.openclassrooms.mddapi.dto;
 
 /**
- * DTO pour la réponse d'authentification contenant le token JWT et les informations utilisateur.
+ * Représente la réponse renvoyée après une authentification réussie.
+ * Contient le token JWT ainsi que les informations essentielles de l'utilisateur.
  */
 public class AuthResponse {
     

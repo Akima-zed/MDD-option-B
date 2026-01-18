@@ -3,6 +3,11 @@ package com.openclassrooms.mddapi.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+/**
+ * Représente les informations d'un article renvoyées au client.
+ * Ce DTO contient les données affichées dans l'interface utilisateur.
+ */
 public class ArticleResponse {
     private Long id;
     private String title;

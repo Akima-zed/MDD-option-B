@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * DTO pour la requête d'inscription d'un nouvel utilisateur.
+ * Représente les informations nécessaires pour inscrire un nouvel utilisateur.
  */
 public class RegisterRequest {
     

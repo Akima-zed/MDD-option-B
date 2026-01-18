@@ -2,6 +2,10 @@ package com.openclassrooms.mddapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Représente les informations d'un thème renvoyées au client.
+ * Ce DTO inclut également l'état d'abonnement de l'utilisateur connecté.
+ */
 public class ThemeResponse {
     private Long id;
 
