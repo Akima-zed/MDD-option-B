@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité représentant un utilisateur de la plateforme.
+ * Contient ses informations personnelles, ses abonnements et ses publications.
+ */
 @Entity
 @Table(name = "users")
 public class User {

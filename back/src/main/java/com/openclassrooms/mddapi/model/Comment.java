@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Entité représentant un commentaire associé à un article.
+ */
 @Entity
 public class Comment {
 

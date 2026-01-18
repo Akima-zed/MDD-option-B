@@ -5,6 +5,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entité représentant un thème auquel les utilisateurs peuvent s'abonner.
+ */
 @Entity
 public class Theme {
 

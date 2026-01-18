@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/**
+ * Entité représentant un article publié par un utilisateur.
+ * Un article appartient à un thème et peut contenir plusieurs commentaires.
+ */
 @Entity
 public class Article {
 
