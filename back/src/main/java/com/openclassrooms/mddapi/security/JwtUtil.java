@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * Utilitaire pour la gestion des tokens JWT.
+ * Permet de générer, valider et lire les informations contenues dans un token.
+ */
 @Component
 public class JwtUtil {
 
@@ -19,10 +23,20 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
+    /**
+     * Génère la clé de signature utilisée pour signer et vérifier les tokens.
+     */
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
+
+     /**
+     * Génère un token JWT contenant l'identifiant de l'utilisateur.
+     *
+     * @param userId identifiant de l'utilisateur
+     * @return token JWT signé
+     */
     public String generateToken(Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
@@ -35,6 +49,12 @@ public class JwtUtil {
                 .compact();
     }
 
+        /**
+     * Extrait l'identifiant utilisateur contenu dans le token.
+     *
+     * @param token JWT reçu
+     * @return identifiant utilisateur
+     */
     public Long extractUserId(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -44,6 +64,13 @@ public class JwtUtil {
 
         return Long.parseLong(claims.getSubject());
     }
+
+    /**
+     * Vérifie si un token est valide.
+     *
+     * @param token JWT reçu
+     * @return true si le token est valide, false sinon
+     */
 
     public boolean validateToken(String token) {
         try {

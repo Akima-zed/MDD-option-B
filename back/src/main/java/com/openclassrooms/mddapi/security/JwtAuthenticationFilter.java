@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Filtre JWT exécuté à chaque requête.
- * Valide le token, extrait l'utilisateur et remplit le SecurityContext.
+ * Filtre chargé de vérifier la présence d'un token JWT dans chaque requête.
+ * Si le token est valide, l'utilisateur correspondant est ajouté au SecurityContext.
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -45,12 +45,15 @@ protected void doFilterInternal(HttpServletRequest request,
             return;
         }
 
+        // Extraction du token depuis le header Authorization
         String jwt = extractJwtFromRequest(request);
 
+        // Extraction du token depuis le header Authorization
         if (jwt != null && jwtUtil.validateToken(jwt)) {
 
             Long userId = jwtUtil.extractUserId(jwt);
 
+            // Récupération de l'utilisateur associé au token
             User user = userService.findById(userId).orElse(null);
 
             if (user != null) {
@@ -78,7 +81,8 @@ protected void doFilterInternal(HttpServletRequest request,
 
 
     /**
-     * Extrait le token JWT depuis le header Authorization.
+     * Récupère le token JWT présent dans le header Authorization.
+     * Le format attendu est : "Bearer <token>".
      */
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
