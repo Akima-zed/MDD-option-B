@@ -25,21 +25,21 @@ public class ThemeController {
     @Autowired
     private UserService userService;
 
-    // -------------------------------------------------------
-    // GET ALL THEMES — DTO + état d’abonnement
-    // -------------------------------------------------------
+   // Récupère tous les thèmes avec un indicateur indiquant si l'utilisateur est abonné
     @GetMapping
     public List<ThemeResponse> getAllThemes() {
-
+        // Récupération de l'utilisateur connecté
         Long userId = SecurityUtils.getCurrentUserId();
         User currentUser = null;
 
         if (userId != null) {
+        // Recherche de l'utilisateur en base
             currentUser = userService.findById(userId).orElse(null);
         }
 
         User finalUser = currentUser;
 
+        // Transformation des thèmes en DTO avec info d'abonnement
         return themeService.findAll().stream()
                 .map(t -> new ThemeResponse(
                         t.getId(),
@@ -51,12 +51,11 @@ public class ThemeController {
                 .collect(Collectors.toList());
     }
 
-    // -------------------------------------------------------
-    // GET THEME BY ID — DTO only
-    // -------------------------------------------------------
+    // Récupère un thème par son ID et renvoie un DTO
     @GetMapping("/{id}")
-    public ResponseEntity<?> getThemeById(@PathVariable Long id) {
+    public ResponseEntity<ThemeResponse> getThemeById(@PathVariable Long id) {
 
+        // Récupération de l'utilisateur connecté
         Long userId = SecurityUtils.getCurrentUserId();
         User currentUser = null;
 
@@ -64,13 +63,16 @@ public class ThemeController {
             currentUser = userService.findById(userId).orElse(null);
         }
 
+        // Recherche du thèm
         Theme theme = themeService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
 
+        // Vérifie si l'utilisateur est abonné à ce thème
         boolean subscribed = currentUser != null &&
                 currentUser.getAbonnements().stream()
                         .anyMatch(a -> a.getId().equals(theme.getId()));
 
+        // Construction du DTO
         ThemeResponse response = new ThemeResponse(
                 theme.getId(),
                 theme.getNom(),
@@ -81,24 +83,27 @@ public class ThemeController {
         return ResponseEntity.ok(response);
     }
 
-    // -------------------------------------------------------
-    // SUBSCRIBE
-    // -------------------------------------------------------
+    // Abonne l'utilisateur connecté à un thème
     @PostMapping("/{themeId}/subscribe")
-    public ResponseEntity<?> subscribeToTheme(@PathVariable Long themeId) {
+    public ResponseEntity<Map<String, String>> subscribeToTheme(@PathVariable Long themeId) {
 
+        // Vérifie que l'utilisateur est connecté
         Long userId = SecurityUtils.getCurrentUserId();
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Utilisateur non authentifié"));
         }
 
+        // Récupération de l'utilisateur
         User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
+
+        // Récupération du thème
         Theme theme = themeService.findById(themeId)
                 .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
 
+        // Vérifie si déjà abonné
         boolean alreadySubscribed = user.getAbonnements().stream()
                 .anyMatch(t -> t.getId().equals(theme.getId()));
 
@@ -107,30 +112,34 @@ public class ThemeController {
                     .body(Map.of("message", "Déjà abonné à ce thème"));
         }
 
+        // Ajout de l'abonnement
         user.getAbonnements().add(theme);
         userService.save(user);
 
         return ResponseEntity.ok(Map.of("message", "Abonnement réussi"));
     }
 
-    // -------------------------------------------------------
-    // UNSUBSCRIBE
-    // -------------------------------------------------------
+    // Désabonne l'utilisateur connecté d'un thème
     @PostMapping("/{themeId}/unsubscribe")
-    public ResponseEntity<?> unsubscribeFromTheme(@PathVariable Long themeId) {
+    public ResponseEntity<Map<String, String>> unsubscribeFromTheme(@PathVariable Long themeId) {
 
+        // Vérifie que l'utilisateur est connecté
         Long userId = SecurityUtils.getCurrentUserId();
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Utilisateur non authentifié"));
         }
 
+        // Récupération de l'utilisateur
         User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
+        // Récupération du thème
         Theme theme = themeService.findById(themeId)
                 .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
 
+
+        // Suppression de l'abonnement
         boolean wasSubscribed = user.getAbonnements().removeIf(t -> t.getId().equals(theme.getId()));
 
         if (!wasSubscribed) {

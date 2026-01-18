@@ -19,6 +19,14 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+/**
+ * Contrôleur pour gérer les articles :
+ * - affichage
+ * - consultation
+ * - création
+ * - suppression
+ */
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
@@ -26,16 +34,15 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
+    @Autowired 
     private ThemeService themeService;
 
     @Autowired
     private UserService userService;
 
 
-    // -------------------------------------------------------
-    // GET ALL ARTICLES (DTO)
-    // -------------------------------------------------------
+    
+    // Retourne la liste des articles (triés par date)
     @GetMapping
     public List<ArticleResponse> getAllArticles() {
         return articleService.findAllOrderByCreatedAtDesc()
@@ -44,9 +51,7 @@ public class ArticleController {
                 .collect(Collectors.toList());
     }
 
-    // -------------------------------------------------------
-    // GET ARTICLE BY ID (DTO)
-    // -------------------------------------------------------
+     // Retourne un article selon son ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getArticleById(@PathVariable Long id) {
         Optional<Article> article = articleService.findById(id);
@@ -59,45 +64,43 @@ public class ArticleController {
         return ResponseEntity.ok(mapToArticleResponse(article.get()));
     }
 
-    // -------------------------------------------------------
-    // CREATE ARTICLE (DTO)
-    // -------------------------------------------------------
+    // Création d’un nouvel article
     @PostMapping
-public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest request) {
-    try {
-        Long userId = SecurityUtils.getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Utilisateur non authentifié"));
-        }
+     public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest request) {
+         try {
+                // Récupération de l’utilisateur connecté via le token
+                Long userId = SecurityUtils.getCurrentUserId();
+                if (userId == null) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Utilisateur non authentifié"));
+                }
 
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                User user = userService.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
-        Theme theme = themeService.findById(request.getThemeId())
-                .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
+                Theme theme = themeService.findById(request.getThemeId())
+                        .orElseThrow(() -> new RuntimeException("Thème non trouvé"));
 
-        Article article = new Article();
-        article.setTitle(request.getTitle());
-        article.setContent(request.getContent());
-        article.setAuthor(user);
-        article.setTheme(theme);
+                // construction de l’article
+                Article article = new Article();
+                article.setTitle(request.getTitle());
+                article.setContent(request.getContent());
+                article.setAuthor(user);
+                article.setTheme(theme);
 
-        Article saved = articleService.save(article);
+                Article saved = articleService.save(article);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+                return ResponseEntity.status(HttpStatus.CREATED)
                 .body(mapToArticleResponse(saved));
 
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("message", "Erreur lors de la création de l'article: " + e.getMessage()));
-    }
+        } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("message", "Erreur lors de la création de l'article: " + e.getMessage()));
+        }
 }
 
 
-    // -------------------------------------------------------
-    // GET COMMENTS FOR ARTICLE (DTO)
-    // -------------------------------------------------------
+    // Retourne les commentaires d’un article
     @GetMapping("/{id}/comments")
     public ResponseEntity<?> getArticleComments(@PathVariable Long id) {
         Optional<Article> article = articleService.findById(id);
@@ -115,9 +118,7 @@ public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest reques
         return ResponseEntity.ok(comments);
     }
 
-    // -------------------------------------------------------
-    // DELETE ARTICLE
-    // -------------------------------------------------------
+    // suppression d’un article par son ID
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteArticle(@PathVariable Long id) {
         Optional<Article> article = articleService.findById(id);
@@ -131,10 +132,7 @@ public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest reques
         return ResponseEntity.noContent().build();
     }
 
-    // -------------------------------------------------------
-    // MAPPING METHODS (DTO)
-    // -------------------------------------------------------
-
+    // conversion Article -> ArticleResponse
     private ArticleResponse mapToArticleResponse(Article article) {
         Theme theme = article.getTheme();
         User author = article.getAuthor();
@@ -167,6 +165,7 @@ public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleRequest reques
         );
     }
 
+        // conversion Comment -> CommentResponse
     private CommentResponse mapToCommentResponse(Comment comment) {
         UserSummary authorDto = new UserSummary(
                 comment.getAuthor().getId(),

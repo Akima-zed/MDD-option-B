@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Contrôleur REST pour la gestion de l'authentification.
- * Expose les endpoints /api/auth/register et /api/auth/login.
+ * Gère l'inscription et la connexion des utilisateurs.
+ * Les réponses renvoient un token JWT et les informations essentielles du compte.
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -65,7 +65,7 @@ public class AuthController {
             
             User savedUser = userService.save(user);
 
-            // Générer un vrai token JWT signé
+            // Générer un token JWT 
             String token = jwtUtil.generateToken(savedUser.getId());
 
             AuthResponse response = new AuthResponse(
@@ -104,14 +104,14 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Vérifier le mot de passe avec BCrypt
+            // Vérifier le mot de passe 
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 Map<String, String> error = new HashMap<>();
                 error.put("message", "Identifiants invalides");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
 
-            // Générer un vrai token JWT signé
+            // Génération du token JWT
             String token = jwtUtil.generateToken(user.getId());
 
             AuthResponse response = new AuthResponse(

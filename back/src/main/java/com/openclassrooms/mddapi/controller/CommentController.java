@@ -17,6 +17,10 @@ import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
+
+/**
+ * Gère l'ajout et la suppression de commentaires sur les articles.
+ */
 @RestController
 @RequestMapping("/api/articles")
 public class CommentController {
@@ -30,6 +34,9 @@ public class CommentController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Ajoute un commentaire à un article.
+     */
     @PostMapping("/{articleId}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long articleId,
                                         @Valid @RequestBody CommentRequest request) {
@@ -41,7 +48,7 @@ public class CommentController {
                         .body(Map.of("message", "Article non trouvé"));
             }
 
-            // Récupérer l'utilisateur authentifié via SecurityUtils
+            // Récupère l'utilisateur connecté via le token
             Long userId = SecurityUtils.getCurrentUserId();
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -56,8 +63,9 @@ public class CommentController {
             comment.setContent(request.getContent().trim());
             comment.setAuthor(user);
             comment.setArticle(article.get());
-
             Comment saved = commentService.save(comment);
+
+            // Retourne le commentaire créé
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
         } catch (Exception e) {
@@ -66,6 +74,9 @@ public class CommentController {
         }
     }
 
+    /**
+     * Supprime un commentaire.
+     */
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         Optional<Comment> comment = commentService.findById(id);
