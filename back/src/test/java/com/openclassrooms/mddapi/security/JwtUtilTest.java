@@ -23,7 +23,7 @@ class JwtUtilTest {
     }
 
     @Test
-    @DisplayName("Should generate valid JWT token for user ID")
+    @DisplayName("Doit générer un token JWT valide pour un identifiant utilisateur")
     void testGenerateToken() {
         Long userId = 123L;
         String token = jwtUtil.generateToken(userId);
@@ -43,20 +43,20 @@ class JwtUtilTest {
     }
 
     @Test
-    @DisplayName("Should reject invalid JWT token (malformed)")
+    @DisplayName("Doit rejeter un token JWT invalide (malformé)")
     void testValidateToken_InvalidToken() {
         assertFalse(jwtUtil.validateToken("invalid.token.here"));
     }
 
     @Test
-    @DisplayName("Should reject empty or null token")
+    @DisplayName("Doit rejeter un token vide ou null")
     void testValidateToken_EmptyToken() {
         assertFalse(jwtUtil.validateToken(""));
         assertFalse(jwtUtil.validateToken(null));
     }
 
     @Test
-    @DisplayName("Should extract correct user ID from valid token")
+    @DisplayName("Doit extraire correctement l'ID utilisateur d'un token valide")
     void testExtractUserId() {
         Long expectedUserId = 789L;
         String token = jwtUtil.generateToken(expectedUserId);
@@ -67,13 +67,13 @@ class JwtUtilTest {
     }
 
     @Test
-    @DisplayName("Should throw exception when extracting userId from invalid token")
+    @DisplayName("Doit lever une exception lors de l'extraction de l'identifiant depuis un token invalide")
     void testExtractUserId_InvalidToken() {
         assertThrows(Exception.class, () -> jwtUtil.extractUserId("invalid.token.signature"));
     }
 
     @Test
-    @DisplayName("Should generate different tokens for different user IDs")
+    @DisplayName("Doit générer différents tokens pour différents identifiants utilisateur")
     void testGenerateToken_DifferentUserIds() {
         String token1 = jwtUtil.generateToken(100L);
         String token2 = jwtUtil.generateToken(200L);
@@ -82,7 +82,7 @@ class JwtUtilTest {
     }
 
     @Test
-    @DisplayName("Should generate different tokens for same user (different timestamps)")
+    @DisplayName("Doit générer des tokens différents pour un même utilisateur à des instants différents")
     void testGenerateToken_SameUser_DifferentTimestamps() throws InterruptedException {
         String token1 = jwtUtil.generateToken(123L);
         Thread.sleep(1000);
