@@ -62,7 +62,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Should register new user with BCrypt password")
+    @DisplayName("POST /api/auth/register - Doit enregistrer un nouvel utilisateur avec un mot de passe BCrypt")
     void testRegister_Success() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
@@ -91,7 +91,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Should reject duplicate email")
+    @DisplayName("POST /api/auth/register - Doit rejeter un email déjà utilisé")
     void testRegister_DuplicateEmail() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
@@ -110,7 +110,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Should reject duplicate username")
+    @DisplayName("POST /api/auth/register - Doit refuser un mot de passe trop faible")
     void testRegister_DuplicateUsername() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
@@ -130,7 +130,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/login - Should login with valid credentials and BCrypt")
+    @DisplayName("POST /api/auth/login - Doit connecter l'utilisateur avec des identifiants valides et BCrypt")
     void testLogin_Success() throws Exception {
         // Given
         LoginRequest request = new LoginRequest();
@@ -151,7 +151,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/login - Should reject invalid password")
+    @DisplayName("POST /api/auth/login - Doit refuser un mot de passe invalide")
     void testLogin_InvalidPassword() throws Exception {
         // Given
         LoginRequest request = new LoginRequest();
@@ -169,7 +169,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/login - Should reject non-existent user")
+    @DisplayName("POST /api/auth/login - Doit refuser un utilisateur inexistant")
     void testLogin_UserNotFound() throws Exception {
         // Given
         LoginRequest request = new LoginRequest();
@@ -188,7 +188,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Should reject weak/invalid password")
+    @DisplayName("POST /api/auth/register - Doit refuser un mot de passe trop faible")
     void testRegister_WeakPassword() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
@@ -204,7 +204,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/login - Should login with username instead of email")
+    @DisplayName("POST /api/auth/login - Doit permettre la connexion avec le nom d'utilisateur")
     void testLogin_WithUsername() throws Exception {
         // Given
         LoginRequest request = new LoginRequest();

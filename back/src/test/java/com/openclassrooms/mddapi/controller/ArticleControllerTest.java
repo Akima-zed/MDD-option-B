@@ -52,7 +52,7 @@ class ArticleControllerTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @DisplayName("POST /api/articles - Should create article when authenticated")
+    @DisplayName("POST /api/articles - Doit créer un article lorsque l'utilisateur est authentifié")
     void testCreateArticle_Success() throws Exception {
 
         ArticleRequest request = new ArticleRequest();
@@ -89,7 +89,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/articles - Should return 403 when user not found")
+    @DisplayName("POST /api/articles - Doit retourner 403 lorsque l'utilisateur n'est pas trouvé")
     void testCreateArticle_UserNotFound() throws Exception {
 
         ArticleRequest request = new ArticleRequest();
