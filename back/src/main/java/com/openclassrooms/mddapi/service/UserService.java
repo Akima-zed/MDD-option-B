@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Service gérant les opérations liées aux utilisateurs.
+ * Les méthodes exposent les actions CRUD nécessaires au projet.
+ */
 @Service
 public class UserService {
     @Autowired
