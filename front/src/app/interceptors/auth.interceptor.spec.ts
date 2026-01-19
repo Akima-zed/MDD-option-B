@@ -35,7 +35,7 @@ describe('AuthInterceptor (TDD)', () => {
     httpMock.verify();
   });
 
-  it('should add Authorization header when token exists', () => {
+  it('devrait ajouter l’en-tête Authorization lorsque le token existe', () => {
     const mockToken = 'fake-jwt-token-12345';
     authService.getToken.mockReturnValue(mockToken);
 
@@ -47,7 +47,7 @@ describe('AuthInterceptor (TDD)', () => {
     req.flush({});
   });
 
-  it('should NOT add Authorization header when token is null', () => {
+  it('ne devrait PAS ajouter l’en-tête Authorization lorsque le token est null', () => {
     authService.getToken.mockReturnValue(null);
 
     httpClient.get('/api/test').subscribe();
@@ -57,7 +57,7 @@ describe('AuthInterceptor (TDD)', () => {
     req.flush({});
   });
 
-  it('should NOT add Authorization header when token is empty string', () => {
+  it('ne devrait PAS ajouter l’en-tête Authorization lorsque le token est une chaîne vide', () => {
     authService.getToken.mockReturnValue('');
 
     httpClient.get('/api/test').subscribe();
@@ -67,7 +67,7 @@ describe('AuthInterceptor (TDD)', () => {
     req.flush({});
   });
 
-  it('should work with POST requests', () => {
+  it('devrait fonctionner avec les requêtes POST', () => {
     const mockToken = 'another-jwt-token';
     authService.getToken.mockReturnValue(mockToken);
 
@@ -79,7 +79,7 @@ describe('AuthInterceptor (TDD)', () => {
     req.flush({});
   });
 
-  it('should work with PUT requests', () => {
+  it('devrait fonctionner avec les requêtes PUT', () => {
     const mockToken = 'jwt-for-put';
     authService.getToken.mockReturnValue(mockToken);
 
@@ -91,7 +91,7 @@ describe('AuthInterceptor (TDD)', () => {
     req.flush({});
   });
 
-  it('should work with DELETE requests', () => {
+  it('devrait fonctionner avec les requêtes DELETE', () => {
     const mockToken = 'jwt-for-delete';
     authService.getToken.mockReturnValue(mockToken);
 

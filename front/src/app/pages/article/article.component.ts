@@ -16,6 +16,10 @@ import { Article } from '../../models/article.model';
 import { Comment, CreateCommentRequest } from '../../models/comment.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
+/**
+ * Affiche un article et ses commentaires.
+ * Permet d’ajouter un commentaire via un formulaire réactif.
+ */
 @Component({
   selector: 'app-article',
   standalone: true,
@@ -53,6 +57,7 @@ export class ArticleComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
+  // Initialise le formulaire et charge l'article + commentaires
   ngOnInit(): void {
     this.commentForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/\S+/)]]
@@ -79,13 +84,24 @@ export class ArticleComponent implements OnInit {
   }
 
   loadComments(articleId: number): void {
-    this.commentService.getCommentsByArticleId(articleId).subscribe({
-      next: (comments: Comment[]) => {
-        this.comments = comments;
-      }
-    });
-  }
+  this.commentService.getCommentsByArticleId(articleId).subscribe({
+    next: (comments: Comment[]) => {
+      this.comments = comments;
+    },
+    error: () => {
+      // En cas d’erreur, on vide la liste et on informe l’utilisateur
+      this.comments = [];
+      this.snackBar.open('Impossible de charger les commentaires.', 'Fermer', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+    }
+  });
+}
 
+
+  // Envoie un commentaire si le formulaire est valide
   onSubmitComment(): void {
     if (this.commentForm.invalid || !this.article) return;
 

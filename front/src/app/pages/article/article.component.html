@@ -7,7 +7,7 @@
 
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
-    <button mat-raised-button color="primary" (click)="goBack()">Back to feed</button>
+    <button mat-raised-button color="primary" (click)="goBack()">Retour au fil</button>
   </div>
 
   <div *ngIf="!isLoading && article" class="article-content">
@@ -39,19 +39,19 @@
     </article>
 
     <section class="comments-section">
-      <h2 class="comments-title">Comments</h2>
+      <h2 class="comments-title">Commentaires</h2>
 
       <mat-card class="comment-form-card">
         <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Write your comment</mat-label>
+            <mat-label>Écrire un commentaire</mat-label>
             <textarea matInput formControlName="content" rows="4" required></textarea>
 
             <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
-              Comment is required
+              Le commentaire est obligatoire
             </mat-error>
             <mat-error *ngIf="commentForm.get('content')?.hasError('minlength')">
-              Minimum 3 characters
+              Minimum 3 caractères requis
             </mat-error>
           </mat-form-field>
 
@@ -76,7 +76,7 @@
 
         <div *ngIf="comments.length === 0" class="no-comments">
           <mat-icon>chat_bubble_outline</mat-icon>
-          <p>No comments yet.</p>
+          <p>Aucun commentaire pour le moment.</p>
         </div>
       </div>
     </section>
