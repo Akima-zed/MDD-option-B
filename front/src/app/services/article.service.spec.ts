@@ -32,19 +32,25 @@ describe('ArticleService (TDD)', () => {
       const mockArticles: Article[] = [
         {
           id: 1,
-          titre: 'Article 1',
+          title: 'Article 1',
           content: 'Content 1',
           dateCreation: '2025-12-17',
-          auteur: { id: 1, username: 'user1', email: 'user1@test.com' },
-          theme: { id: 1, nom: 'Java' }
+          author: { id: 1, username: 'user1', email: 'user1@test.com' },
+          theme: {
+            id: 1, name: 'Java',
+            subscribed: false
+          }
         },
         {
           id: 2,
-          titre: 'Article 2',
+          title: 'Article 2',
           content: 'Content 2',
           dateCreation: '2025-12-16',
-          auteur: { id: 2, username: 'user2', email: 'user2@test.com' },
-          theme: { id: 2, nom: 'Angular' }
+          author: { id: 2, username: 'user2', email: 'user2@test.com' },
+          theme: {
+            id: 2, name: 'Angular',
+            subscribed: false
+          }
         }
       ];
 
@@ -76,11 +82,14 @@ describe('ArticleService (TDD)', () => {
     it('should return a single article by ID', () => {
       const mockArticle: Article = {
         id: 1,
-        titre: 'Article Test',
+        title: 'Article Test',
         content: 'Content test',
         dateCreation: '2025-12-17',
-        auteur: { id: 1, username: 'testuser', email: 'test@test.com' },
-        theme: { id: 1, nom: 'Java' }
+        author: { id: 1, username: 'testuser', email: 'test@test.com' },
+        theme: {
+          id: 1, name: 'Java',
+          subscribed: false
+        }
       };
 
       service.getArticleById(1).subscribe((article: Article) => {
@@ -110,18 +119,21 @@ describe('ArticleService (TDD)', () => {
   describe('createArticle()', () => {
     it('should create a new article and return it', () => {
       const createData: CreateArticleRequest = {
-        titre: 'Nouvel article',
+        title: 'Nouvel article',
         content: 'Contenu du nouvel article',
         themeId: 1
       };
 
       const mockResponse: Article = {
         id: 10,
-        titre: 'Nouvel article',
+        title: 'Nouvel article',
         content: 'Contenu du nouvel article',
         dateCreation: '2025-12-17',
-        auteur: { id: 1, username: 'currentuser', email: 'current@test.com' },
-        theme: { id: 1, nom: 'Java' }
+        author: { id: 1, username: 'currentuser', email: 'current@test.com' },
+        theme: {
+          id: 1, name: 'Java',
+          subscribed: false
+        }
       };
 
       service.createArticle(createData).subscribe((article: Article) => {
@@ -133,7 +145,7 @@ describe('ArticleService (TDD)', () => {
       expect(req.request.method).toBe('POST');
       // Le service transforme titre -> title et contenu -> content
       expect(req.request.body).toEqual({
-        title: createData.titre,
+        title: createData.title,
         content: createData.content,
         themeId: createData.themeId
       });
@@ -142,7 +154,7 @@ describe('ArticleService (TDD)', () => {
 
     it('should handle error when creation fails', () => {
       const createData: CreateArticleRequest = {
-        titre: '',
+        title: '',
         content: 'Content',
         themeId: 1
       };

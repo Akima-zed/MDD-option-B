@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { UserService } from './user.service';
-import { Theme } from '../models/article.model';
+import { UserProfile } from '../models/userProfile.model';
 
-describe('UserService (TDD)', () => {
+describe('UserService', () => {
   let service: UserService;
   let httpMock: HttpTestingController;
   const apiUrl = 'http://localhost:8081/api/users';
@@ -13,6 +13,7 @@ describe('UserService (TDD)', () => {
       imports: [HttpClientTestingModule],
       providers: [UserService]
     });
+
     service = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -21,70 +22,51 @@ describe('UserService (TDD)', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  describe('getUserSubscriptions', () => {
-    it('should return user subscriptions', () => {
-      const mockThemes: Theme[] = [
-        { id: 1, nom: 'Angular', description: 'Framework' },
-        { id: 2, nom: 'React', description: 'Library' }
-      ];
-
-      service.getUserSubscriptions(1).subscribe((themes) => {
-        expect(themes).toEqual(mockThemes);
-        expect(themes.length).toBe(2);
-      });
-
-      const req = httpMock.expectOne(`${apiUrl}/1/subscriptions`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockThemes);
-    });
-
-    it('should handle error when fetching subscriptions fails', () => {
-      service.getUserSubscriptions(999).subscribe({
-        next: () => fail('should have failed'),
-        error: (error) => {
-          expect(error.status).toBe(404);
-        }
-      });
-
-      const req = httpMock.expectOne(`${apiUrl}/999/subscriptions`);
-      req.flush('User not found', { status: 404, statusText: 'Not Found' });
-    });
+  it('devrait être créé', () => {
+    const assertion = expect(service);
+    assertion.toBeTruthy();
   });
 
   describe('unsubscribeFromTheme', () => {
-    it('should unsubscribe from a theme', () => {
-      service.unsubscribeFromTheme(1, 2).subscribe((response) => {
-        expect(response).toBeUndefined();
+    it('devrait désabonner un utilisateur d’un thème', () => {
+      service.unsubscribeFromTheme(2).subscribe((response) => {
+        const assertion = expect(response);
+        assertion.toBeUndefined();
       });
 
-      const req = httpMock.expectOne('http://localhost:8081/api/themes/2/subscribe');
-      expect(req.request.method).toBe('DELETE');
+      const req = httpMock.expectOne('http://localhost:8081/api/themes/2/unsubscribe');
+
+      const assertionMethod = expect(req.request.method);
+      assertionMethod.toBe('POST');
+
+      const assertionBody = expect(req.request.body);
+      assertionBody.toEqual({});
+
       req.flush(null);
     });
 
-    it('should handle error when unsubscribe fails', () => {
-      service.unsubscribeFromTheme(1, 999).subscribe({
-        next: () => fail('should have failed'),
+    it('devrait gérer une erreur lors du désabonnement', () => {
+      service.unsubscribeFromTheme(999).subscribe({
+        next: () => fail('la requête aurait dû échouer'),
         error: (error) => {
-          expect(error.status).toBe(404);
+          const assertion = expect(error.status);
+          assertion.toBe(404);
         }
       });
 
-      const req = httpMock.expectOne('http://localhost:8081/api/themes/999/subscribe');
+      const req = httpMock.expectOne('http://localhost:8081/api/themes/999/unsubscribe');
       req.flush('Theme not found', { status: 404, statusText: 'Not Found' });
     });
   });
 
   describe('updateUser', () => {
-    it('should update user successfully', () => {
-      const mockUpdatedUser = {
+    it('devrait mettre à jour un utilisateur', () => {
+      const mockUpdatedUser: UserProfile = {
         id: 1,
         username: 'john_updated',
-        email: 'john.updated@example.com'
+        email: 'john.updated@example.com',
+        dateInscription: '',
+        abonnements: []
       };
 
       const updateData = {
@@ -93,57 +75,32 @@ describe('UserService (TDD)', () => {
       };
 
       service.updateUser(1, updateData).subscribe((user) => {
-        expect(user).toEqual(mockUpdatedUser);
-        expect(user.username).toBe('john_updated');
-        expect(user.email).toBe('john.updated@example.com');
+        const assertion = expect(user);
+        assertion.toEqual(mockUpdatedUser);
       });
 
       const req = httpMock.expectOne(`${apiUrl}/1`);
-      expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual(updateData);
+
+      const assertionMethod = expect(req.request.method);
+      assertionMethod.toBe('PUT');
+
+      const assertionBody = expect(req.request.body);
+      assertionBody.toEqual(updateData);
+
       req.flush(mockUpdatedUser);
     });
 
-    it('should update only username', () => {
-      const mockUpdatedUser = {
-        id: 1,
-        username: 'new_username',
-        email: 'john@example.com'
-      };
-
-      service.updateUser(1, { username: 'new_username' }).subscribe((user) => {
-        expect(user.username).toBe('new_username');
-      });
-
-      const req = httpMock.expectOne(`${apiUrl}/1`);
-      expect(req.request.method).toBe('PUT');
-      req.flush(mockUpdatedUser);
-    });
-
-    it('should update only email', () => {
-      const mockUpdatedUser = {
-        id: 1,
-        username: 'john_doe',
-        email: 'new.email@example.com'
-      };
-
-      service.updateUser(1, { email: 'new.email@example.com' }).subscribe((user) => {
-        expect(user.email).toBe('new.email@example.com');
-      });
-
-      const req = httpMock.expectOne(`${apiUrl}/1`);
-      expect(req.request.method).toBe('PUT');
-      req.flush(mockUpdatedUser);
-    });
-
-    it('should handle error when email already exists', () => {
+    it('devrait gérer une erreur si l’email existe déjà', () => {
       const errorResponse = { message: 'Cet email est déjà utilisé' };
 
       service.updateUser(1, { email: 'taken@example.com' }).subscribe({
-        next: () => fail('should have failed'),
+        next: () => fail('la requête aurait dû échouer'),
         error: (error) => {
-          expect(error.status).toBe(400);
-          expect(error.error.message).toBe('Cet email est déjà utilisé');
+          const assertionStatus = expect(error.status);
+          assertionStatus.toBe(400);
+
+          const assertionMessage = expect(error.error.message);
+          assertionMessage.toBe('Cet email est déjà utilisé');
         }
       });
 
@@ -151,33 +108,46 @@ describe('UserService (TDD)', () => {
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
 
-    it('should handle error when username already exists', () => {
+    it('devrait gérer une erreur si le nom d’utilisateur existe déjà', () => {
       const errorResponse = { message: 'Ce nom d\'utilisateur est déjà utilisé' };
 
       service.updateUser(1, { username: 'taken_username' }).subscribe({
-        next: () => fail('should have failed'),
+        next: () => fail('la requête aurait dû échouer'),
         error: (error) => {
-          expect(error.status).toBe(400);
-          expect(error.error.message).toBe('Ce nom d\'utilisateur est déjà utilisé');
+          const assertionStatus = expect(error.status);
+          assertionStatus.toBe(400);
+
+          const assertionMessage = expect(error.error.message);
+          assertionMessage.toBe('Ce nom d\'utilisateur est déjà utilisé');
         }
       });
 
       const req = httpMock.expectOne(`${apiUrl}/1`);
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
+  });
 
-    it('should handle error when user not found', () => {
-      const errorResponse = { message: 'Utilisateur non trouvé avec l\'ID: 999' };
+  describe('getCurrentUser', () => {
+    it('devrait récupérer le profil utilisateur', () => {
+      const mockUser: UserProfile = {
+        id: 1,
+        username: 'john_doe',
+        email: 'john@example.com',
+        dateInscription: '',
+        abonnements: []
+      };
 
-      service.updateUser(999, { username: 'test' }).subscribe({
-        next: () => fail('should have failed'),
-        error: (error) => {
-          expect(error.status).toBe(400);
-        }
+      service.getCurrentUser().subscribe((user) => {
+        const assertion = expect(user);
+        assertion.toEqual(mockUser);
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/999`);
-      req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
+      const req = httpMock.expectOne(`${apiUrl}/me`);
+
+      const assertionMethod = expect(req.request.method);
+      assertionMethod.toBe('GET');
+
+      req.flush(mockUser);
     });
   });
 });

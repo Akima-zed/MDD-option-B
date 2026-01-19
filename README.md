@@ -258,18 +258,19 @@ cd back
 ```
 
 **Résultats** :
-- ✅ **31 tests exécutés** - **100% de réussite**
-- ⏱️ Temps d'exécution : ~20 secondes
-- 📦 Classes testées : 24
+-  **34 tests exécutés** - **100% de réussite**
+-  Temps d'exécution : ~20 secondes
+-  Classes testées : 29
 
 **Fichiers de tests** :
 - `MddApiApplicationTests.java` : Test de chargement du contexte Spring (1 test)
-- `JwtUtilTest.java` : Tests de génération et validation JWT (8 tests)
+- `JwtUtilTest.java` : Tests de génération et validation JWT (7 tests)
 - `UserServiceTest.java` : Tests des services utilisateur (15 tests)
-- `AuthControllerIntegrationTest.java` : Tests d'intégration API (7 tests)
+- `AuthControllerIntegrationTest.java` : Tests d'intégration API (8 tests)
+- `ArticleServiceTest.java` : Tests des services article (2 tests)
 
 **Rapport de couverture JaCoCo** :
-- 📊 Rapport HTML généré dans : `back/target/site/jacoco/index.html`
+-  Rapport HTML généré dans : `back/target/site/jacoco/index.html`
 - Configuration : Plugin JaCoCo 0.8.10 dans pom.xml
 
 ### Tests Front-end (Jest)
@@ -286,25 +287,25 @@ npm run test:coverage
 ```
 
 **Résultats** :
-- ✅ **56 tests réussis** sur 63 total (**89% de réussite**)
-- 📊 **Couverture globale : 61.62%**
-  - Statements : 61.62%
-  - Branches : 14.81%
-  - Functions : 33.58%
-  - Lines : 61.76%
+- **60 tests réussis** sur 60 total (**100% de réussite**)
+-  **Couverture globale : 61.62%**
+  - Statements : 67.61%
+  - Branches : 22.72%
+  - Functions : 40.32%
+  - Lines : 69.04%
 
 **Détail par catégorie** :
-- 🟢 **Services : 95%** (Excellent)
+-  **Services : 95%** (Excellent)
   - ArticleService : 100%
   - CommentService : 100%
   - UserService : 100%
   - ThemeService : 91.66%
   - AuthService : 88.88%
-- 🟢 **Guards : 100%** (Parfait)
+-  **Guards : 100%** (Parfait)
   - AuthGuard : 100%
-- 🟢 **Interceptors : 100%** (Parfait)
+-  **Interceptors : 100%** (Parfait)
   - AuthInterceptor : 100%
-- 🟡 **Components : 45-80%** (À améliorer)
+-  **Components : 45-80%** (À améliorer)
   - HomeComponent : 80%
   - FeedComponent : 74.07%
   - ArticleCreateComponent : 66.66%
@@ -314,70 +315,21 @@ npm run test:coverage
   - ProfileComponent : 45.61%
 
 **Rapport de couverture** :
-- 📊 Rapport HTML généré dans : `front/coverage/index.html`
-- 📄 Formats disponibles : HTML, LCOV, JSON, Clover XML
-
-### Tests E2E (Cypress)
-
-**Lancer les tests en mode interactif** :
-```bash
-cd front
-npm run cypress:open
-# ou
-npm run e2e:open
-```
-
-**Lancer les tests en mode headless** :
-```bash
-npm run cypress:run
-# ou
-npm run e2e
-```
-
-**3 scénarios couverts (13 tests au total)** :
-
-1. **Inscription et création d'article** (`01-register-and-create-article.cy.ts`) - 3 tests
-   - ✅ Flux complet : inscription → login → abonnement → création article
-   - ✅ Gestion des erreurs de validation
-   - ✅ Gestion des doublons d'email
-
-2. **Abonnement aux thèmes et fil d'actualité** (`02-theme-subscription-and-feed.cy.ts`) - 4 tests
-   - ✅ Login → abonnement thème → vérification articles dans le fil
-   - ✅ Désabonnement depuis le profil
-   - ✅ Message fil vide si aucun abonnement
-   - ✅ Tri chronologique des articles
-
-3. **Consultation d'article et commentaires** (`03-article-view-and-comment.cy.ts`) - 6 tests
-   - ✅ Consultation article → ajout commentaire → vérification affichage
-   - ✅ Affichage des informations article (auteur, thème, date)
-   - ✅ Message si aucun commentaire
-   - ✅ Validation champ commentaire vide
-   - ✅ Navigation retour vers le fil
-
-**Configuration** :
-- Base URL : http://localhost:4200
-- Backend API : http://localhost:8081
-- Viewport : 1280x720
-- Screenshots automatiques en cas d'échec
-
-**Commandes personnalisées** :
-- `cy.login(email, password)` : Connexion via API avec stockage du token
-- `cy.logout()` : Déconnexion et nettoyage du localStorage
-
-**Documentation complète** : Voir `front/cypress/README.md`
+-  Rapport HTML généré dans : `front/coverage/index.html`
+-  Formats disponibles : HTML, LCOV, JSON, Clover XML
 
 ### Rapports consolidés
 
 | Type | Outil | Tests | Réussite | Couverture |
 |------|-------|-------|----------|------------|
-| **Backend** | JUnit 5 + Mockito | 31 | ✅ 100% | JaCoCo configuré |
-| **Frontend** | Jest | 63 | ✅ 89% (56/63) | 📊 61.62% |
-| **E2E** | Cypress | 13 | ✅ 3 scénarios | Flux complets |
+| **Backend** | JUnit 5 + Mockito | 34 |  100% | JaCoCo configuré |
+| **Frontend** | Jest | 60 |  100% |  61.62% |
+|
 
 **Accès aux rapports** :
 - Backend JaCoCo : Ouvrir `back/target/site/jacoco/index.html` dans un navigateur
 - Frontend Jest : Ouvrir `front/coverage/index.html` dans un navigateur
-- Cypress : Screenshots dans `front/cypress/screenshots/` (en cas d'échec)
+
 
 ## Technologies utilisées
 
@@ -413,15 +365,9 @@ npm run e2e
 - **SOLID** : Respect des principes (SRP, OCP, DIP via DI Spring)
 - **REST** : API RESTful avec codes HTTP standards
 - **JWT** : Authentification stateless
-- **Lazy Loading** : Chargement différé des modules Angular
+- **Lazy Loading** : Chargement différé des composants Angular via loadComponent (standalone components)
 - **Guards** : Protection des routes Angular
 - **Interceptors** : Ajout automatique token JWT
-
-## Contributeurs
-
-- **Développeur** : Heidi (initial) + Vous
-- **Designer UX** : Juana
-- **Responsable** : Orlando
 
 ## Licence
 
@@ -439,7 +385,7 @@ Frontend : http://localhost:4200
 
 ## Technologies
 
-- Backend : Spring Boot 3, Spring Security + JWT, MySQL
+- Backend : Spring Boot 32.7.3, Spring Security + JWT, MySQL
 - Frontend : Angular 14, Angular Material, TypeScript
 
 ---

@@ -32,16 +32,16 @@ describe('CommentService (TDD)', () => {
       const mockComments: Comment[] = [
         {
           id: 1,
-          contenu: 'Premier commentaire',
+          content: 'Premier commentaire',
           dateCreation: '2025-12-17',
-          auteur: { id: 1, username: 'user1', email: 'user1@test.com' },
+          author: { id: 1, username: 'user1', email: 'user1@test.com' },
           articleId: 1
         },
         {
           id: 2,
-          contenu: 'Deuxième commentaire',
+          content: 'Deuxième commentaire',
           dateCreation: '2025-12-17',
-          auteur: { id: 2, username: 'user2', email: 'user2@test.com' },
+          author: { id: 2, username: 'user2', email: 'user2@test.com' },
           articleId: 1
         }
       ];
@@ -73,33 +73,33 @@ describe('CommentService (TDD)', () => {
   describe('createComment()', () => {
     it('should create a new comment and return it', () => {
       const createData: CreateCommentRequest = {
-        contenu: 'Nouveau commentaire',
+        content: 'Nouveau commentaire',
         articleId: 1
       };
 
       const mockResponse: Comment = {
         id: 10,
-        contenu: 'Nouveau commentaire',
+        content: 'Nouveau commentaire',
         dateCreation: '2025-12-17',
-        auteur: { id: 1, username: 'currentuser', email: 'current@test.com' },
+        author: { id: 1, username: 'currentuser', email: 'current@test.com' },
         articleId: 1
       };
 
       service.createComment(createData).subscribe((comment: Comment) => {
         expect(comment).toEqual(mockResponse);
         expect(comment.id).toBe(10);
-        expect(comment.contenu).toBe('Nouveau commentaire');
+        expect(comment.content).toBe('Nouveau commentaire');
       });
 
       const req = httpMock.expectOne(`${apiUrl}/1/comments`);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({ contenu: createData.contenu });
+      expect(req.request.body).toEqual({ content: createData.content });
       req.flush(mockResponse);
     });
 
     it('should handle error when comment creation fails', () => {
       const createData: CreateCommentRequest = {
-        contenu: '',
+        content: '',
         articleId: 1
       };
 

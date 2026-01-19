@@ -30,9 +30,18 @@ describe('ThemeService (TDD)', () => {
   describe('getThemes()', () => {
     it('should return list of themes from API', () => {
       const mockThemes: Theme[] = [
-        { id: 1, nom: 'Java', description: 'Langage Java' },
-        { id: 2, nom: 'Angular', description: 'Framework Angular' },
-        { id: 3, nom: 'Python', description: 'Langage Python' }
+        {
+          id: 1, name: 'Java', description: 'Langage Java',
+          subscribed: false
+        },
+        {
+          id: 2, name: 'Angular', description: 'Framework Angular',
+          subscribed: false
+        },
+        {
+          id: 3, name: 'Python', description: 'Langage Python',
+          subscribed: false
+        }
       ];
 
       service.getThemes().subscribe((themes: Theme[]) => {
@@ -63,8 +72,9 @@ describe('ThemeService (TDD)', () => {
     it('should return a single theme by ID', () => {
       const mockTheme: Theme = {
         id: 1,
-        nom: 'Java',
-        description: 'Langage de programmation Java'
+        name: 'Java',
+        description: 'Langage de programmation Java',
+        subscribed: false
       };
 
       service.getThemeById(1).subscribe((theme: Theme) => {
