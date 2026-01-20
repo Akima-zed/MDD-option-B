@@ -15,6 +15,7 @@ import { ThemeService } from '../../services/theme.service';
 import { CreateArticleRequest, Theme } from '../../models/article.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
+// Formulaire de connexion avec gestion d'erreur et redirection.
 @Component({
   selector: 'app-article-create',
   standalone: true,
