@@ -55,7 +55,7 @@ describe('ThemeService (TDD)', () => {
     });
 
     it('should handle error when getting themes fails', () => {
-      service.getThemes().subscribe(
+      service.getThemes().subscribe( // déprécié mais nécessaire pour le test
         () => fail('should have failed'),
         (error: HttpErrorResponse) => {
           expect(error.status).toBe(500);
