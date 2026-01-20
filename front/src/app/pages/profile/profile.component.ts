@@ -100,7 +100,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    const updatedData = this.profileForm.value;
+    const updatedData = { ...this.profileForm.value };
+
+    // Ne pas envoyer un mot de passe vide
+  if (!updatedData.password) {
+    delete updatedData.password;
+  }
+
 
     this.userService
       .updateUser(this.user.id, updatedData)

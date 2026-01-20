@@ -17,7 +17,7 @@ export class UserService {
   }
 
   /** Met à jour le profil utilisateur */
-  updateUser(userId: number, userData: { username?: string; email?: string }): Observable<UserProfile> {
+  updateUser(userId: number, userData: { username?: string; email?: string; password?: string }): Observable<UserProfile> {
     return this.http.put<UserProfile>(`${this.apiUrl}/${userId}`, userData);
   }
 
