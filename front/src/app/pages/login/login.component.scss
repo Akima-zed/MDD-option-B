@@ -5,37 +5,40 @@
   flex-direction: column;
 }
 
-/* Logo + flèche à gauche */
+/* Header : logo + trait + flèche */
 .login-header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start; /* Desktop : tout à gauche */
   margin-bottom: 45px;
   padding: 24px 32px 16px;
-  border-bottom: 1px solid #1a1a1a;
 
   .logo {
     max-width: 100px;
     height: auto;
-    margin-bottom: 8px;
+    margin-bottom: 16px; /* espace entre logo et trait */
+  }
+
+  /* Trait noir desktop */
+  .header-separator {
+    width: 100vw; /* largeur totale de la fenêtre */
+    margin-left: calc(-32px); /* compense le padding du header */
+    height: 2px;
+    background-color: #000;
+    margin-bottom: 16px; /* espace entre trait et flèche */
   }
 
   .back-button {
     width: 56px;
     height: 56px;
-  }
 
-  .back-button .mat-icon {
-    font-size: 44px;
-    width: 44px;
-    height: 44px;
-  }
-
-  .big-arrow {
-    font-size: 48px !important;
-    width: 48px !important;
-    height: 48px !important;
-    line-height: 48px !important;
+    .mat-icon,
+    .big-arrow {
+      font-size: 48px !important;
+      width: 48px !important;
+      height: 48px !important;
+      line-height: 48px !important;
+    }
   }
 }
 
@@ -60,14 +63,12 @@
   max-width: 360px;
   display: flex;
   flex-direction: column;
-  
 }
 
 .field-label {
   font-size: 11px;
   margin-bottom: -6px;
   font-weight: 400;
-  
 }
 
 .error-message {
@@ -92,38 +93,38 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-
   .login-header {
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* logo centré */
     justify-content: center;
     padding: 16px;
     gap: 12px;
     margin-bottom: 32px;
-    border-bottom: none;
-  }
 
-  /* Flèche au-dessus du logo */
-  .login-header .back-button {
-    order: -1; /* place la flèche avant le logo */
-  }
+    .header-separator {
+      display: none; /* supprime le trait en mobile */
+    }
 
-  /* Logo plus grand */
-  .login-header .logo {
-    max-width: 140px; /* taille augmentée */
-  }
+    .logo {
+      order: 1; /* logo sous la flèche */
+      max-width: 140px; /* taille augmentée */
+      margin-bottom: 0;
+    }
 
-  .back-button {
-    width: 48px;
-    height: 48px;
-  }
+    .back-button {
+      order: 0; /* flèche à gauche */
+      align-self: flex-start;
+      width: 48px;
+      height: 48px;
 
-  .back-button .mat-icon,
-  .back-button .big-arrow {
-    font-size: 36px !important;
-    width: 36px !important;
-    height: 36px !important;
-    line-height: 36px !important;
+      .mat-icon,
+      .big-arrow {
+        font-size: 36px !important;
+        width: 36px !important;
+        height: 36px !important;
+        line-height: 36px !important;
+      }
+    }
   }
 
   .login-main {
