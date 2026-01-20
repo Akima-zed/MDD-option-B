@@ -1,5 +1,4 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -9,9 +8,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ArticleService } from '../../services/article.service';
 import { Article } from '../../models/article.model';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
 
-@Component({
+
+/**
+ * Page affichant le fil des articles.
+ * Permet de consulter les articles et de les trier par date.
+ */@Component({
   selector: 'app-feed',
   standalone: true,
   imports: [
@@ -27,10 +30,16 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.scss']
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent implements OnInit, OnDestroy {
+
+  private destroy$ = new Subject<void>();
+
   articles: Article[] = [];
-  isLoading: boolean = true;
-  errorMessage: string = '';
+  isLoading = true;
+  errorMessage = '';
+
+  /** true = tri décroissant (flèche ↓), false = tri croissant (flèche ↑) */
+  isSortDesc = true;
 
   constructor(
     private articleService: ArticleService,
@@ -41,21 +50,49 @@ export class FeedComponent implements OnInit {
     this.loadArticles();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadArticles(): void {
     this.isLoading = true;
-    this.articleService.getArticles().subscribe({
-      next: (articles: Article[]) => {
-        // Tri par date décroissante (plus récents en premier)
-        this.articles = articles.sort((a, b) => 
-          new Date(b.dateCreation).getTime() - new Date(a.dateCreation).getTime()
-        );
-        this.isLoading = false;
-      },
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage = 'Erreur lors du chargement des articles';
-        this.isLoading = false;
-      }
-    });
+
+    this.articleService.getArticles()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (articles) => {
+          this.articles = this.sortArticlesByDateDesc([...articles]);
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des articles';
+          this.isLoading = false;
+        }
+      });
+  }
+
+  /** Tri décroissant */
+  private sortArticlesByDateDesc(articles: Article[]): Article[] {
+    return articles.sort((a, b) =>
+      new Date(b.dateCreation).getTime() - new Date(a.dateCreation).getTime()
+    );
+  }
+
+  /** Tri croissant */
+  private sortArticlesByDateAsc(articles: Article[]): Article[] {
+    return articles.sort((a, b) =>
+      new Date(a.dateCreation).getTime() - new Date(b.dateCreation).getTime()
+    );
+  }
+
+  /** Inverse le tri et met à jour la liste */
+  toggleSort(): void {
+    this.isSortDesc = !this.isSortDesc;
+
+    this.articles = this.isSortDesc
+      ? this.sortArticlesByDateDesc([...this.articles])
+      : this.sortArticlesByDateAsc([...this.articles]);
   }
 
   viewArticle(id: number): void {

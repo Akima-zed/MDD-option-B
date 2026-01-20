@@ -5,10 +5,15 @@
     <button mat-raised-button class="create-article-btn" (click)="createArticle()">
       Créer un article
     </button>
-    <div class="sort-section">
-      <span>Trier par</span>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </div>
+    
+    <div class="sort-section" (click)="toggleSort()">
+  <span>Trier par</span>
+  <span class="sort-arrow">
+    {{ isSortDesc ? '↓' : '↑' }}
+  </span>
+</div>
+
+
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
