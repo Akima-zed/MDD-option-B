@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,8 @@ import { ArticleService } from '../../services/article.service';
 import { CommentService } from '../../services/comment.service';
 import { Article } from '../../models/article.model';
 import { Comment, CreateCommentRequest } from '../../models/comment.model';
-import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 /**
  * Affiche un article et ses commentaires.
@@ -40,10 +41,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss']
 })
-export class ArticleComponent implements OnInit {
+export class ArticleComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   article: Article | null = null;
   comments: Comment[] = [];
   commentForm!: FormGroup;
+
+  /** Chargement de l’article uniquement */
   isLoading = true;
   isSubmitting = false;
   errorMessage = '';
@@ -51,13 +56,13 @@ export class ArticleComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private ngZone: NgZone,
     private articleService: ArticleService,
     private commentService: CommentService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar
   ) {}
 
-  // Initialise le formulaire et charge l'article + commentaires
   ngOnInit(): void {
     this.commentForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/\S+/)]]
@@ -70,66 +75,65 @@ export class ArticleComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadArticle(id: number): void {
-    this.articleService.getArticleById(id).subscribe({
-      next: (article: Article) => {
-        this.article = article;
-        this.isLoading = false;
-      },
+    this.isLoading = true; // 
+    this.articleService.getArticleById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: article => {
+          this.article = article;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'Article introuvable';
+          this.isLoading = false;
+        }
+      });
+  }
+
+  loadComments(articleId: number): void {
+    this.commentService.getCommentsByArticleId(articleId).subscribe({
+      next: comments => this.comments = comments,
       error: () => {
-        this.errorMessage = 'Article not found';
-        this.isLoading = false;
+        this.comments = [];
+        this.snackBar.open('Impossible de charger les commentaires.', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
       }
     });
   }
 
-  loadComments(articleId: number): void {
-  this.commentService.getCommentsByArticleId(articleId).subscribe({
-    next: (comments: Comment[]) => {
-      this.comments = comments;
-    },
-    error: () => {
-      // En cas d’erreur, on vide la liste et on informe l’utilisateur
-      this.comments = [];
-      this.snackBar.open('Impossible de charger les commentaires.', 'Fermer', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
-    }
-  });
-}
-
-
-  // Envoie un commentaire si le formulaire est valide
   onSubmitComment(): void {
     if (this.commentForm.invalid || !this.article) return;
 
     this.isSubmitting = true;
-
     const commentData: CreateCommentRequest = {
       content: this.commentForm.value.content.trim(),
       articleId: this.article.id
     };
 
     this.commentService.createComment(commentData).subscribe({
-      next: (comment: Comment) => {
+      next: comment => {
         this.comments.push(comment);
         this.commentForm.reset();
         this.isSubmitting = false;
-        this.snackBar.open('Comment added successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
+        this.snackBar.open('Commentaire ajouté !', 'Fermer', { duration: 3000 });
       },
       error: () => {
         this.isSubmitting = false;
+        this.snackBar.open('Impossible d’ajouter le commentaire.', 'Fermer', { duration: 3000 });
       }
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/feed']);
+    this.ngZone.run(() => this.router.navigate(['/feed']));
   }
 }

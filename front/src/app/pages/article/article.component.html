@@ -11,22 +11,20 @@
   </div>
 
   <div *ngIf="!isLoading && article" class="article-content">
-    <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Back">
+    <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Retour">
       <mat-icon>arrow_back</mat-icon>
     </button>
 
     <article class="article-main">
       <header class="article-header">
         <h1 class="article-title">{{ article.title }}</h1>
-
         <div class="article-meta">
           <div class="article-theme">
             <mat-icon>label</mat-icon>
             <span>{{ article.theme.name }}</span>
           </div>
-
           <div class="article-info">
-            <span class="author">By {{ article.author.username }}</span>
+            <span class="author">Par {{ article.author.username }}</span>
             <span class="separator"> • </span>
             <span class="date">{{ article.dateCreation | date: 'dd MMMM yyyy' }}</span>
           </div>
@@ -58,7 +56,7 @@
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit"
                     [disabled]="commentForm.invalid || isSubmitting">
-              {{ isSubmitting ? 'Sending...' : 'Send' }}
+              {{ isSubmitting ? 'Envoi...' : 'Envoyer' }}
             </button>
           </div>
         </form>
@@ -70,7 +68,6 @@
             <span class="comment-author">{{ comment.author.username }}</span>
             <span class="comment-date">{{ comment.dateCreation | date: 'dd/MM/yyyy' }}</span>
           </div>
-
           <p class="comment-content">{{ comment.content }}</p>
         </mat-card>
 
