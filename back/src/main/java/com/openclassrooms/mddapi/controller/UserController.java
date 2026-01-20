@@ -2,10 +2,10 @@ package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.dto.ThemeResponse;
 import com.openclassrooms.mddapi.dto.UserResponse;
+import com.openclassrooms.mddapi.dto.UserUpdateRequest;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.security.SecurityUtils;
 import com.openclassrooms.mddapi.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +64,7 @@ public class UserController {
 
     // Mise à jour du profil
     @PutMapping("/me")
-    public ResponseEntity<?> updateCurrentUser(@RequestBody User updated) {
+    public ResponseEntity<?> updateCurrentUser(@RequestBody UserUpdateRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
 
         if (userId == null) {
@@ -72,7 +72,7 @@ public class UserController {
                     .body(Map.of("message", "Utilisateur non authentifié"));
         }
 
-        User saved = userService.update(userId, updated);
+        User saved = userService.update(userId, request);
 
         UserResponse response = new UserResponse(
                 saved.getId(),
