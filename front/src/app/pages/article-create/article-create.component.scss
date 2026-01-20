@@ -26,7 +26,7 @@ $violet: #6C4CCF;
   .back-button {
     position: fixed;
     left: 16px;        /* ← collé au bord gauche de l’écran */
-    top: 120px;        /* ← aligné verticalement comme ta maquette */
+    top: 120px;        /* ← aligné verticalement comme la maquette */
     background: none;
     border: none;
     font-size: 44px;
@@ -40,7 +40,7 @@ $violet: #6C4CCF;
   }
 }
 
-/* Formulaire centré */
+/* Formulaire centré en flex */
 .create-form {
   width: 100%;
   max-width: 600px;
@@ -49,7 +49,7 @@ $violet: #6C4CCF;
   gap: 24px;
 }
 
-/* Encarts identiques + police uniforme */
+/* Champs uniformisés (inputs, select, textarea) */
 .field-group {
   display: flex;
   flex-direction: column;
@@ -62,12 +62,12 @@ $violet: #6C4CCF;
     border: 2px solid $violet;
     border-radius: 6px;
     font-size: 16px;
-    font-family: inherit; /* correction */
+    font-family: inherit; 
     outline: none;
     background-color: white;
     color: #333;
     min-height: 48px;
-    box-sizing: border-box; /* correction */
+    box-sizing: border-box; /* évite les débordements */
   }
 
   input::placeholder,

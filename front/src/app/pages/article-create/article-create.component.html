@@ -2,10 +2,13 @@
 
 <div class="page-wrapper">
   <div class="top-bar">
+        <!-- Bouton retour, positionné hors flux pour rester accessible sur mobile -->
+
     <button class="back-button" (click)="goBack()">←</button>
     <h1>Créer un nouvel article</h1>
   </div>
 
+    <!-- Formulaire de création d’article (Reactive Forms) -->
   <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" class="create-form">
 
     <div class="field-group">
@@ -34,6 +37,7 @@
       </div>
     </div>
 
+    <!-- Message d’erreur global  -->
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
