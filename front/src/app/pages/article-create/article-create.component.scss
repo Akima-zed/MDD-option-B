@@ -1,44 +1,147 @@
-.create-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 24px;
+$violet: #6C4CCF;
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 }
 
-.create-card {
-  mat-card-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+/* Top bar avec flèche collée à gauche */
+.top-bar {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  margin-bottom: 32px;
+  text-align: center;
 
-    .back-button {
-      margin-right: 8px;
-    }
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
 
-    mat-card-title {
-      margin: 0;
-    }
+  .back-button {
+    position: fixed;
+    left: 16px;        /* ← collé au bord gauche de l’écran */
+    top: 120px;        /* ← aligné verticalement comme ta maquette */
+    background: none;
+    border: none;
+    font-size: 44px;
+    cursor: pointer;
+    color: #333;
+    width: 44px;
+    height: 44px;
+    padding: 0; 
+    z-index: 10;       /* ← pour qu’elle passe au-dessus du contenu */
+
   }
 }
 
-.full-width {
+/* Formulaire centré */
+.create-form {
   width: 100%;
-  margin-bottom: 16px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Encarts identiques + police uniforme */
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid $violet;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: inherit; /* correction */
+    outline: none;
+    background-color: white;
+    color: #333;
+    min-height: 48px;
+    box-sizing: border-box; /* correction */
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #999;
+  }
+
+  select {
+    color: #333;
+    background-color: white;
+  }
+
+  select:invalid {
+    color: #999;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: darken($violet, 10%);
+  }
+}
+
+/* Erreurs */
+.error {
+  margin-top: 6px;
+  color: #d32f2f;
+  font-size: 14px;
 }
 
 .error-message {
-  color: #f44336;
-  margin-bottom: 16px;
-  text-align: center;
-  font-size: 14px;
+  color: #d32f2f;
+  background: #ffebee;
   padding: 12px;
-  background-color: #ffebee;
   border-radius: 4px;
+  text-align: center;
 }
 
+/* Bouton Créer centré */
 .form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 24px;
+  justify-content: center;
+}
+
+.submit-btn {
+  background-color: $violet;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 220px;
+  height: 48px;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 24px 12px;
+  }
+
+  .top-bar h1 {
+    font-size: 20px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    min-width: unset;
+  }
 }

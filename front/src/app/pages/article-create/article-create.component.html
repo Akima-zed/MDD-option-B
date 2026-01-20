@@ -1,64 +1,48 @@
 <app-header></app-header>
 
-<div class="create-container">
-  <div class="create-content">
-    <div class="create-header">
-      <button mat-icon-button (click)="goBack()" class="back-button" aria-label="Back">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <h1>Create a new article</h1>
+<div class="page-wrapper">
+  <div class="top-bar">
+    <button class="back-button" (click)="goBack()">←</button>
+    <h1>Créer un nouvel article</h1>
+  </div>
+
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" class="create-form">
+
+    <div class="field-group">
+      <input type="text" formControlName="title" placeholder="Titre de l’article *" />
+      <div class="error" *ngIf="articleForm.get('title')?.invalid && articleForm.get('title')?.touched">
+        Titre requis (min. 3 caractères)
+      </div>
     </div>
 
-    <mat-card class="create-card">
-      <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+    <div class="field-group">
+      <select formControlName="themeId">
+        <option value="" disabled selected hidden>Sélectionner un thème *</option>
+        <option *ngFor="let theme of themes" [value]="theme.id">
+          {{ theme.name }}
+        </option>
+      </select>
+      <div class="error" *ngIf="articleForm.get('themeId')?.invalid && articleForm.get('themeId')?.touched">
+        Thème requis
+      </div>
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Article title</mat-label>
-          <input matInput formControlName="title" required>
-          <mat-error *ngIf="articleForm.get('title')?.hasError('required')">
-            Title is required
-          </mat-error>
-          <mat-error *ngIf="articleForm.get('title')?.hasError('minlength')">
-            Minimum 3 characters
-          </mat-error>
-        </mat-form-field>
+    <div class="field-group">
+      <textarea rows="10" formControlName="content" placeholder="Contenu de l’article *"></textarea>
+      <div class="error" *ngIf="articleForm.get('content')?.invalid && articleForm.get('content')?.touched">
+        Contenu requis (min. 10 caractères)
+      </div>
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Select a theme</mat-label>
-          <mat-select formControlName="themeId" required>
-            <mat-option *ngFor="let theme of themes" [value]="theme.id">
-              {{ theme.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="articleForm.get('themeId')?.hasError('required')">
-            Theme is required
-          </mat-error>
-        </mat-form-field>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Article content</mat-label>
-          <textarea matInput formControlName="content" rows="12" required></textarea>
-          <mat-error *ngIf="articleForm.get('content')?.hasError('required')">
-            Content is required
-          </mat-error>
-          <mat-error *ngIf="articleForm.get('content')?.hasError('minlength')">
-            Minimum 10 characters
-          </mat-error>
-        </mat-form-field>
+    <div class="form-actions">
+      <button type="submit" class="submit-btn" [disabled]="articleForm.invalid || isLoading">
+        {{ isLoading ? 'Création en cours...' : 'Créer' }}
+      </button>
+    </div>
 
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-
-        <div class="form-actions">
-          <button mat-stroked-button type="button" (click)="goBack()">Cancel</button>
-          <button mat-raised-button color="primary" type="submit"
-                  [disabled]="articleForm.invalid || isLoading">
-            {{ isLoading ? 'Creating...' : 'Create' }}
-          </button>
-        </div>
-
-      </form>
-    </mat-card>
-  </div>
+  </form>
 </div>
