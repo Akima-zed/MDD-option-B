@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
+/** page d'accueil avec navigation vers login et register */
 @Component({
   selector: 'app-home',
   standalone: true,
