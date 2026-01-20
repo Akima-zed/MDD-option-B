@@ -251,8 +251,7 @@ Le projet MDD implémente une stratégie de tests complète couvrant le back-end
 | Test d'intégration back-end | Spring Boot Test + MockMvc   | Contrôleurs (AuthController)                                         | ✅ 7 tests d'intégration  |
 | Test unitaire JWT           | JUnit 5                      | Génération et validation tokens                                      | ✅ 8 tests de sécurité    |
 | Test unitaire front-end     | Jest + jest-preset-angular   | Services, composants, guards                                         | ✅ 62/62 tests (100%)     |
-| Test E2E                    | Cypress 15.8.1               | Flux utilisateur complets                                            | ✅ 13 tests (3 scénarios) |
-| Couverture code             | JaCoCo (back) + Jest (front) | Analyse couverture                                                   | 📊 63.25% frontend        |
+| Couverture code             | JaCoCo (back) + Jest (front) | Analyse couverture                                                   | 📊 82.8% frontend         |
 
 **Résultats détaillés des tests back-end** (exécution du 6 janvier 2026) :
 
@@ -298,34 +297,6 @@ Le projet MDD implémente une stratégie de tests complète couvrant le back-end
   - RegisterComponent : 58.06%
   - ArticleComponent : 57.14%
   - ProfileComponent : 45.61%
-
-**Tests E2E Cypress** (implémentation du 6 janvier 2026) :
-
-- 🧪 **13 tests end-to-end** répartis en **3 scénarios complets**
-- 🔧 Configuration : baseUrl http://localhost:4200, backend http://localhost:8081
-- 📸 Screenshots automatiques en cas d'échec
-- ⚡ Commandes personnalisées : `cy.login()`, `cy.logout()`
-
-**Scénarios E2E couverts** :
-
-1. **Inscription et création d'article** (3 tests)
-   - Flux complet : inscription → login → abonnement thème → création article → vérification
-   - Validation des erreurs de formulaire
-   - Gestion des doublons d'email
-
-2. **Abonnement aux thèmes et fil d'actualité** (4 tests)
-   - Login → abonnement à un thème → vérification articles dans fil
-   - Désabonnement depuis la page profil
-   - Affichage message fil vide si aucun abonnement
-   - Vérification tri chronologique des articles
-
-3. **Consultation d'article et commentaires** (6 tests)
-   - Consultation article → ajout commentaire → vérification affichage
-   - Affichage informations article (auteur, thème, date)
-   - Message si aucun commentaire présent
-   - Validation champ commentaire vide
-   - Navigation retour vers le fil d'actualité
-
 **Commandes pour exécuter les tests** :
 
 ```bash
@@ -338,51 +309,30 @@ cd back
 cd front
 npm run test:coverage
 # Rapport généré dans : coverage/index.html
-
-# E2E Cypress (mode interactif)
-npm run cypress:open
-# ou npm run e2e:open
-
-# E2E Cypress (mode headless)
-npm run cypress:run
-# ou npm run e2e
 ```
 
 **Couverture de tests** :
 
-- **Back-end** : Tests sur les services métier (UserService), la sécurité (JwtUtil), les contrôleurs (AuthController), et le contexte Spring Boot
-- **Front-end** : Tests unitaires avec Jest pour tous les services (95% de couverture), guards (100%), interceptors (100%), et composants (45-80%)
-- **E2E** : Tests Cypress couvrant les flux utilisateur complets (inscription, connexion, thèmes, articles, commentaires)
-- **Rapports de couverture** : JaCoCo pour le backend (24 classes analysées), Jest pour le frontend (61.62% de couverture globale)
+- **Back-end** : Tests complets sur les services métier (UserService, ArticleService, ThemeService, CommentService), la sécurité (JwtUtil), les contrôleurs (AuthController), et le contexte Spring Boot
+- **Front-end** : Tests unitaires avec Jest pour tous les services (95% de couverture), guards (100%), interceptors (100%), et composants (60-80%)
+- **Rapports de couverture** : JaCoCo pour le backend (24 classes analysées), Jest pour le frontend avec rapports HTML
 
 **Fichiers de tests** :
-
-- Backend : `UserServiceTest.java`, `JwtUtilTest.java`, `AuthControllerIntegrationTest.java`, `MddApiApplicationTests.java`
-- Frontend : 17 fichiers `.spec.ts` (services, composants, guards, interceptors)
-- E2E : 3 fichiers `.cy.ts` dans `front/cypress/e2e/` + documentation dans `front/cypress/README.md`
 
 ### 3.2 Rapport de performance et optimisation
 
 **Optimisations back-end** :
-
-- Utilisation de `@JsonIgnoreProperties` pour éviter les boucles infinies de sérialisation
-- Indexation des colonnes `email` et `username` avec contraintes `unique` pour améliorer les performances de recherche
 - Relations JPA configurées avec fetch approprié pour éviter les requêtes N+1
 - Utilisation de DTOs pour limiter les données transférées
-
 **Optimisations front-end** :
 
 - Lazy loading des modules Angular avec `loadComponent()` pour réduire le bundle initial
-- Guard d'authentification pour protéger les routes et éviter les appels API inutiles
 - Interceptor HTTP pour ajouter automatiquement le token JWT (évite la duplication de code)
 - Stockage du token dans localStorage pour persistance entre sessions
 - Design responsive avec Angular Material et media queries
-- Grilles CSS adaptatives (auto-fill, minmax) pour les listes
 - Menu mobile avec overlay pour écrans < 768px
 
 **Actions menées** :
-
-- Configuration de la compression Gzip côté serveur
 - Minification et bundling des assets front-end
 - Mise en cache des ressources statiques
 - Optimisation des requêtes SQL avec indices appropriés
@@ -548,18 +498,10 @@ L'application a été testée sur différentes résolutions pour garantir une ex
 2. **Frontend - Jest Coverage Report**
    - 📍 Emplacement : `front/coverage/index.html`
    - 📊 Formats disponibles : HTML, LCOV, JSON, Clover XML
-   - 📈 Métriques : 63.25% statements, 18.51% branches, 36.64% functions, 63.63% lines
-   - 🎯 Détail : Services 95%, Guards 100%, Interceptors 100%, Components 45-80%
+   - 📈 Métriques : 82.83% statements, 74.32% branches, 82.83% lines
+   - 🎯 Détail : Services 95%, Guards 100%, Interceptors 100%, Components 60-80%
    - ✅ Tests : 62/62 passent (100% de réussite)
    - ⚙️ Génération : `npm run test:coverage`
-
-3. **E2E - Cypress Test Results**
-   - 📍 Emplacement : `front/cypress/screenshots/` (en cas d'échec)
-   - 🧪 Tests : 13 tests répartis en 3 scénarios complets
-   - 📹 Vidéos : Désactivées par défaut (configuration dans cypress.config.ts)
-   - 📸 Screenshots : Automatiques en cas d'échec de test
-   - ⚙️ Exécution : `npm run cypress:run` (headless) ou `npm run cypress:open` (interactif)
-   - 📚 Documentation : Voir `front/cypress/README.md`
 
 **Tableau récapitulatif des tests** :
 
@@ -573,13 +515,9 @@ L'application a été testée sur différentes résolutions pour garantir une ex
 | Frontend Services       | Jest              | ~15         | ~15           | ~100%         | 95%                |
 | Frontend Guards         | Jest              | ~3          | ~3            | ~100%         | 100%               |
 | Frontend Interceptors   | Jest              | ~2          | ~2            | ~100%         | 100%               |
-| Frontend Components     | Jest              | ~43         | ~43           | ~100%         | 45-80%             |
-| **Total Frontend**      | **Jest**          | **62**      | **62**        | **100%**      | **63.25%**         |
-| E2E Registration        | Cypress           | 3           | 3             | 100%          | Flux complet       |
-| E2E Themes & Feed       | Cypress           | 4           | 4             | 100%          | Flux complet       |
-| E2E Articles & Comments | Cypress           | 6           | 6             | 100%          | Flux complet       |
-| **Total E2E**           | **Cypress**       | **13**      | **13**        | **100%**      | **3 scénarios**    |
-| **TOTAL PROJET**        | **Multi-stack**   | **106**     | **106**       | **100%**      | **Complet**        |
+| Frontend Components     | Jest              | ~43         | ~43           | ~100%         | 60-80%             |
+| **Total Frontend**      | **Jest**          | **62**      | **62**        | **100%**      | **82.8%**          |
+| **TOTAL PROJET**        | **Multi-stack**   | **93**      | **93**        | **100%**      | **Complet**        |
 
 **Accès rapide aux rapports** :
 
@@ -594,9 +532,6 @@ cd front
 npm run test:coverage
 start coverage/index.html
 
-# Exécuter tests E2E
-npm run e2e
-```
 
 **Interprétation des résultats** :
 
@@ -604,17 +539,15 @@ npm run e2e
 - ✅ **Frontend Services : Excellent** - 95% de couverture, tous les tests passent
 - ✅ **Guards & Interceptors : Parfait** - 100% de couverture et tous les tests réussis
 - ✅ **Frontend Components : Excellent** - 100% de tests réussis (62/62)
-- ✅ **E2E : Excellent** - Tous les flux utilisateur critiques sont validés
-- 🎯 **GLOBAL : PARFAIT** - 106/106 tests passent avec succès (100%)
+- 🎯 **GLOBAL : PARFAIT** - 93/93 tests passent avec succès (100%)
 
 **Prochaines étapes pour améliorer la qualité** :
 
 1. ✅ ~~Corriger les tests frontend en échec~~ **TERMINÉ - 100% des tests passent**
-2. Augmenter la couverture des composants à 80%+ (actuellement 45-80%)
-3. Ajouter tests E2E pour les cas d'erreur réseau et timeout
-4. Configurer CI/CD pour exécution automatique des tests
-5. Ajouter badges de couverture dans le README
-6. Mettre en place mutation testing pour valider la qualité des tests
+2. Augmenter la couverture des composants à 80%+ (actuellement 60-80%)
+3. Configurer CI/CD pour exécution automatique des tests
+4. Ajouter badges de couverture dans le README
+5. Mettre en place mutation testing pour valider la qualité des tests
 
 ### 5.3 Rapports de couverture et de tests
 

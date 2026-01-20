@@ -99,7 +99,7 @@
 | ├─ Architecture back | Controllers, services, entities | ✅ FAIT | back/src/main/java/ structuré |
 | ├─ API REST | Endpoints documentés | ✅ FAIT | 9 endpoints principaux |
 | ├─ Données sécurisées | BCrypt + JWT | ✅ FAIT | JwtUtil + password hashing |
-| ├─ Tests | JUnit + Jest + Cypress | ✅ FAIT | 31 + 62 + 13 tests |
+| ├─ Tests | JUnit + Jest | ✅ FAIT | 31 + 62 tests |
 | ├─ Instructions tests | npm test, mvn test | ✅ FAIT | README.md lignes 85-105 |
 | ├─ Code amélioré | Conventions + javadoc | ✅ FAIT | Code propre et commenté |
 | ├─ README technique | Setup + configuration | ✅ FAIT | README.md (229 lignes) |
@@ -129,7 +129,6 @@
 | **Tests & couverture** | | |
 | ├─ Tests unitaires backend | JUnit 5 + Mockito | ✅ FAIT | **31 tests - 100% réussite** |
 | ├─ Tests unitaires frontend | Jest + jest-preset-angular | ✅ FAIT | **62 tests - 100% réussite** |
-| ├─ Tests E2E | Cypress | ✅ FAIT | **13 tests - 3 scénarios complets** |
 | ├─ Couverture minimum 70% | Services 95%, Guards 100% | ✅ FAIT | **Couverture globale 82.8%** |
 | └─ Rapports de couverture | JaCoCo + Jest | ✅ FAIT | target/site/jacoco/ + coverage/ |
 | **Sécurité** | | |
@@ -173,7 +172,6 @@
 - **Fonctionnalités MVP** : 7/7 implémentées (100%)
 - **Tests backend** : 31/31 réussis (100%)
 - **Tests frontend** : 62/62 réussis (100%)
-- **Tests E2E** : 13/13 réussis (100%)
 - **Couverture code** : 82.8% (dépassant les 70% requis)
 - **Documentation** : 3 fichiers (README + Doc technique + FAQ)
 - **Endpoints API** : 9 fonctionnels
@@ -200,14 +198,6 @@ Tu as:
 
 ### Points forts à valoriser
 
-- **Architecture professionnelle** : Séparation claire front/back, respect SOLID
-- **Sécurité de haut niveau** : JWT signé, BCrypt, validation stricte
-- **Tests exhaustifs** : 106 tests au total (backend + frontend + E2E)
-- **Code bien structuré** : Services, repositories, DTOs, guards, interceptors
-- **Documentation complète** : Technique + utilisateur + choix justifiés
-- **Posture IA maîtrisée** : Délégation contrôlée avec revue manuelle
-
-### Pour la présentation à Orlando
 
 Tu peux affirmer avec confiance:
 - "J'ai respecté 100% des spécifications fonctionnelles"
