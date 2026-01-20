@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -14,8 +14,8 @@ import { ArticleService } from '../../services/article.service';
 import { ThemeService } from '../../services/theme.service';
 import { CreateArticleRequest, Theme } from '../../models/article.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
 
-// Formulaire de connexion avec gestion d'erreur et redirection.
 @Component({
   selector: 'app-article-create',
   standalone: true,
@@ -35,11 +35,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './article-create.component.html',
   styleUrls: ['./article-create.component.scss']
 })
-export class ArticleCreateComponent implements OnInit {
+export class ArticleCreateComponent implements OnInit, OnDestroy {
+
   articleForm!: FormGroup;
   themes: Theme[] = [];
   isLoading = false;
   errorMessage = '';
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -50,54 +53,74 @@ export class ArticleCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.articleForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      content: ['', [Validators.required, Validators.minLength(10)]],
-      themeId: ['', [Validators.required]]
-    });
-
+    this.initForm();
     this.loadThemes();
   }
 
-  loadThemes(): void {
-    this.themeService.getThemes().subscribe({
-      next: (themes: Theme[]) => {
-        this.themes = themes;
-      },
-      error: () => {
-        this.errorMessage = 'Error loading themes';
-      }
+  
+
+  private initForm(): void {
+    this.articleForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      content: ['', [Validators.required, Validators.minLength(10)]],
+      themeId: ['', Validators.required]
     });
   }
 
+  loadThemes(): void {
+    this.themeService.getThemes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (themes: Theme[]) => {
+          this.themes = themes;
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des thèmes';
+        }
+      });
+  }
+
   onSubmit(): void {
-    if (this.articleForm.invalid) return;
+    if (this.articleForm.invalid) {
+      return;
+    }
 
     this.isLoading = true;
     this.errorMessage = '';
 
     const articleData: CreateArticleRequest = this.articleForm.value;
 
-    this.articleService.createArticle(articleData).subscribe({
-      next: () => {
-        this.snackBar.open('Article created successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-        this.router.navigate(['/feed']);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Error creating article';
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+    this.articleService.createArticle(articleData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.snackBar.open(
+            'Article créé avec succès',
+            'Fermer',
+            {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top'
+            }
+          );
+          this.router.navigate(['/feed']);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isLoading = false;
+          this.errorMessage = error.error?.message || 'Erreur lors de la création de l’article';
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
   }
 
   goBack(): void {
     this.router.navigate(['/feed']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

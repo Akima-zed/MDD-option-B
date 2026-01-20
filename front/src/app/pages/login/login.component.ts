@@ -12,6 +12,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
+import { finalize } from 'rxjs/internal/operators/finalize';
+import { Subject } from 'rxjs/internal/Subject';
 
 // Formulaire de connexion avec gestion d'erreur et redirection.
 @Component({
@@ -32,9 +35,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+
   loginForm!: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
+
+  private destroy$ = new Subject<void>();
+
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +58,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+
   onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
@@ -60,7 +74,12 @@ export class LoginComponent implements OnInit {
 
     const loginData: LoginRequest = this.loginForm.value;
 
-    this.authService.login(loginData).subscribe({
+    this.authService.login(loginData)
+    .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false)
+      )
+    .subscribe({
       next: () => {
         this.snackBar.open('Connexion réussie !', 'Fermer', {
           duration: 3000,
@@ -73,9 +92,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.errorMessage = error.error?.message || 'Email ou mot de passe incorrect';
       },
-      complete: () => {
-        this.isLoading = false;
-      }
+      
     });
   }
 }

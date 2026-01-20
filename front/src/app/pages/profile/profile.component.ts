@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Theme } from '../../models/theme.model';
 import { UserProfile } from '../../models/userProfile.model';
+import { Subject, finalize, takeUntil } from 'rxjs';
 
 /** Composant de gestion du profil utilisateur */
 @Component({
@@ -33,7 +34,8 @@ import { UserProfile } from '../../models/userProfile.model';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   user!: UserProfile;
   subscribedThemes: Theme[] = [];
@@ -63,25 +65,36 @@ export class ProfileComponent implements OnInit {
       ]
     });
 
-    this.userService.getCurrentUser().subscribe({
-      next: (user) => {
-        this.user = user;
-        this.subscribedThemes = user.abonnements;
+    this.userService
+      .getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.subscribedThemes = user.abonnements;
 
-        this.profileForm.patchValue({
-          username: user.username,
-          email: user.email
-        });
-      },
-      error: () => {
-        this.router.navigate(['/login']);
-      }
-    });
+          this.profileForm.patchValue({
+            username: user.username,
+            email: user.email
+          });
+        },
+        error: () => {
+          this.router.navigate(['/login']);
+        }
+      });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /** Sauvegarde du profil utilisateur */
   saveProfile(): void {
     if (this.profileForm.invalid) {
-      this.snackBar.open('Veuillez corriger les erreurs du formulaire', 'Fermer', { duration: 3000 });
+      this.snackBar.open('Veuillez corriger les erreurs du formulaire', 'Fermer', {
+        duration: 3000
+      });
       return;
     }
 
@@ -89,33 +102,47 @@ export class ProfileComponent implements OnInit {
 
     const updatedData = this.profileForm.value;
 
-    this.userService.updateUser(this.user.id, updatedData).subscribe({
-      next: (updatedUser) => {
-        this.user = updatedUser;
-        this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', { duration: 3000 });
-      },
-      error: () => {
-        this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', { duration: 5000 });
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+    this.userService
+      .updateUser(this.user.id, updatedData)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe({
+        next: (updatedUser) => {
+          this.user = updatedUser;
+          this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', {
+            duration: 3000
+          });
+        },
+        error: () => {
+          this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', {
+            duration: 5000
+          });
+        }
+      });
   }
 
+  /** Déconnexion utilisateur */
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
   }
 
+  /** Désabonnement à un thème */
   unsubscribe(theme: Theme): void {
-    this.userService.unsubscribeFromTheme(theme.id).subscribe({
-      next: () => {
-        this.subscribedThemes = this.subscribedThemes.filter(t => t.id !== theme.id);
-      },
-      error: () => {
-        this.snackBar.open('Erreur lors du désabonnement', 'Fermer', { duration: 3000 });
-      }
-    });
+    this.userService
+      .unsubscribeFromTheme(theme.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.subscribedThemes = this.subscribedThemes.filter((t) => t.id !== theme.id);
+        },
+        error: () => {
+          this.snackBar.open('Erreur lors du désabonnement', 'Fermer', {
+            duration: 3000
+          });
+        }
+      });
   }
 }

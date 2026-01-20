@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../models/theme.model';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 
 @Component({
   selector: 'app-themes',
@@ -26,7 +28,9 @@ import { Theme } from '../../models/theme.model';
   templateUrl: './themes.component.html',
   styleUrls: ['./themes.component.scss']
 })
-export class ThemesComponent implements OnInit {
+export class ThemesComponent implements OnInit,OnDestroy {
+
+private destroy$ = new Subject<void>();
 
   themes: Theme[] = [];
   isLoading = true;
@@ -41,28 +45,37 @@ export class ThemesComponent implements OnInit {
     this.loadThemes();
   }
 
+  
+
   loadThemes(): void {
-    this.themeService.getThemes().subscribe({
-      next: (themes: Theme[]) => {
-        this.themes = themes; // 🔥 contient déjà "subscribed"
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Error loading themes';
-        this.isLoading = false;
-      }
-    });
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.themeService.getThemes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (themes: Theme[]) => {
+          this.themes = themes;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des thèmes';
+          this.isLoading = false;
+        }
+      });
   }
 
   subscribe(theme: Theme): void {
     if (theme.subscribed) return;
 
-    this.themeService.subscribe(theme.id).subscribe({
+    this.themeService.subscribe(theme.id)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
       next: () => {
-        theme.subscribed = true; // 🔥 met à jour l’état local
+        theme.subscribed = true; 
         this.snackBar.open(
-          'Subscribed to theme ' + theme.name,
-          'Close',
+          'Vous êtes maintenant abonné au thème ' + theme.name,
+          'Fermer',
           {
             duration: 3000,
             horizontalPosition: 'center',
@@ -71,7 +84,7 @@ export class ThemesComponent implements OnInit {
         );
       },
       error: () => {
-        this.snackBar.open('Error subscribing to theme', 'Close', {
+        this.snackBar.open('Erreur lors de la souscription au thème', 'Fermer', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -79,4 +92,14 @@ export class ThemesComponent implements OnInit {
       }
     });
   }
+
+  trackById(index: number, theme: Theme): number {
+    return theme.id;
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }

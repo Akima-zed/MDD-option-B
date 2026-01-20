@@ -2,10 +2,10 @@
 
 <div class="themes-container">
   <div class="themes-content">
-    <h1>Themes</h1>
+    <h1>Thèmes</h1>
 
     <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
+      <mat-spinner color="primary"></mat-spinner>
     </div>
 
     <div *ngIf="errorMessage" class="error-message">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="themes-grid" *ngIf="!isLoading && themes.length > 0">
-      <mat-card *ngFor="let theme of themes" class="theme-card">
+      <mat-card *ngFor="let theme of themes; trackBy: trackById" class="theme-card">
         <mat-card-header>
           <div class="theme-header">
             <mat-icon class="theme-icon">label</mat-icon>
@@ -26,12 +26,15 @@
         </mat-card-content>
 
         <mat-card-actions>
-          <button mat-raised-button
-                  [disabled]="theme.subscribed"
-                  [color]="theme.subscribed ? '' : 'primary'"
-                  (click)="subscribe(theme)"
-                  class="subscribe-button">
-            {{ theme.subscribed ? 'Already subscribed' : 'Subscribe' }}
+          <button
+            mat-raised-button
+            [disabled]="theme.subscribed"
+            [color]="theme.subscribed ? '' : 'primary'"
+            (click)="subscribe(theme)"
+            class="subscribe-button"
+            [attr.aria-label]="'S abonner au thème ' + theme.name"
+          >
+            {{ theme.subscribed ? 'Déjà abonné' : "S'abonner" }}
           </button>
         </mat-card-actions>
       </mat-card>
@@ -39,7 +42,7 @@
 
     <div *ngIf="!isLoading && themes.length === 0" class="empty-state">
       <mat-icon>category</mat-icon>
-      <p>No themes available</p>
+      <p>Aucun thème disponible</p>
     </div>
   </div>
 </div>

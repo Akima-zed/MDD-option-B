@@ -11,22 +11,27 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ 
-        LoginComponent, 
+      imports: [
+        LoginComponent,
         HttpClientTestingModule,
         RouterTestingModule,
         NoopAnimationsModule
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('devrait créer le composant', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('devrait rendre le formulaire invalide si les champs sont vides', () => {
+    component.loginForm.setValue({ emailOrUsername: '', password: '' });
+    expect(component.loginForm.invalid).toBe(true);
+
   });
 });
