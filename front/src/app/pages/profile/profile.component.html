@@ -1,100 +1,69 @@
 <app-header></app-header>
 
-<div class="profile-container">
-  <div class="profile-content">
-    <button mat-icon-button routerLink="/feed" class="back-button" aria-label="Retour">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
+<div class="page-wrapper">
 
+  <!-- Top bar -->
+  <div class="top-bar">
     <h1>Profil utilisateur</h1>
-
-    <mat-card class="profile-card">
-      <mat-card-content>
-        <div class="user-info">
-          <div class="info-section">
-            <div class="section-header">
-              <h2>Informations</h2>
-              <button mat-raised-button 
-                      color="primary" 
-                      (click)="toggleEditMode()"
-                      *ngIf="!isEditMode">
-                <mat-icon>edit</mat-icon>
-                Modifier
-              </button>
-            </div>
-
-            <!-- Mode lecture -->
-            <div *ngIf="!isEditMode">
-              <div class="info-row">
-                <span class="label">Nom :</span>
-                <span class="value">{{ user.username }}</span>
-              </div>
-              <div class="info-row">
-                <span class="label">Email :</span>
-                <span class="value">{{ user.email }}</span>
-              </div>
-            </div>
-
-            <!-- Mode édition -->
-            <form [formGroup]="profileForm" *ngIf="isEditMode" class="edit-form">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nom d'utilisateur</mat-label>
-                <input matInput formControlName="username" placeholder="Nom d'utilisateur">
-                <mat-error *ngIf="profileForm.get('username')?.hasError('required')">
-                  Le nom d'utilisateur est requis
-                </mat-error>
-                <mat-error *ngIf="profileForm.get('username')?.hasError('minlength')">
-                  Minimum 3 caractères
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Email</mat-label>
-                <input matInput formControlName="email" type="email" placeholder="Email">
-                <mat-error *ngIf="profileForm.get('email')?.hasError('required')">
-                  L'email est requis
-                </mat-error>
-                <mat-error *ngIf="profileForm.get('email')?.hasError('email')">
-                  Format email invalide
-                </mat-error>
-              </mat-form-field>
-
-              <div class="form-actions">
-                <button mat-raised-button 
-                        color="primary" 
-                        (click)="saveProfile()"
-                        [disabled]="profileForm.invalid">
-                  <mat-icon>save</mat-icon>
-                  Enregistrer
-                </button>
-                <button mat-raised-button 
-                        (click)="toggleEditMode()">
-                  <mat-icon>cancel</mat-icon>
-                  Annuler
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div class="subscriptions-section">
-            <h2>Abonnements</h2>
-            <div class="themes-chips" *ngIf="subscribedThemes.length > 0">
-              <mat-chip-list aria-label="Thèmes abonnés">
-                <mat-chip *ngFor="let theme of subscribedThemes" 
-                          [removable]="true"
-                          (removed)="unsubscribe(theme)">
-                  {{ theme.name }}
-                  <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-            </div>
-            <p *ngIf="subscribedThemes.length === 0" class="no-subscriptions">
-              Vous n'êtes abonné à aucun thème.
-            </p>
-          </div>
-        </div>
-
-      </mat-card-content>
-    </mat-card>
   </div>
+
+
+  <!-- Formulaire profil -->
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="create-form">
+
+    <div class="field-group">
+      <input type="text" formControlName="username" placeholder="Nom d'utilisateur *" />
+      <div class="error" *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">
+        Nom d'utilisateur requis (min. 3 caractères)
+      </div>
+    </div>
+
+    <div class="field-group">
+      <input type="email" formControlName="email" placeholder="Email *" />
+      <div class="error" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+        Email invalide
+      </div>
+    </div>
+
+    <div class="field-group">
+      <input type="password" formControlName="password" placeholder="Mot de passe *" />
+      <div class="error" *ngIf="profileForm.get('password')?.invalid && profileForm.get('password')?.touched">
+        Minimum 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial
+      </div>
+    </div>
+
+    
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn" [disabled]="profileForm.invalid || isLoading">
+        {{ isLoading ? 'Sauvegarde...' : 'Sauvegarder' }}
+      </button>
+    </div>
+
+  </form>
+
+  <!-- Séparateur -->
+  <hr class="separator" />
+
+
+  <!-- Abonnements -->
+  <section class="subscriptions-section">
+    <h2>Abonnements</h2>
+
+    <div class="theme-grid" *ngIf="subscribedThemes.length > 0">
+      <div class="theme-card" *ngFor="let theme of subscribedThemes">
+        <h3>{{ theme.name }}</h3>
+        <p>{{ theme.description }}</p>
+
+        <button class="unsubscribe-btn" (click)="unsubscribe(theme)">
+          Se désabonner
+        </button>
+      </div>
+    </div>
+
+    <p *ngIf="subscribedThemes.length === 0" class="no-subscriptions">
+      Vous n'êtes abonné à aucun thème.
+    </p>
+  </section>
+
 </div>

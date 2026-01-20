@@ -5,7 +5,6 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,6 +14,7 @@ import { UserService } from '../../services/user.service';
 import { Theme } from '../../models/theme.model';
 import { UserProfile } from '../../models/userProfile.model';
 
+/** Composant de gestion du profil utilisateur */
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -25,7 +25,6 @@ import { UserProfile } from '../../models/userProfile.model';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
@@ -38,8 +37,8 @@ export class ProfileComponent implements OnInit {
 
   user!: UserProfile;
   subscribedThemes: Theme[] = [];
-  isEditMode = false;
-  profileForm: FormGroup;
+  profileForm!: FormGroup;
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -47,14 +46,23 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private snackBar: MatSnackBar
-  ) {
-    this.profileForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]]
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.profileForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      // Même règle que Register
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).+$')
+        ]
+      ]
+    });
+
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.user = user;
@@ -71,32 +79,26 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  toggleEditMode(): void {
-    this.isEditMode = !this.isEditMode;
-
-    if (!this.isEditMode) {
-      this.profileForm.patchValue({
-        username: this.user.username,
-        email: this.user.email
-      });
-    }
-  }
-
   saveProfile(): void {
     if (this.profileForm.invalid) {
       this.snackBar.open('Veuillez corriger les erreurs du formulaire', 'Fermer', { duration: 3000 });
       return;
     }
 
-    this.userService.updateUser(this.user.id, this.profileForm.value).subscribe({
+    this.isLoading = true;
+
+    const updatedData = this.profileForm.value;
+
+    this.userService.updateUser(this.user.id, updatedData).subscribe({
       next: (updatedUser) => {
         this.user = updatedUser;
-        this.isEditMode = false;
-
         this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', { duration: 3000 });
       },
       error: () => {
         this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', { duration: 5000 });
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }

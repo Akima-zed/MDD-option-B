@@ -1,112 +1,204 @@
-.profile-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 24px;
-}
+$violet: #6C4CCF;
+$light-gray: #EEEEEE;
 
-.profile-card {
-  mat-card-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-
-    .profile-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #3f51b5;
-    }
-
-    mat-card-title {
-      margin: 0;
-      font-size: 24px;
-    }
-  }
-}
-
-.profile-info {
+.page-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 16px 0;
-}
-
-.info-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-
-  mat-icon {
-    color: #757575;
-    margin-top: 4px;
-  }
-
-  .info-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    label {
-      font-size: 12px;
-      color: #757575;
-      font-weight: 500;
-      text-transform: uppercase;
-    }
-
-    span {
-      font-size: 16px;
-      color: #424242;
-    }
-  }
-}
-
-mat-card-actions {
-  padding: 16px;
-  display: flex;
-  justify-content: center;
-
-  button {
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  padding: 32px 16px;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
 
-  h2 {
+/* Top bar */
+.top-bar {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  margin-bottom: 32px;
+  text-align: center;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
     margin: 0;
   }
 
-  button mat-icon {
-    margin-right: 8px;
+  .back-button {
+    position: fixed;
+    left: 16px;
+    top: 120px;
+    background: none;
+    border: none;
+    font-size: 44px;
+    cursor: pointer;
+    color: #333;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    z-index: 10;
   }
 }
 
-.edit-form {
+/* Formulaire */
+.create-form {
+  width: 100%;
+  max-width: 350px; /* ← Réduction de la largeur */
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 20px;
+}
 
-  .full-width {
+/* Champs */
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  input {
     width: 100%;
+    padding: 12px 16px;
+    border: 2px solid $violet;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: white;
+    color: #0f0f0f;
+    min-height: 48px;
+    box-sizing: border-box;
   }
 
-  .form-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin-top: 8px;
+  input::placeholder {
+    color: #2b2a2a;
+  }
 
-    button mat-icon {
-      margin-right: 8px;
-    }
+  input:focus {
+    border-color: darken($violet, 10%);
+  }
+}
+
+/* Erreurs */
+.error {
+  margin-top: 6px;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 12px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Bouton Sauvegarder */
+.form-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  background-color: $violet;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  min-width: 220px;
+  height: 48px;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.separator {
+  width: 100%;
+  max-width: 600px;
+  border: none;
+  border-top: 1px solid #0e0d0d;
+  margin: 20px auto 12px auto;
+}
+
+
+/* Abonnements */
+.subscriptions-section {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 8px;
+
+  h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  
+}
+
+/* Carte d’abonnement */
+.theme-card {
+  background: $light-gray; 
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: left; 
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 16px;
+  }
+
+  .unsubscribe-btn {
+    background-color: $violet;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0 auto; /* ← Centre le bouton */
+    min-width: 160px;
+  }
+}
+
+.no-subscriptions {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 24px 12px;
+  }
+
+  .top-bar h1 {
+    font-size: 20px;
+  }
+
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-btn {
+    width: 100%;
+    min-width: unset;
   }
 }

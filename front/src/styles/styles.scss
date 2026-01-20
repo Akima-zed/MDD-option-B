@@ -2,3 +2,14 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+//éviter les couleurs automatiques du navigateur
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  background-color: white !important;
+  -webkit-text-fill-color: #0f0f0f !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+}
+

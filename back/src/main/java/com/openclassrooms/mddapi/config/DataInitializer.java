@@ -33,14 +33,21 @@ public class DataInitializer {
 
             // Ajout de thèmes si la table est vide
             if (themeRepo.count() == 0) {
+                String lorem = "Description :Le lorem ipsum (également appelé faux-texte, lipsum, ou bolo bolo[1]) est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page.";
+
                 Theme java = new Theme();
                 java.setNom("Java");
-                java.setDescription("Tout sur Java");
+                java.setDescription(lorem);
+
                 Theme angular = new Theme();
                 angular.setNom("Angular");
-                angular.setDescription("Front-end moderne");
+                angular.setDescription(lorem);
                 themeRepo.save(java);
                 themeRepo.save(angular);
+
+                
+
+
             }
 
             // Ajout d'un utilisateur de test

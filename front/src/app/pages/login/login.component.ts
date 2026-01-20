@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
+// Formulaire de connexion avec gestion d'erreur et redirection.
 @Component({
   selector: 'app-login',
   standalone: true,
