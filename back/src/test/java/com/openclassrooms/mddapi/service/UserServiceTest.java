@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.service;
 
+import com.openclassrooms.mddapi.dto.UserUpdateRequest;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests unitaires pour UserService avec Mockito
+ * Tests unitaires du UserService utilisant Mockito.
  */
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -40,111 +41,114 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Should save user successfully")
+    @DisplayName("Doit enregistrer un utilisateur avec succès")
     void testSave() {
-        // Given
+        // ÉTANT DONNÉ
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        // When
+        // QUAND
         User savedUser = userService.save(testUser);
 
-        // Then
+        // ALORS
         assertNotNull(savedUser);
         assertEquals("johndoe", savedUser.getUsername());
         verify(userRepository, times(1)).save(testUser);
     }
 
     @Test
-    @DisplayName("Should find user by email")
+    @DisplayName("Doit retrouver un utilisateur par email")
     void testFindByEmail() {
-        // Given
+        // ÉTANT DONNÉ
         when(userRepository.findByEmail("john@test.com")).thenReturn(Optional.of(testUser));
 
-        // When
+        // QUAND
         Optional<User> foundUser = userService.findByEmail("john@test.com");
 
-        // Then
+        // ALORS
         assertTrue(foundUser.isPresent());
         assertEquals("john@test.com", foundUser.get().getEmail());
         verify(userRepository, times(1)).findByEmail("john@test.com");
     }
 
     @Test
-    @DisplayName("Should return empty when user not found by email")
+    @DisplayName("Doit retourner vide si aucun utilisateur trouvé par email")
     void testFindByEmail_NotFound() {
-        // Given
+        // ÉTANT DONNÉ
         when(userRepository.findByEmail("notfound@test.com")).thenReturn(Optional.empty());
 
-        // When
+        // QUAND
         Optional<User> foundUser = userService.findByEmail("notfound@test.com");
 
-        // Then
+        // ALORS
         assertFalse(foundUser.isPresent());
     }
 
     @Test
-    @DisplayName("Should find user by username")
+    @DisplayName("Doit retrouver un utilisateur par username")
     void testFindByUsername() {
-        // Given
+        // ÉTANT DONNÉ
         when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
 
-        // When
+        // QUAND
         Optional<User> foundUser = userService.findByUsername("johndoe");
 
-        // Then
+        // ALORS
         assertTrue(foundUser.isPresent());
         assertEquals("johndoe", foundUser.get().getUsername());
     }
 
     @Test
-    @DisplayName("Should check if email exists")
+    @DisplayName("Doit vérifier si un email existe déjà")
     void testExistsByEmail() {
-        // Given
+        // ÉTANT DONNÉ
         when(userRepository.findByEmail("john@test.com")).thenReturn(Optional.of(testUser));
 
-        // When
+        // QUAND
         boolean exists = userService.existsByEmail("john@test.com");
 
-        // Then
+        // ALORS
         assertTrue(exists);
     }
 
-    @Test
-    @DisplayName("Should return false if email does not exist")
+        @Test
+    @DisplayName("Doit retourner false si l'email n'existe pas")
     void testExistsByEmail_NotExists() {
-        // Given
-        when(userRepository.findByEmail("nonexistent@test.com")).thenReturn(Optional.empty());
+        // ÉTANT DONNÉ
+        when(userRepository.findByEmail("nonexistent@test.com"))
+                .thenReturn(Optional.empty());
 
-        // When
+        // QUAND
         boolean exists = userService.existsByEmail("nonexistent@test.com");
 
-        // Then
+        // ALORS
         assertFalse(exists);
     }
 
     @Test
-    @DisplayName("Should check if username exists")
+    @DisplayName("Doit vérifier si un username existe déjà")
     void testExistsByUsername() {
-        // Given
-        when(userRepository.findByUsername("johndoe")).thenReturn(Optional.of(testUser));
+        // ÉTANT DONNÉ
+        when(userRepository.findByUsername("johndoe"))
+                .thenReturn(Optional.of(testUser));
 
-        // When
+        // QUAND
         boolean exists = userService.existsByUsername("johndoe");
 
-        // Then
+        // ALORS
         assertTrue(exists);
     }
 
     @Test
-    @DisplayName("Should find user by ID")
+    @DisplayName("Doit retrouver un utilisateur par son ID")
     void testFindById() {
-        // Given
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        // ÉTANT DONNÉ
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(testUser));
 
-        // When
+        // QUAND
         Optional<User> foundUser = userService.findById(1L);
 
-        // Then
+        // ALORS
         assertTrue(foundUser.isPresent());
         assertEquals(1L, foundUser.get().getId());
     }
@@ -152,10 +156,10 @@ class UserServiceTest {
     // ==================== Tests pour update() ====================
 
     @Test
-    @DisplayName("Should update user successfully")
+    @DisplayName("Doit mettre à jour un utilisateur avec succès")
     void testUpdate_Success() {
-        // Given
-        User updatedUserData = new User();
+        // ÉTANT DONNÉ
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
         updatedUserData.setUsername("john_updated");
         updatedUserData.setEmail("john.updated@example.com");
 
@@ -164,141 +168,143 @@ class UserServiceTest {
         when(userRepository.findByUsername("john_updated")).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        // When
+        // QUAND
         User result = userService.update(1L, updatedUserData);
 
-        // Then
+        // ALORS
         assertNotNull(result);
         assertEquals("john_updated", result.getUsername());
         assertEquals("john.updated@example.com", result.getEmail());
-        assertEquals("hashedPassword123", result.getPassword()); // Le mot de passe ne change pas
+        assertEquals("hashedPassword123", result.getPassword()); // inchangé
         verify(userRepository, times(1)).save(testUser);
     }
 
     @Test
-    @DisplayName("Should throw exception when user not found during update")
+    @DisplayName("Doit lever une exception si l'utilisateur n'existe pas lors de la mise à jour")
     void testUpdate_UserNotFound() {
-        // Given
-        User updatedUserData = new User();
+        // ÉTANT DONNÉ
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
         updatedUserData.setUsername("john_updated");
 
         when(userRepository.findById(999L)).thenReturn(Optional.empty());
 
-        // When & Then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.update(999L, updatedUserData);
-        });
+        // QUAND & ALORS
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                userService.update(999L, updatedUserData)
+        );
 
         assertEquals("Utilisateur non trouvé avec l'ID: 999", exception.getMessage());
         verify(userRepository, never()).save(any());
     }
 
     @Test
-    @DisplayName("Should throw exception when email already exists")
+    @DisplayName("Doit lever une exception si l'email est déjà utilisé")
     void testUpdate_EmailAlreadyExists() {
-        // Given
-        User anotherUser = new User();
-        anotherUser.setId(2L);
-        anotherUser.setEmail("jane@example.com");
+        // ÉTANT DONNÉ
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
+        updatedUserData.setEmail("jane@example.com"); // email déjà pris
 
-        User updatedUserData = new User();
-        updatedUserData.setEmail("jane@example.com"); // Email déjà pris par user ID=2
+        // Simule un autre utilisateur possédant cet email
+        User autreUtilisateur = new User();
+        autreUtilisateur.setId(2L);
+        autreUtilisateur.setEmail("jane@example.com");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userRepository.findByEmail("jane@example.com")).thenReturn(Optional.of(anotherUser));
+        when(userRepository.findByEmail("jane@example.com")).thenReturn(Optional.of(autreUtilisateur));
 
-        // When & Then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.update(1L, updatedUserData);
-        });
+        // QUAND & ALORS
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                userService.update(1L, updatedUserData)
+        );
 
         assertEquals("Cet email est déjà utilisé", exception.getMessage());
         verify(userRepository, never()).save(any());
     }
 
-    @Test
-    @DisplayName("Should throw exception when username already exists")
-    void testUpdate_UsernameAlreadyExists() {
-        // Given
-        User anotherUser = new User();
-        anotherUser.setId(2L);
-        anotherUser.setUsername("jane_doe");
 
-        User updatedUserData = new User();
-        updatedUserData.setUsername("jane_doe"); // Username déjà pris par user ID=2
+        @Test
+    @DisplayName("Doit lever une exception si le username est déjà utilisé")
+    void testUpdate_UsernameAlreadyExists() {
+        // ÉTANT DONNÉ
+        User autreUtilisateur = new User();
+        autreUtilisateur.setId(2L);
+        autreUtilisateur.setUsername("jane_doe");
+
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
+        updatedUserData.setUsername("jane_doe"); // Username déjà pris
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userRepository.findByUsername("jane_doe")).thenReturn(Optional.of(anotherUser));
+        when(userRepository.findByUsername("jane_doe")).thenReturn(Optional.of(autreUtilisateur));
 
-        // When & Then
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.update(1L, updatedUserData);
-        });
+        // QUAND & ALORS
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                userService.update(1L, updatedUserData)
+        );
 
         assertEquals("Ce nom d'utilisateur est déjà utilisé", exception.getMessage());
         verify(userRepository, never()).save(any());
     }
 
     @Test
-    @DisplayName("Should allow user to keep same email")
+    @DisplayName("Doit permettre à l'utilisateur de conserver son propre email")
     void testUpdate_SameEmailKeepsSameUser() {
-        // Given - L'utilisateur garde son propre email
-        User updatedUserData = new User();
-        updatedUserData.setEmail("john@test.com"); // Même email qu'avant
+        // ÉTANT DONNÉ — l'utilisateur garde son email actuel
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
+        updatedUserData.setEmail("john@test.com"); // même email
         updatedUserData.setUsername("john_updated");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.findByUsername("john_updated")).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        // When
+        // QUAND
         User result = userService.update(1L, updatedUserData);
 
-        // Then
+        // ALORS
         assertNotNull(result);
         assertEquals("john_updated", result.getUsername());
         verify(userRepository, times(1)).save(testUser);
     }
 
     @Test
-    @DisplayName("Should update only username when email is null")
+    @DisplayName("Doit mettre à jour uniquement le username si l'email est null")
     void testUpdate_OnlyUsernameChanged() {
-        // Given - Modification uniquement du username
-        User updatedUserData = new User();
+        // ÉTANT DONNÉ — seul le username change
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
         updatedUserData.setUsername("john_new");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.findByUsername("john_new")).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        // When
+        // QUAND
         User result = userService.update(1L, updatedUserData);
 
-        // Then
+        // ALORS
         assertNotNull(result);
         assertEquals("john_new", result.getUsername());
-        assertEquals("john@test.com", result.getEmail()); // Email inchangé
+        assertEquals("john@test.com", result.getEmail()); // email inchangé
         verify(userRepository, times(1)).save(testUser);
     }
 
     @Test
-    @DisplayName("Should update only email when username is null")
+    @DisplayName("Doit mettre à jour uniquement l'email si le username est null")
     void testUpdate_OnlyEmailChanged() {
-        // Given - Modification uniquement de l'email
-        User updatedUserData = new User();
+        // ÉTANT DONNÉ — seul l'email change
+        UserUpdateRequest updatedUserData = new UserUpdateRequest();
         updatedUserData.setEmail("new.email@example.com");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.findByEmail("new.email@example.com")).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        // When
+        // QUAND
         User result = userService.update(1L, updatedUserData);
 
-        // Then
+        // ALORS
         assertNotNull(result);
         assertEquals("new.email@example.com", result.getEmail());
-        assertEquals("johndoe", result.getUsername()); // Username inchangé
+        assertEquals("johndoe", result.getUsername()); // username inchangé
         verify(userRepository, times(1)).save(testUser);
     }
 }
