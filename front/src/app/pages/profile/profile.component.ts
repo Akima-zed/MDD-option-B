@@ -109,24 +109,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
     this.userService
-      .updateUser(this.user.id, updatedData)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => (this.isLoading = false))
-      )
-      .subscribe({
-        next: (updatedUser) => {
-          this.user = updatedUser;
-          this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', {
-            duration: 3000
-          });
-        },
-        error: () => {
-          this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', {
-            duration: 5000
-          });
-        }
+  .updateUser(updatedData)
+  .pipe(
+    takeUntil(this.destroy$),
+    finalize(() => (this.isLoading = false))
+  )
+  .subscribe({
+    next: (updatedUser) => {
+      this.user = updatedUser;
+      this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', {
+        duration: 3000
       });
+    },
+    error: () => {
+      this.snackBar.open('Erreur lors de la mise à jour du profil', 'Fermer', {
+        duration: 5000
+      });
+    }
+  });
+
   }
 
   /** Déconnexion utilisateur */

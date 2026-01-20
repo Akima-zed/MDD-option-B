@@ -7,3 +7,10 @@ export interface UserProfile {
   dateInscription: string;
   abonnements: Theme[];
 }
+
+
+export interface UserUpdateRequest {
+  username?: string;
+  email?: string;
+  password?: string;
+}

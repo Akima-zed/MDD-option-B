@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserProfile } from '../models/userProfile.model';
+import { UserProfile, UserUpdateRequest } from '../models/userProfile.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class UserService {
   }
 
   /** Met à jour le profil utilisateur */
-  updateUser(userId: number, userData: { username?: string; email?: string; password?: string }): Observable<UserProfile> {
-    return this.http.put<UserProfile>(`${this.apiUrl}/${userId}`, userData);
+  updateUser(data: UserUpdateRequest ): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.apiUrl}/me`, data);
   }
 
   /** Récupère le profil complet de l'utilisateur connecté */
