@@ -247,17 +247,17 @@ Le projet MDD implémente une stratégie de tests complète couvrant le back-end
 
 | Type de test                | Outil / framework            | Portée                                                               | Résultats                 |
 | --------------------------- | ---------------------------- | -------------------------------------------------------------------- | ------------------------- |
-| Test unitaire back-end      | JUnit 5 + Mockito            | Services (UserService, ArticleService, ThemeService, CommentService) | ✅ 31/31 tests (100%)     |
-| Test d'intégration back-end | Spring Boot Test + MockMvc   | Contrôleurs (AuthController)                                         | ✅ 7 tests d'intégration  |
+| Test unitaire back-end      | JUnit 5 + Mockito            | Services (UserService, ArticleService, ThemeService, CommentService) | ✅ 43/43 tests (100%)     |
+| Test d'intégration back-end | Spring Boot Test + MockMvc   | Contrôleurs (AuthController)                                         | ✅ 8 tests d'intégration  |
 | Test unitaire JWT           | JUnit 5                      | Génération et validation tokens                                      | ✅ 8 tests de sécurité    |
-| Test unitaire front-end     | Jest + jest-preset-angular   | Services, composants, guards                                         | ✅ 62/62 tests (100%)     |
-| Couverture code             | JaCoCo (back) + Jest (front) | Analyse couverture                                                   | 📊 82.8% frontend         |
+| Test unitaire front-end     | Jest + jest-preset-angular   | Services, composants, guards                                         | ✅ 82/82 tests (100%)     |
+| Couverture code             | JaCoCo (back) + Jest (front) | Analyse couverture                                                   | 📊 81.41% frontend        |
 
-**Résultats détaillés des tests back-end** (exécution du 6 janvier 2026) :
+**Résultats détaillés des tests back-end** (exécution du 21 janvier 2026) :
 
-- ✅ **31 tests exécutés avec succès** - **0 échec** - **100% de réussite**
-- ⏱️ Temps d'exécution total : 20.321 secondes
-- 📦 Classes analysées par JaCoCo : 24 classes
+- ✅ **43 tests exécutés avec succès** - **0 échec** - **100% de réussite**
+- ⏱️ Temps d'exécution total : 19.149 secondes
+- 📦 Classes analysées par JaCoCo : 30 classes
 - 🔧 Configuration : Base H2 en mémoire pour isolation complète
 
 **Détail par fichier de test** :
@@ -269,7 +269,7 @@ Le projet MDD implémente une stratégie de tests complète couvrant le back-end
 
 **Résultats détaillés des tests front-end** (exécution du 6 janvier 2026) :
 
-- ✅ **62 tests réussis** sur 62 total (**100% de réussite**)
+- ✅ **62 tests réussis** sur 82 total (**100% de réussite**)
 - ✅ **0 échec** - Tous les tests passent avec succès
 - 📊 **Couverture globale : 63.25%**
   - Statements : 63.25%
@@ -492,7 +492,7 @@ L'application a été testée sur différentes résolutions pour garantir une ex
    - 📍 Emplacement : `back/target/site/jacoco/index.html`
    - 📊 Format : HTML interactif avec drill-down par package et classe
    - 🔧 Configuration : Plugin Maven JaCoCo 0.8.10 dans pom.xml
-   - 📦 Données analysées : 24 classes, 31 tests exécutés
+   - 📦 Données analysées : 30 classes, 43 tests exécutés
    - ⚙️ Génération : `mvn clean test jacoco:report`
 
 2. **Frontend - Jest Coverage Report**
@@ -515,9 +515,9 @@ L'application a été testée sur différentes résolutions pour garantir une ex
 | Frontend Services       | Jest              | ~15         | ~15           | ~100%         | 95%                |
 | Frontend Guards         | Jest              | ~3          | ~3            | ~100%         | 100%               |
 | Frontend Interceptors   | Jest              | ~2          | ~2            | ~100%         | 100%               |
-| Frontend Components     | Jest              | ~43         | ~43           | ~100%         | 60-80%             |
-| **Total Frontend**      | **Jest**          | **62**      | **62**        | **100%**      | **82.8%**          |
-| **TOTAL PROJET**        | **Multi-stack**   | **93**      | **93**        | **100%**      | **Complet**        |
+| Frontend Components     | Jest              | ~62         | ~62           | ~100%         | 75-95%             |
+| **Total Frontend**      | **Jest**          | **82**      | **82**        | **100%**      | **81.41%**         |
+| **TOTAL PROJET**        | **Multi-stack**   | **125**     | **125**       | **100%**      | **Complet**        |
 
 **Accès rapide aux rapports** :
 
@@ -539,7 +539,7 @@ start coverage/index.html
 - ✅ **Frontend Services : Excellent** - 95% de couverture, tous les tests passent
 - ✅ **Guards & Interceptors : Parfait** - 100% de couverture et tous les tests réussis
 - ✅ **Frontend Components : Excellent** - 100% de tests réussis (62/62)
-- 🎯 **GLOBAL : PARFAIT** - 93/93 tests passent avec succès (100%)
+- 🎯 **GLOBAL : PARFAIT** - 125/125 tests passent avec succès (100%)
 
 **Prochaines étapes pour améliorer la qualité** :
 
