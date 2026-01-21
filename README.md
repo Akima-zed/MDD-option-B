@@ -158,6 +158,7 @@ cd back
 ```
 
 Résultats :
+
 - 43 tests exécutés - 100% de réussite
 - Couverture globale backend : 64%
 - Rapport HTML : `back/target/site/jacoco/index.html`
