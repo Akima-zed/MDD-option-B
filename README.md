@@ -28,13 +28,6 @@ MDD est une application permettant aux développeurs de :
 - Backend : Spring Boot 2.7.3 (API REST)
 - Base de données : MySQL 8.0+
 
-```
- Couverture globale frontend : 82.8%
- 82 tests exécutés - 100% de réussite
- Rapport HTML : `front/coverage/index.html`
-└── README.md
-```
-
 ## Prérequis
 
 - Java 11 ou supérieur
@@ -42,9 +35,6 @@ MDD est une application permettant aux développeurs de :
 - npm 6.14+
 - MySQL 8.0+
 - Maven 3.8+ (inclus via wrapper mvnw)
-  82 tests exécutés - 100% de réussite
-  Couverture globale frontend : 82.8%
-  Rapport HTML : `front/coverage/index.html`
 
 ### 1. Cloner le projet
 
@@ -169,8 +159,8 @@ cd back
 
 Résultats :
 
-- 34 tests exécutés - 100% de réussite
-- Couverture globale backend : 65%
+- 43 tests exécutés - 100% de réussite
+- Couverture globale backend : 64%
 - Rapport HTML : `back/target/site/jacoco/index.html`
 
 ### Frontend (Jest)
@@ -189,7 +179,6 @@ npm run test:coverage
 ```
 
 Résultats :
-
 82 tests exécutés - 100% de réussite
 Couverture globale frontend : 82.8%
 Rapport HTML : `front/coverage/index.html`

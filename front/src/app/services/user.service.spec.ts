@@ -11,7 +11,7 @@ describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserService]
+      providers: [UserService],
     });
 
     service = TestBed.inject(UserService);
@@ -29,7 +29,7 @@ describe('UserService', () => {
 
   describe('unsubscribeFromTheme', () => {
     it('devrait désabonner un utilisateur d’un thème', () => {
-      service.unsubscribeFromTheme(2).subscribe((response) => {
+      service.unsubscribeFromTheme(2).subscribe(response => {
         const assertion = expect(response);
         assertion.toBeUndefined();
       });
@@ -48,10 +48,10 @@ describe('UserService', () => {
     it('devrait gérer une erreur lors du désabonnement', () => {
       service.unsubscribeFromTheme(999).subscribe({
         next: () => fail('la requête aurait dû échouer'),
-        error: (error) => {
+        error: error => {
           const assertion = expect(error.status);
           assertion.toBe(404);
-        }
+        },
       });
 
       const req = httpMock.expectOne('http://localhost:8081/api/themes/999/unsubscribe');
@@ -66,20 +66,20 @@ describe('UserService', () => {
         username: 'john_updated',
         email: 'john.updated@example.com',
         dateInscription: '',
-        abonnements: []
+        abonnements: [],
       };
 
       const updateData = {
         username: 'john_updated',
-        email: 'john.updated@example.com'
+        email: 'john.updated@example.com',
       };
 
-      service.updateUser(1, updateData).subscribe((user) => {
+      service.updateUser(updateData).subscribe(user => {
         const assertion = expect(user);
         assertion.toEqual(mockUpdatedUser);
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
 
       const assertionMethod = expect(req.request.method);
       assertionMethod.toBe('PUT');
@@ -93,36 +93,36 @@ describe('UserService', () => {
     it('devrait gérer une erreur si l’email existe déjà', () => {
       const errorResponse = { message: 'Cet email est déjà utilisé' };
 
-      service.updateUser(1, { email: 'taken@example.com' }).subscribe({
+      service.updateUser({ email: 'taken@example.com' }).subscribe({
         next: () => fail('la requête aurait dû échouer'),
-        error: (error) => {
+        error: error => {
           const assertionStatus = expect(error.status);
           assertionStatus.toBe(400);
 
           const assertionMessage = expect(error.error.message);
           assertionMessage.toBe('Cet email est déjà utilisé');
-        }
+        },
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
 
     it('devrait gérer une erreur si le nom d’utilisateur existe déjà', () => {
-      const errorResponse = { message: 'Ce nom d\'utilisateur est déjà utilisé' };
+      const errorResponse = { message: "Ce nom d'utilisateur est déjà utilisé" };
 
-      service.updateUser(1, { username: 'taken_username' }).subscribe({
+      service.updateUser({ username: 'taken_username' }).subscribe({
         next: () => fail('la requête aurait dû échouer'),
-        error: (error) => {
+        error: error => {
           const assertionStatus = expect(error.status);
           assertionStatus.toBe(400);
 
           const assertionMessage = expect(error.error.message);
-          assertionMessage.toBe('Ce nom d\'utilisateur est déjà utilisé');
-        }
+          assertionMessage.toBe("Ce nom d'utilisateur est déjà utilisé");
+        },
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
   });
@@ -134,10 +134,10 @@ describe('UserService', () => {
         username: 'john_doe',
         email: 'john@example.com',
         dateInscription: '',
-        abonnements: []
+        abonnements: [],
       };
 
-      service.getCurrentUser().subscribe((user) => {
+      service.getCurrentUser().subscribe(user => {
         const assertion = expect(user);
         assertion.toEqual(mockUser);
       });

@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.mddapi.model.Theme;
 import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.dto.UserUpdateRequest;
 import com.openclassrooms.mddapi.security.JwtUtil;
 import com.openclassrooms.mddapi.service.UserService;
 
@@ -74,7 +75,7 @@ class UserControllerTest {
     @Test
     @DisplayName("PUT /api/users/me - Doit mettre à jour le profil de l'utilisateur")
     void updateUser_shouldWork() throws Exception {
-        User updated = new User();
+        UserUpdateRequest updated = new UserUpdateRequest();
         updated.setUsername("julie2");
         updated.setEmail("new@test.com");
 
@@ -86,7 +87,7 @@ class UserControllerTest {
         saved.setAbonnements(new HashSet<>());
 
         mockAuth(saved);
-        when(userService.update(eq(1L), any(User.class))).thenReturn(saved);
+        when(userService.update(eq(1L), any(UserUpdateRequest.class))).thenReturn(saved);
 
         mockMvc.perform(put("/api/users/me")
                 .header("Authorization", "Bearer faketoken")
