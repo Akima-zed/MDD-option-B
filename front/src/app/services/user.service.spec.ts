@@ -74,12 +74,12 @@ describe('UserService', () => {
         email: 'john.updated@example.com'
       };
 
-      service.updateUser(1, updateData).subscribe((user) => {
+      service.updateUser(updateData).subscribe((user) => {
         const assertion = expect(user);
         assertion.toEqual(mockUpdatedUser);
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
 
       const assertionMethod = expect(req.request.method);
       assertionMethod.toBe('PUT');
@@ -93,7 +93,7 @@ describe('UserService', () => {
     it('devrait gérer une erreur si l’email existe déjà', () => {
       const errorResponse = { message: 'Cet email est déjà utilisé' };
 
-      service.updateUser(1, { email: 'taken@example.com' }).subscribe({
+      service.updateUser({ email: 'taken@example.com' }).subscribe({
         next: () => fail('la requête aurait dû échouer'),
         error: (error) => {
           const assertionStatus = expect(error.status);
@@ -104,14 +104,14 @@ describe('UserService', () => {
         }
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
 
     it('devrait gérer une erreur si le nom d’utilisateur existe déjà', () => {
       const errorResponse = { message: 'Ce nom d\'utilisateur est déjà utilisé' };
 
-      service.updateUser(1, { username: 'taken_username' }).subscribe({
+      service.updateUser({ username: 'taken_username' }).subscribe({
         next: () => fail('la requête aurait dû échouer'),
         error: (error) => {
           const assertionStatus = expect(error.status);
@@ -122,7 +122,7 @@ describe('UserService', () => {
         }
       });
 
-      const req = httpMock.expectOne(`${apiUrl}/1`);
+      const req = httpMock.expectOne(`${apiUrl}/me`);
       req.flush(errorResponse, { status: 400, statusText: 'Bad Request' });
     });
   });

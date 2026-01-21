@@ -97,7 +97,7 @@ describe('ProfileComponent', () => {
 
     component.saveProfile();
 
-    expect(userService.updateUser).toHaveBeenCalledWith(1, {
+    expect(userService.updateUser).toHaveBeenCalledWith({
       username: 'Julie',
       email: 'julie@example.com',
       password: 'Test123!'
