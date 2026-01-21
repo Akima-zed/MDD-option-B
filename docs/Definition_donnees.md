@@ -186,7 +186,7 @@ CREATE TABLE comments (
 
 **Particularité**
 
-- ⚠️ Commentaires **NON-RÉCURSIFS** (pas de parent_comment_id)
+- Commentaires **NON-RÉCURSIFS** (pas de parent_comment_id)
 - Un seul niveau de commentaires
 
 ---

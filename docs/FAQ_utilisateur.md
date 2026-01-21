@@ -7,10 +7,10 @@
 1. Ouvrez votre navigateur web (Chrome, Firefox, Safari, Edge)
 2. Accédez à l'URL : `http://localhost:4200`
 
-- ✅ Google Chrome (recommandé)
-- ✅ Microsoft Edge
-- ✅ Safari (macOS/iOS)
-- ⚠️ Internet Explorer : Non supporté
+- Google Chrome (recommandé)
+- Microsoft Edge
+- Safari (macOS/iOS)
+- Internet Explorer : Non supporté
 
 ---
 
@@ -114,7 +114,7 @@ Un thème représente un sujet de programmation (JavaScript, Java, Python, Angul
 
 ### Puis-je modifier ou supprimer un article ?
 
-❌ **Non**, dans cette version MVP (Minimum Viable Product), il n'est pas possible de :
+**Non** - dans cette version MVP (Minimum Viable Product), il n'est pas possible de :
 
 - Supprimer un article
 
@@ -136,7 +136,7 @@ Un thème représente un sujet de programmation (JavaScript, Java, Python, Angul
 
 ### Puis-je répondre à un commentaire ?
 
-❌ **Non**, dans cette version, les commentaires ne sont pas récursifs.  
+**Non** - dans cette version, les commentaires ne sont pas récursifs.  
 Vous pouvez uniquement commenter l'article principal, pas un autre commentaire.
 
 ### Puis-je modifier ou supprimer un commentaire ?
@@ -173,7 +173,7 @@ Votre profil affiche :
 
 ## Erreurs courantes
 
-### ❌ "Cet email est déjà utilisé"
+### Erreur : "Cet email est déjà utilisé"
 
 **Cause** : L'adresse email que vous essayez d'utiliser existe déjà dans la base.
 
@@ -185,7 +185,7 @@ Votre profil affiche :
 
 ---
 
-### ❌ "Ce nom d'utilisateur est déjà pris"
+### Erreur : "Ce nom d'utilisateur est déjà pris"
 
 **Cause** : Le nom d'utilisateur existe déjà.
 
@@ -197,17 +197,17 @@ Votre profil affiche :
 
 ---
 
-### ❌ "Mot de passe invalide" (lors de l'inscription)
+### Erreur : "Mot de passe invalide" (lors de l'inscription)
 
 **Cause** : Votre mot de passe ne respecte pas les critères de sécurité.
 
 **Solution** : Créez un mot de passe avec :
 
-- ✅ Au moins 8 caractères
-- ✅ Au moins 1 chiffre (0-9)
-- ✅ Au moins 1 lettre minuscule (a-z)
-- ✅ Au moins 1 lettre majuscule (A-Z)
-- ✅ Au moins 1 caractère spécial (!, @, #, $, %, etc.)
+- Au moins 8 caractères
+- Au moins 1 chiffre (0-9)
+- Au moins 1 lettre minuscule (a-z)
+- Au moins 1 lettre majuscule (A-Z)
+- Au moins 1 caractère spécial (!, @, #, $, %, etc.)
 
 **Exemples valides** :
 
@@ -217,7 +217,7 @@ Votre profil affiche :
 
 ---
 
-### ❌ "Identifiants invalides" (lors de la connexion)
+### Erreur : "Identifiants invalides" (lors de la connexion)
 
 **Causes possibles** :
 
@@ -234,7 +234,7 @@ Votre profil affiche :
 
 ---
 
-### ❌ "Erreur lors du chargement des articles"
+### Erreur : "Erreur lors du chargement des articles"
 
 **Causes possibles** :
 
@@ -249,7 +249,7 @@ Votre profil affiche :
 
 ---
 
-### ❌ La page ne charge pas / Erreur 404
+### Erreur : "La page ne charge pas / Erreur 404"
 
 **Causes** :
 
@@ -268,7 +268,7 @@ Votre profil affiche :
 
 ---
 
-### ❌ "Utilisateur non trouvé" (lors d'une modification de profil)
+### Erreur : "Utilisateur non trouvé" (lors d'une modification de profil)
 
 **Cause** : Votre session a expiré (token JWT > 24h).
 
@@ -284,7 +284,7 @@ Votre profil affiche :
 
 ### Mes données sont-elles sécurisées ?
 
-✅ **Oui**, MDD utilise plusieurs mécanismes de sécurité :
+**Oui**, MDD utilise plusieurs mécanismes de sécurité :
 
 1. **Mots de passe** : Hashés avec **BCrypt** (jamais stockés en clair)
 2. **Authentification** : Tokens **JWT** (JSON Web Token) avec expiration 24h
@@ -299,11 +299,11 @@ Votre profil affiche :
 
 ### Puis-je utiliser l'application sur mobile ?
 
-✅ **Oui**, MDD est responsive et s'adapte automatiquement :
+**Oui**, MDD est responsive et s'adapte automatiquement :
 
-- 📱 **Smartphone** : Interface optimisée mobile
-- 💻 **Tablette** : Affichage adapté
-- 🖥️ **Desktop** : Pleine résolution
+-  **Smartphone** : Interface optimisée mobile
+-  **Tablette** : Affichage adapté
+-  **Desktop** : Pleine résolution
 
 ---
 
@@ -333,15 +333,15 @@ Créez une issue sur le repository GitHub du projet avec :
 
 Pour les versions futures (hors MVP) :
 
-- ✨ Modification/suppression d'articles et commentaires
-- ✨ Réponses aux commentaires (commentaires récursifs)
-- ✨ Système de likes/votes
-- ✨ Notifications en temps réel
-- ✨ Messages privés entre utilisateurs
-- ✨ Recherche d'articles et d'utilisateurs
-- ✨ Upload d'images dans les articles
-- ✨ Thèmes personnalisés (dark mode)
-- ✨ Statistiques de profil
+-  Modification/suppression d'articles et commentaires
+-  Réponses aux commentaires (commentaires récursifs)
+-  Système de likes/votes
+-  Notifications en temps réel
+-  Messages privés entre utilisateurs
+-  Recherche d'articles et d'utilisateurs
+-  Upload d'images dans les articles
+-  Thèmes personnalisés (dark mode)
+-  Statistiques de profil
 
 ---
 

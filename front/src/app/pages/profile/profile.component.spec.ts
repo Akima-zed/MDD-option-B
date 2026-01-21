@@ -25,36 +25,32 @@ describe('ProfileComponent', () => {
     username: 'testuser',
     email: 'test@example.com',
     abonnements: [],
-    dateInscription: '2024-01-01'
+    dateInscription: '2024-01-01',
   };
 
   beforeEach(async () => {
     const userServiceMock = {
       getCurrentUser: jest.fn().mockReturnValue(of(mockUser)),
       updateUser: jest.fn().mockReturnValue(of(mockUser)),
-      unsubscribeFromTheme: jest.fn().mockReturnValue(of({}))
+      unsubscribeFromTheme: jest.fn().mockReturnValue(of({})),
     } as unknown as jest.Mocked<UserService>;
 
     const authServiceMock = {
-      logout: jest.fn()
+      logout: jest.fn(),
     } as unknown as jest.Mocked<AuthService>;
 
     routerMock = {
-      navigate: jest.fn()
+      navigate: jest.fn(),
     };
 
     await TestBed.configureTestingModule({
-      imports: [
-        ProfileComponent,
-        HttpClientTestingModule,
-        NoopAnimationsModule
-      ],
+      imports: [ProfileComponent, HttpClientTestingModule, NoopAnimationsModule],
       providers: [
         { provide: UserService, useValue: userServiceMock },
         { provide: AuthService, useValue: authServiceMock },
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfileComponent);
@@ -92,7 +88,7 @@ describe('ProfileComponent', () => {
     component.profileForm.setValue({
       username: 'Julie',
       email: 'julie@example.com',
-      password: 'Test123!'
+      password: 'Test123!',
     });
 
     component.saveProfile();
@@ -100,7 +96,7 @@ describe('ProfileComponent', () => {
     expect(userService.updateUser).toHaveBeenCalledWith({
       username: 'Julie',
       email: 'julie@example.com',
-      password: 'Test123!'
+      password: 'Test123!',
     });
   });
 

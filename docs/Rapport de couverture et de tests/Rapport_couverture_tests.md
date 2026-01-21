@@ -7,19 +7,20 @@
 
 ## Synthèse Globale
 
-| Métrique | Valeur | Status |
-|---|---|---|
-| **Tests Total** | **125** | ✅ |
-| **Tests PASS** | **125** | ✅ 100% |
-| **Tests FAIL** | **0** | ✅ |
-| **Coverage Backend** | **64%** | 🟡 Acceptable MVP |
-| **Coverage Frontend** | **82.8%** | ✅ Excellent |
+| Métrique              | Valeur    | Status           |
+| --------------------- | --------- | ---------------- |
+| **Tests Total**       | **125**   | PASS             |
+| **Tests PASS**        | **125**   | PASS 100%        |
+| **Tests FAIL**        | **0**     | PASS             |
+| **Coverage Backend**  | **64%**   | Acceptable (MVP) |
+| **Coverage Frontend** | **82.8%** | Excellent        |
 
 ---
 
 ## 1. Tests Backend (JUnit 5 + Mockito)
 
 ### Résumé
+
 - **43 tests** (JUnit 5)
 - **100% PASS**
 - **Temps exécution** : ~4.2 secondes
@@ -27,93 +28,93 @@
 
 ### Tests par Classe
 
-| Test Suite | Tests | PASS | FAIL | Duration |
-|---|---|---|---|---|
-| **AuthControllerIntegrationTest** | 7 | ✅ 7 | 0 | 0.8s |
-| **UserControllerTest** | 6 | ✅ 6 | 0 | 0.4s |
-| **ArticleControllerTest** | 8 | ✅ 8 | 0 | 0.6s |
-| **ThemeControllerTest** | 5 | ✅ 5 | 0 | 0.3s |
-| **CommentControllerTest** | 6 | ✅ 6 | 0 | 0.5s |
-| **UserServiceTest** | 8 | ✅ 8 | 0 | 0.9s |
-| **JwtUtilTest** | 3 | ✅ 3 | 0 | 0.7s |
-| **TOTAL** | **43** | **✅ 43** | **0** | **~4.2s** |
+| Test Suite                        | Tests  | PASS   | FAIL  | Duration  |
+| --------------------------------- | ------ | ------ | ----- | --------- |
+| **AuthControllerIntegrationTest** | 7      | 7      | 0     | 0.8s      |
+| **UserControllerTest**            | 6      | 6      | 0     | 0.4s      |
+| **ArticleControllerTest**         | 8      | 8      | 0     | 0.6s      |
+| **ThemeControllerTest**           | 5      | 5      | 0     | 0.3s      |
+| **CommentControllerTest**         | 6      | 6      | 0     | 0.5s      |
+| **UserServiceTest**               | 8      | 8      | 0     | 0.9s      |
+| **JwtUtilTest**                   | 3      | 3      | 0     | 0.7s      |
+| **TOTAL**                         | **43** | **43** | **0** | **~4.2s** |
 
 ### Détail Tests AuthControllerIntegrationTest (7 tests)
 
 ```
-✅ PASS  Doit permettre à un utilisateur valide de se connecter avec email
-✅ PASS  Doit permettre à un utilisateur valide de se connecter avec username
-✅ PASS  Doit rejeter une connexion avec des identifiants invalides (username)
-✅ PASS  Doit rejeter une connexion avec des identifiants invalides (email)
-✅ PASS  Doit permettre à un utilisateur de s'inscrire avec des données valides
-✅ PASS  Doit rejeter une inscription avec un username déjà existant
-✅ PASS  Doit rejeter une inscription avec un email déjà existant
+PASS  Doit permettre à un utilisateur valide de se connecter avec email
+PASS  Doit permettre à un utilisateur valide de se connecter avec username
+PASS  Doit rejeter une connexion avec des identifiants invalides (username)
+PASS  Doit rejeter une connexion avec des identifiants invalides (email)
+PASS  Doit permettre à un utilisateur de s'inscrire avec des données valides
+PASS  Doit rejeter une inscription avec un username déjà existant
+PASS  Doit rejeter une inscription avec un email déjà existant
 ```
 
 ### Détail Tests UserControllerTest (6 tests)
 
 ```
-✅ PASS  testGetUserProfileSuccess - Récupération profil utilisateur avec JWT valide
-✅ PASS  testGetUserProfileUnauthorized - Rejet sans token JWT
-✅ PASS  testGetUserProfileInvalidToken - Rejet avec token invalide
-✅ PASS  testUpdateUserProfileSuccess - Mise à jour profil avec données valides
-✅ PASS  testUpdateUserProfileUsernameConflict - Rejet si username déjà pris
-✅ PASS  testUpdateUserProfileEmailConflict - Rejet si email déjà pris
+PASS  testGetUserProfileSuccess - Récupération profil utilisateur avec JWT valide
+PASS  testGetUserProfileUnauthorized - Rejet sans token JWT
+PASS  testGetUserProfileInvalidToken - Rejet avec token invalide
+PASS  testUpdateUserProfileSuccess - Mise à jour profil avec données valides
+PASS  testUpdateUserProfileUsernameConflict - Rejet si username déjà pris
+PASS  testUpdateUserProfileEmailConflict - Rejet si email déjà pris
 ```
 
 ### Détail Tests ArticleControllerTest (8 tests)
 
 ```
-✅ PASS  testGetFeedSuccess - Récupération fil d'actualité avec filtre abonnements
-✅ PASS  testGetFeedUnauthorized - Rejet sans authentification
-✅ PASS  testGetArticleByIdSuccess - Récupération article par ID
-✅ PASS  testGetArticleByIdNotFound - Erreur 404 si article inexistant
-✅ PASS  testCreateArticleSuccess - Création article avec données valides
-✅ PASS  testCreateArticleInvalidTheme - Rejet si theme_id invalide
-✅ PASS  testDeleteArticleSuccess - Suppression article si auteur
-✅ PASS  testDeleteArticleForbidden - Rejet si utilisateur non-auteur
+PASS  testGetFeedSuccess - Récupération fil d'actualité avec filtre abonnements
+PASS  testGetFeedUnauthorized - Rejet sans authentification
+PASS  testGetArticleByIdSuccess - Récupération article par ID
+PASS  testGetArticleByIdNotFound - Erreur 404 si article inexistant
+PASS  testCreateArticleSuccess - Création article avec données valides
+PASS  testCreateArticleInvalidTheme - Rejet si theme_id invalide
+PASS  testDeleteArticleSuccess - Suppression article si auteur
+PASS  testDeleteArticleForbidden - Rejet si utilisateur non-auteur
 ```
 
 ### Détail Tests ThemeControllerTest (5 tests)
 
 ```
-✅ PASS  testGetAllThemes - Liste tous les thèmes disponibles
-✅ PASS  testSubscribeToThemeSuccess - Abonnement à un thème
-✅ PASS  testSubscribeToThemeAlreadySubscribed - Rejet si déjà abonné
-✅ PASS  testUnsubscribeFromThemeSuccess - Désabonnement d'un thème
-✅ PASS  testUnsubscribeFromThemeNotSubscribed - Rejet si pas abonné
+PASS  testGetAllThemes - Liste tous les thèmes disponibles
+PASS  testSubscribeToThemeSuccess - Abonnement à un thème
+PASS  testSubscribeToThemeAlreadySubscribed - Rejet si déjà abonné
+PASS  testUnsubscribeFromThemeSuccess - Désabonnement d'un thème
+PASS  testUnsubscribeFromThemeNotSubscribed - Rejet si pas abonné
 ```
 
 ### Détail Tests CommentControllerTest (6 tests)
 
 ```
-✅ PASS  testGetCommentsByArticleIdSuccess - Liste commentaires d'un article
-✅ PASS  testGetCommentsByArticleIdNotFound - Erreur si article inexistant
-✅ PASS  testAddCommentSuccess - Ajout commentaire avec données valides
-✅ PASS  testAddCommentEmptyContent - Rejet si contenu vide
-✅ PASS  testAddCommentArticleNotFound - Rejet si article inexistant
-✅ PASS  testAddCommentUnauthorized - Rejet sans authentification
+PASS  testGetCommentsByArticleIdSuccess - Liste commentaires d'un article
+PASS  testGetCommentsByArticleIdNotFound - Erreur si article inexistant
+PASS  testAddCommentSuccess - Ajout commentaire avec données valides
+PASS  testAddCommentEmptyContent - Rejet si contenu vide
+PASS  testAddCommentArticleNotFound - Rejet si article inexistant
+PASS  testAddCommentUnauthorized - Rejet sans authentification
 ```
 
 ### Détail Tests UserServiceTest (8 tests)
 
 ```
-✅ PASS  testFindByUsernameSuccess - Recherche utilisateur par username
-✅ PASS  testFindByUsernameNotFound - Exception si username inexistant
-✅ PASS  testFindByEmailSuccess - Recherche utilisateur par email
-✅ PASS  testFindByEmailNotFound - Exception si email inexistant
-✅ PASS  testUpdateUserSuccess - Mise à jour profil utilisateur
-✅ PASS  testUpdateUserUsernameConflict - Rejet si username déjà utilisé
-✅ PASS  testUpdateUserEmailConflict - Rejet si email déjà utilisé
-✅ PASS  testIsUsernameAvailable - Vérification disponibilité username
+PASS  testFindByUsernameSuccess - Recherche utilisateur par username
+PASS  testFindByUsernameNotFound - Exception si username inexistant
+PASS  testFindByEmailSuccess - Recherche utilisateur par email
+PASS  testFindByEmailNotFound - Exception si email inexistant
+PASS  testUpdateUserSuccess - Mise à jour profil utilisateur
+PASS  testUpdateUserUsernameConflict - Rejet si username déjà utilisé
+PASS  testUpdateUserEmailConflict - Rejet si email déjà utilisé
+PASS  testIsUsernameAvailable - Vérification disponibilité username
 ```
 
 ### Détail Tests JwtUtilTest (3 tests)
 
 ```
-✅ PASS  testGenerateToken - Génération token JWT valide
-✅ PASS  testExtractUsername - Extraction username depuis token
-✅ PASS  testValidateToken - Validation token JWT signé HMAC
+PASS  testGenerateToken - Génération token JWT valide
+PASS  testExtractUsername - Extraction username depuis token
+PASS  testValidateToken - Validation token JWT signé HMAC
 ```
 
 ---
@@ -121,6 +122,7 @@
 ## 2. Tests Frontend (Jest + Angular Testing Utilities)
 
 ### Résumé
+
 - **82 tests** (Jest)
 - **100% PASS**
 - **Temps exécution** : ~12.8 secondes
@@ -128,23 +130,23 @@
 
 ### Tests par Composant/Service
 
-| Test Suite | Tests | PASS | Duration |
-|---|---|---|---|
-| **AuthService** | 4 | ✅ 4 | 0.4s |
-| **UserService** | 3 | ✅ 3 | 0.3s |
-| **ArticleService** | 5 | ✅ 5 | 0.5s |
-| **ThemeService** | 4 | ✅ 4 | 0.4s |
-| **CommentService** | 3 | ✅ 3 | 0.3s |
-| **AuthGuard** | 2 | ✅ 2 | 0.2s |
-| **JwtInterceptor** | 3 | ✅ 3 | 0.3s |
-| **LoginComponent** | 8 | ✅ 8 | 1.2s |
-| **RegisterComponent** | 10 | ✅ 10 | 1.5s |
-| **FeedComponent** | 7 | ✅ 7 | 1.1s |
-| **ArticleDetailComponent** | 9 | ✅ 9 | 1.4s |
-| **CreateArticleComponent** | 6 | ✅ 6 | 0.8s |
-| **ThemesComponent** | 8 | ✅ 8 | 1.2s |
-| **ProfileComponent** | 10 | ✅ 10 | 1.6s |
-| **TOTAL** | **82** | **✅ 82** | **~12.8s** |
+| Test Suite                 | Tests  | PASS   | Duration   |
+| -------------------------- | ------ | ------ | ---------- |
+| **AuthService**            | 4      | 4      | 0.4s       |
+| **UserService**            | 3      | 3      | 0.3s       |
+| **ArticleService**         | 5      | 5      | 0.5s       |
+| **ThemeService**           | 4      | 4      | 0.4s       |
+| **CommentService**         | 3      | 3      | 0.3s       |
+| **AuthGuard**              | 2      | 2      | 0.2s       |
+| **JwtInterceptor**         | 3      | 3      | 0.3s       |
+| **LoginComponent**         | 8      | 8      | 1.2s       |
+| **RegisterComponent**      | 10     | 10     | 1.5s       |
+| **FeedComponent**          | 7      | 7      | 1.1s       |
+| **ArticleDetailComponent** | 9      | 9      | 1.4s       |
+| **CreateArticleComponent** | 6      | 6      | 0.8s       |
+| **ThemesComponent**        | 8      | 8      | 1.2s       |
+| **ProfileComponent**       | 10     | 10     | 1.6s       |
+| **TOTAL**                  | **82** | **82** | **~12.8s** |
 
 ### Tests AuthService (4 tests)
 
@@ -239,6 +241,7 @@
 ## 3. Coverage Backend (JaCoCo)
 
 ### Commande d'exécution
+
 ```bash
 cd back
 ./mvnw clean test
@@ -247,58 +250,64 @@ cd back
 
 ### Résultats Coverage (Screenshot JaCoCo)
 
-| Package | Coverage Instructions | Coverage Branches |
-|---|---|---|
-| **com.openclassrooms.mddapi.controller** | **60%** | 45% |
-| **com.openclassrooms.mddapi.config** | **37%** | 0% |
-| **com.openclassrooms.mddapi.service** | **63%** | 72% |
-| **com.openclassrooms.mddapi.dto** | **76%** | N/A |
-| **com.openclassrooms.mddapi.model** | **81%** | N/A |
-| **com.openclassrooms.mddapi.security** | **90%** | 77% |
-| **com.openclassrooms.mddapi** (root) | **37%** | N/A |
-| **TOTAL PROJET** | **64Package (d'après screenshot)
+| Package                                  | Coverage Instructions              | Coverage Branches |
+| ---------------------------------------- | ---------------------------------- | ----------------- |
+| **com.openclassrooms.mddapi.controller** | **60%**                            | 45%               |
+| **com.openclassrooms.mddapi.config**     | **37%**                            | 0%                |
+| **com.openclassrooms.mddapi.service**    | **63%**                            | 72%               |
+| **com.openclassrooms.mddapi.dto**        | **76%**                            | N/A               |
+| **com.openclassrooms.mddapi.model**      | **81%**                            | N/A               |
+| **com.openclassrooms.mddapi.security**   | **90%**                            | 77%               |
+| **com.openclassrooms.mddapi** (root)     | **37%**                            | N/A               |
+| **TOTAL PROJET**                         | \*\*64Package (d'après screenshot) |
 
 **Excellente couverture (≥ 80%)**
+
 - ✅ `security` : **90%** (77% branches) - JWT, filtres, authentification
 - ✅ `model` : **81%** - Entités JPA
 
 **Bonne couverture (70-79%)**
+
 - ✅ `dto` : **76%** - Data Transfer Objects
 
 **Acceptable (60-69%)**
-- 🟡 `service` : **63%** (72% branches) - Logique métier
-- 🟡 `controller` : **60%** (45% branches) - Endpoints REST
 
-**Amélioration nécessaire (< 60%)**
-- 🔴 `config` : **37%** (0% branches) - Configuration Spring
-- 🔴 Root package : **37%** - Classe principale MddApiApplication
-- 🔴 `ArticleService` : 60% (manque tests cas limites)
-- 🔴 `CommentService` : 55% (manque tests validations)
+- `service` : **63%** (72% branches) - Logique métier
+- `controller` : **60%** (45% branches) - Endpoints REST
+
+**À améliorer (< 60%)**
+
+- `config` : **37%** (0% branches) - Configuration Spring
+- Root package : **37%** - Classe principale MddApiApplication
+- `ArticleService` : 60% (manque tests cas limites)
+- `CommentService` : 55% (manque tests validations)
 
 ### Capture d'écran JaCoCo
 
-**📸 Screenshot à intégrer ici - Rapport JaCoCo Backend**
+**Screenshot à intégrer ici - Rapport JaCoCo Backend**
 
 Le rapport complet est disponible dans : `back/target/site/jacoco/index.html`
 
 **Vue d'ensemble du rapport** :
+
 - Coverage global : **64%** (751 instructions sur 2145)
 - Coverage branches : **54%** (43 sur 94)
 - Packages couverts :
   - ✅ **security** : 90% (meilleure couverture)
   - ✅ **model** : 81%
   - ✅ **dto** : 76%
-  - 🟡 **service** : 63%
-  - 🟡 **controller** : 60%
-  - 🔴 **config** : 37%
+  - `service` : 63%
+  - `controller` : 60%
+  - `config` : 37%
 
-> **📸 Insérer screenshot JaCoCo ici** (capture d'écran de `back/target/site/jacoco/index.html`)
+> **Insérer screenshot JaCoCo ici** (capture d'écran de `back/target/site/jacoco/index.html`)
 
 ---
 
 ## 4. Coverage Frontend (Jest)
 
 ### Commande d'exécution
+
 ```bash
 cd front
 npm test -- --coverage
@@ -306,53 +315,57 @@ npm test -- --coverage
 
 ### Résultats Coverage
 
-| Métrique | Valeur | Cible | Status |
-|---|---|---|---|
-| **Statements** | **82.8%** | 70% | ✅ |
-| **Branches** | **78.5%** | 70% | ✅ |
-| **Functions** | **85.3%** | 70% | ✅ |
-| **Lines** | **82.1%** | 70% | ✅ |
+| Métrique       | Valeur    | Cible | Status |
+| -------------- | --------- | ----- | ------ |
+| **Statements** | **82.8%** | 70%   | ✅     |
+| **Branches**   | **78.5%** | 70%   | ✅     |
+| **Functions**  | **85.3%** | 70%   | ✅     |
+| **Lines**      | **82.1%** | 70%   | ✅     |
 
 ### Coverage par Module
 
-| Module | Statements | Branches | Functions | Lines |
-|---|---|---|---|---|
-| **app/services/** | **89%** | 85% | 92% | 88% |
-| **app/components/** | **80%** | 76% | 83% | 79% |
-| **app/guards/** | **95%** | 90% | 100% | 94% |
-| **app/interceptors/** | **90%** | 88% | 95% | 89% |
-| **app/models/** | **100%** (Interfaces) | N/A | N/A | 100% |
+| Module                | Statements            | Branches | Functions | Lines |
+| --------------------- | --------------------- | -------- | --------- | ----- |
+| **app/services/**     | **89%**               | 85%      | 92%       | 88%   |
+| **app/components/**   | **80%**               | 76%      | 83%       | 79%   |
+| **app/guards/**       | **95%**               | 90%      | 100%      | 94%   |
+| **app/interceptors/** | **90%**               | 88%      | 95%       | 89%   |
+| **app/models/**       | **100%** (Interfaces) | N/A      | N/A       | 100%  |
 
 ### Analyse Coverage par Fichier
 
 **Excellente couverture (≥ 90%)**
+
 - ✅ `auth.service.ts` : 92%
 - ✅ `auth.guard.ts` : 95%
 - ✅ `jwt.interceptor.ts` : 90%
 - ✅ `user.service.ts` : 91%
 
 **Bonne couverture (80-89%)**
+
 - ✅ `article.service.ts` : 88%
 - ✅ `theme.service.ts` : 86%
 - ✅ `comment.service.ts` : 84%
 - ✅ `login.component.ts` : 85%
 - ✅ `register.component.ts` : 87%
 
-**Acceptable (70-79%)**
-- 🟡 `feed.component.ts` : 78%
-- 🟡 `article-detail.component.ts` : 76%
-- 🟡 `profile.component.ts` : 75%
+**À améliorer (70-79%)**
+
+- `feed.component.ts` : 78%
+- `article-detail.component.ts` : 76%
+- `profile.component.ts` : 75%
 
 ### Capture d'écran Jest
 
-> **📸 Voir screenshot** : `front/coverage/lcov-report/index.html`
+> **Voir screenshot** : `front/coverage/lcov-report/index.html`
 
 ![Coverage Frontend Jest](../front/coverage/lcov-report/index.html)
-**📸 Screenshot fourni - Rapport Jest Frontend**
+**Screenshot fourni - Rapport Jest Frontend**
 
 Le rapport complet est disponible dans : `front/coverage/lcov-report/index.html`
 
 **Vue d'ensemble du rapport** (d'après screenshot) :
+
 - Coverage global : **82.8%** (excellent)
 - Détail par module Angular :
   - ✅ **app/guards** : 100%
@@ -363,13 +376,14 @@ Le rapport complet est disponible dans : `front/coverage/lcov-report/index.html`
   - ✅ **app/pages/article** : 95.16% (59/62)
   - ✅ **app/pages/themes** : 92.1% (35/38)
   - ✅ **app/pages/profile** : 86.27% (44/51)
-  - 🟡 **app/pages/home** : 80% (8/10)
-  - 🟡 **app/pages/feed** : 72.97% (27/37)
-  - 🟡 **app/pages/login** : 71.05% (27/38)
-  - 🔴 **app/shared/components/header** : 70% (14/20)
-  - 🔴 **app** (root) : 10.63% (5/47) - App module principal
+  - `app/pages/home` : 80% (8/10)
+  - `app/pages/feed` : 72.97% (27/37)
+  - `app/pages/login` : 71.05% (27/38)
+  - `app/shared/components/header` : 70% (14/20)
+  - `app` (root) : 10.63% (5/47) - App module principal
 
 > **Note** : Les 2 screenshots fournis confirment les métriques de couverture.
+
 ## 5. Résultats Tests - Fichiers de Log
 
 ### Backend (Maven Surefire)
@@ -377,6 +391,7 @@ Le rapport complet est disponible dans : `front/coverage/lcov-report/index.html`
 **Localisation** : `back/target/surefire-reports/`
 
 **Fichiers générés** :
+
 ```
 TEST-com.openclassrooms.mddapi.controller.AuthControllerIntegrationTest.xml
 TEST-com.openclassrooms.mddapi.controller.UserControllerTest.xml
@@ -390,6 +405,7 @@ TEST-com.openclassrooms.mddapi.security.JwtUtilTest.xml
 **Format** : XML (JUnit format)
 
 **Contenu** :
+
 - Nombre de tests
 - Nombre de succès/échecs
 - Temps d'exécution
@@ -400,6 +416,7 @@ TEST-com.openclassrooms.mddapi.security.JwtUtilTest.xml
 **Localisation** : `front/coverage/`
 
 **Fichiers générés** :
+
 ```
 coverage-final.json
 clover.xml
@@ -483,12 +500,14 @@ open coverage/lcov-report/index.html
    - **Bénéfice** : Coverage E2E (100% success rate)
 
 ✅ **Coverage acceptable** :
+
 - Frontend : **82.8%** (excellent, > 70% requis)
 - Backend : **64%** (acceptable pour MVP, proche du seuil 70%)
 
 ✅ **Qualité tests** : Pattern AAA, mocking efficace, tests isolés, pas de flakiness
 
-✅ **Screenshots à intégrer** : 
+✅ **Screenshots à intégrer** :
+
 - 📸 Insérer capture JaCoCo dans section "3. Coverage Backend"
 - 📸 Insérer capture Jest dans section "4. Coverage Frontend"
 
@@ -499,6 +518,7 @@ open coverage/lcov-report/index.html
 ---
 
 **Note** : Les captures d'écran de couverture doivent être intégrées directement dans ce rapport markdown. Le dossier `docs/Captures_ecran_UI/` est réservé aux captures d'écran de l'interface utilisateur (pages de l'application).
+
 - Frontend : 82.8% (excellent)
 - Backend : 65% (acceptable pour MVP)
 

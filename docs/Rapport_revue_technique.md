@@ -6,18 +6,18 @@
 
 ---
 
-## Points Forts ✅
+## Points Forts
 
 ### Architecture
 
-✅ **Séparation claire des responsabilités**
+**Séparation claire des responsabilités**
 
 - Backend 3-couches : Controllers → Services → Repositories
 - Frontend modulaire par features
 - DTOs séparés des Entités
 - Services injectés via constructeur
 
-✅ **Organisation cohérente**
+**Organisation cohérente**
 
 - Structure package logique
 - Naming conventions respectées
@@ -25,20 +25,20 @@
 
 ### Sécurité
 
-✅ **Authentification robuste**
+**Authentification robuste**
 
 - JWT signé HMAC SHA-256
 - Tokens avec expiration 24h
 - Validation stricte
 
-✅ **Protection des données**
+**Protection des données**
 
 - Passwords hachés BCrypt
 - Pas de secrets en logs
 - CORS configuré restrictif
 - Validation @Valid sur endpoints
 
-✅ **Spring Security configuré**
+**Spring Security configuré**
 
 - Filtres actifs
 - Protection CSRF
@@ -46,21 +46,21 @@
 
 ### Code Quality
 
-✅ **Conventions respectées**
+**Conventions respectées**
 
 - camelCase (TypeScript)
 - PascalCase (Java)
 - Indentation cohérente
 - JavaDoc sur APIs publiques
 
-✅ **Code propre**
+**Code propre**
 
 - Pas de code mort
 - Pas de console.log en production
 - Pas de TODO/FIXME
 - Formatage uniforme
 
-✅ **Lisibilité**
+**Lisibilité**
 
 - Noms explicites
 - Méthodes courtes
@@ -69,25 +69,25 @@
 
 ### Tests
 
-✅ **125 tests, 100% PASS**
+**125 tests, 100% PASS**
 
 - 43 tests backend (JUnit 5 + Mockito)
 - 82 tests frontend (Jest + Angular testing)
 - Aucune flakiness
 
-✅ **Couverture acceptable**
+**Couverture acceptable**
 
 - Backend : 65% (acceptable pour MVP)
 - Frontend : 82.8% (excellent, > 70%)
 - Chemins critiques testés
 
-✅ **Pattern AAA appliqué**
+**Pattern AAA appliqué**
 
 - Arrange → Act → Assert
 - Tests isolés
 - Mocking efficace
 
-✅ **Tests bien nommés**
+**Tests bien nommés**
 
 - DisplayName français sur tests backend
 - Descriptions claires frontend
@@ -95,7 +95,7 @@
 
 ### Documentation
 
-✅ **Documentation complète**
+**Documentation complète**
 
 - README technique
 - Architecture documentée
@@ -103,14 +103,14 @@
 - Schémas de données
 - FAQ utilisateur (36 sections)
 
-✅ **Justifications fournies**
+**Justifications fournies**
 
 - Choix techniques expliqués
 - Decisions architecturales motivées
 
 ### Git
 
-✅ **Historique propre**
+**Historique propre**
 
 - 26 branches obsolètes supprimées
 - Commits explicites et atomiques
@@ -119,7 +119,7 @@
 
 ---
 
-## Points à Améliorer 🟡
+## Points à Améliorer
 
 ### Coverage Backend (65% vs 70% cible)
 
@@ -129,7 +129,7 @@
 - CommentService : 55%
 - Légèrement en-dessous du seuil 70%
 
-**Impact** : 🟡 Mineur (acceptable pour MVP)
+**Impact** : (Mineur - acceptable pour MVP)
 
 **Cause**
 
@@ -155,7 +155,7 @@
 - Peu de logs structurés
 - Difficile à debugger en production
 
-**Impact** : 🟡 Mineur
+**Impact** : (Mineur)
 
 **Cause**
 
@@ -181,7 +181,7 @@
 - Cypress supprimé (instabilité)
 - Seulement tests unitaires + intégration Spring
 
-**Impact** : 🟡 Mineur
+**Impact** : (Mineur)
 
 **Cause**
 
@@ -206,7 +206,7 @@
 - Pas de GitHub Actions configuré
 - Tests non automatisés à chaque push
 
-**Impact** : 🟡 Moyen
+**Impact** : (Moyen)
 
 **Cause**
 
@@ -231,7 +231,7 @@
 - Pas de Redis/Memcached
 - Thèmes rechargés à chaque appel
 
-**Impact** : 🔴 Bas (non-critique MVP)
+**Impact** : (Non-critique pour MVP)
 
 **Cause**
 
@@ -251,7 +251,7 @@
 
 ## Checklist Validation
 
-### Architecture ✅
+### Architecture
 
 - [x] Séparation front/back
 - [x] 3-couches backend
@@ -259,7 +259,7 @@
 - [x] Services injectés constructeur
 - [x] Guards et Interceptors front
 
-### Sécurité ✅
+### Sécurité
 
 - [x] JWT HMAC SHA-256
 - [x] Passwords BCrypt
@@ -268,7 +268,7 @@
 - [x] CORS restrictif
 - [x] Validation stricte
 
-### Code ✅
+### Code
 
 - [x] Conventions naming respectées
 - [x] JavaDoc sur public APIs
@@ -277,7 +277,7 @@
 - [x] Pas de code mort
 - [x] Formatage correct
 
-### Tests ✅
+### Tests
 
 - [x] 125 tests écrits
 - [x] 100% PASS
@@ -287,7 +287,7 @@
 - [x] Coverage back 65%
 - [x] Tests isolés
 
-### Documentation ✅
+### Documentation
 
 - [x] README complet
 - [x] Architecture documentée
@@ -296,7 +296,7 @@
 - [x] FAQ utilisateur
 - [x] Justifications techniques
 
-### Git ✅
+### Git
 
 - [x] Branches propres
 - [x] Commits explicites
@@ -325,7 +325,7 @@
 
 ## Verdict Final
 
-✅ **PROJET VALIDÉ**
+**PROJET VALIDÉ**
 
 - Code de qualité professionnelle
 - Respecte énoncé 100%
@@ -334,7 +334,7 @@
 - Sécurité robuste
 - Prêt pour soutenance OpenClassrooms
 
-**Status** : 🟢 Production-ready (avec caveats MVP)
+**Status** : Production-ready (avec caveats MVP)
 
 **Confiance** : 95%+
 
