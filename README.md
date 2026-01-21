@@ -169,8 +169,8 @@ cd back
 
 Résultats :
 
-- 34 tests exécutés - 100% de réussite
-- Couverture globale backend : 65%
+- 43 tests exécutés - 100% de réussite
+- Couverture globale backend : 64%
 - Rapport HTML : `back/target/site/jacoco/index.html`
 
 ### Frontend (Jest)
