@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.service;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.dto.UserUpdateRequest;
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -75,7 +79,7 @@ public class UserService {
 
     // Mise à jour du mot de passe si fourni
     if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
-        existingUser.setPassword(updatedUser.getPassword()); // encoder si nécessaire
+        existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
     }
     
         

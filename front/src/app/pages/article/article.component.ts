@@ -123,6 +123,11 @@ export class ArticleComponent implements OnInit, OnDestroy {
       next: comment => {
         this.comments.push(comment);
         this.commentForm.reset();
+        Object.keys(this.commentForm.controls).forEach(key => {
+          this.commentForm.get(key)?.setErrors(null);
+          this.commentForm.get(key)?.markAsUntouched();
+          this.commentForm.get(key)?.markAsPristine();
+        });
         this.isSubmitting = false;
         this.snackBar.open('Commentaire ajouté !', 'Fermer', { duration: 3000 });
       },
