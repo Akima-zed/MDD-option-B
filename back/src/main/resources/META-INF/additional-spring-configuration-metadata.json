@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Clé secrète pour signer et vérifier les tokens JWT (doit rester confidentielle)"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "Durée de validité des tokens JWT en millisecondes (86400000 = 24 heures)"
+  }
+]}

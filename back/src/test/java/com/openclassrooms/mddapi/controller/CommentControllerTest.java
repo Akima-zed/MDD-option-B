@@ -131,4 +131,52 @@ class CommentControllerTest {
                 .header("Authorization", "Bearer faketoken"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    @DisplayName("Doit retourner 404 si article n'existe pas")
+    void addComment_shouldReturn404_whenArticleNotFound() throws Exception {
+        CommentRequest req = new CommentRequest("Hello");
+
+        User user = new User();
+        user.setId(1L);
+
+        mockAuth(user);
+        when(articleService.findById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/articles/999/comments")
+                .header("Authorization", "Bearer faketoken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(req)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("POST /api/articles/{id}/comments - Doit créer un commentaire avec succès")
+    void addComment_shouldCreateComment_whenSuccess() throws Exception {
+        CommentRequest req = new CommentRequest("Great article!");
+
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testuser");
+
+        Article article = new Article();
+        article.setId(1L);
+        article.setTitle("Test Article");
+
+        Comment savedComment = new Comment();
+        savedComment.setId(1L);
+        savedComment.setContent("Great article!");
+        savedComment.setAuthor(user);
+        savedComment.setArticle(article);
+
+        mockAuth(user);
+        when(articleService.findById(1L)).thenReturn(Optional.of(article));
+        when(commentService.save(any(Comment.class))).thenReturn(savedComment);
+
+        mockMvc.perform(post("/api/articles/1/comments")
+                .header("Authorization", "Bearer faketoken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(req)))
+                .andExpect(status().isCreated());
+    }
 }
