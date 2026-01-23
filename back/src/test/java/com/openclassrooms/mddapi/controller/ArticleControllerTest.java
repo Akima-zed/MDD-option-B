@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.mddapi.dto.ArticleRequest;
 import com.openclassrooms.mddapi.model.Article;
+import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Theme;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.service.ArticleService;
@@ -20,11 +21,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,6 +107,75 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer faketoken")
                 .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("GET /api/articles/{id} - Doit retourner 404 lorsque article n'existe pas")
+    void testGetArticleById_NotFound() throws Exception {
+
+        when(articleService.findById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/articles/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET /api/articles/{id} - Doit retourner l'article si existe")
+    void testGetArticleById_Success() throws Exception {
+
+        User user = new User();
+        user.setId(2L);
+
+        Theme theme = new Theme();
+        theme.setId(1L);
+        theme.setNom("Java");
+
+        Article article = new Article();
+        article.setId(10L);
+        article.setTitle("Test Article");
+        article.setContent("Test Content");
+        article.setAuthor(user);
+        article.setTheme(theme);
+
+        when(articleService.findById(10L)).thenReturn(Optional.of(article));
+
+        mockMvc.perform(get("/api/articles/10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10));
+    }
+
+    @Test
+    @DisplayName("GET /api/articles - Doit retourner la liste des articles")
+    void testGetAllArticles() throws Exception {
+
+        User user = new User();
+        user.setId(2L);
+
+        Theme theme = new Theme();
+        theme.setId(1L);
+
+        Article article1 = new Article();
+        article1.setId(1L);
+        article1.setTitle("Article 1");
+        article1.setAuthor(user);
+        article1.setTheme(theme);
+
+        when(articleService.findAllOrderByCreatedAtDesc())
+                .thenReturn(Arrays.asList(article1));
+
+        mockMvc.perform(get("/api/articles"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("DELETE /api/articles/{id} - Doit retourner 403 sans authentification")
+    void testDeleteArticle_Unauthorized() throws Exception {
+
+        when(jwtUtil.validateToken(anyString())).thenReturn(false);
+
+        mockMvc.perform(delete("/api/articles/1")
+                .header("Authorization", "Bearer invalid"))
                 .andExpect(status().isForbidden());
     }
 }
