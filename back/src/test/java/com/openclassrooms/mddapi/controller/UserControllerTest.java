@@ -96,4 +96,30 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("julie2"));
     }
+
+    @Test
+    @DisplayName("Doit retourner 403 sans authentification (getCurrentUser)")
+    void getCurrentUser_shouldReturn403_whenNotAuthenticated() throws Exception {
+        when(jwtUtil.validateToken(anyString())).thenReturn(false);
+
+        mockMvc.perform(get("/api/users/me")
+                .header("Authorization", "Bearer invalid"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Doit retourner 403 sans authentification (updateUser)")
+    void updateUser_shouldReturn403_whenNotAuthenticated() throws Exception {
+        UserUpdateRequest updated = new UserUpdateRequest();
+        updated.setUsername("julie2");
+        updated.setEmail("new@test.com");
+
+        when(jwtUtil.validateToken(anyString())).thenReturn(false);
+
+        mockMvc.perform(put("/api/users/me")
+                .header("Authorization", "Bearer invalid")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(updated)))
+                .andExpect(status().isForbidden());
+    }
 }

@@ -1,6 +1,6 @@
 # Rapport de Revue Technique
 
-**Date** : 21 janvier 2026  
+**Date** : 23 janvier 2026  
 **Projet** : Monde de Dév (MDD)  
 **Scope** : Code complet (backend + frontend + tests + documentation)
 
@@ -69,17 +69,26 @@
 
 ### Tests
 
-**125 tests, 100% PASS**
+**172 tests, 100% PASS** ✅
 
-- 43 tests backend (JUnit 5 + Mockito)
-- 82 tests frontend (Jest + Angular testing)
-- Aucune flakiness
+- **90 tests backend** (JUnit 5 + Mockito) - 100% PASS
+- **82 tests frontend** (Jest + Angular testing) - 100% PASS
+- Aucune flakiness, tous les tests stables
 
-**Couverture acceptable**
+**Couverture excellente** ✅
 
-- Backend : 65% (acceptable pour MVP)
+- **Backend : 71%** (dépassement du seuil 70% requis) ✅
 - Frontend : 82.8% (excellent, > 70%)
 - Chemins critiques testés
+
+**Détail couverture backend:**
+
+- Controllers: 66%
+- Services: 92%
+- Security: 90%
+- Model: 83%
+- DTO: 76%
+- Config: 37%
 
 **Pattern AAA appliqué**
 
@@ -120,33 +129,6 @@
 ---
 
 ## Points à Améliorer
-
-### Coverage Backend (65% vs 70% cible)
-
-**Constat**
-
-- ArticleService : 60%
-- CommentService : 55%
-- Légèrement en-dessous du seuil 70%
-
-**Impact** : (Mineur - acceptable pour MVP)
-
-**Cause**
-
-- Certains cas edge non testés
-- Chemins alternatifs non couverts
-
-**Solution**
-
-- Ajouter 5-10 tests supplémentaires
-- Couvrir cas edge (validation, erreurs)
-- Focus sur ArticleService et CommentService
-
-**Effort estimé** : 3 heures
-
-**Bénéfice** : Coverage → 72%+
-
----
 
 ### Logging Minimal
 

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -56,7 +56,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner tous les articles")
+    @DisplayName("Doit retourner tous les articles")
     void testFindAll() {
         // ÉTANT DONNÉ
         List<Article> articles = Arrays.asList(testArticle);
@@ -73,7 +73,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("findAllOrderByCreatedAtDesc - Doit retourner les articles triés par date")
+    @DisplayName("Doit retourner les articles triés par date")
     void testFindAllOrderByCreatedAtDesc() {
         // ÉTANT DONNÉ
         List<Article> articles = Arrays.asList(testArticle);
@@ -89,7 +89,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner l'article si trouvé")
+    @DisplayName("Doit retourner l'article si trouvé")
     void testFindById_Success() {
         // ÉTANT DONNÉ
         when(articleRepository.findById(1L)).thenReturn(Optional.of(testArticle));
@@ -104,7 +104,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner Optional.empty si non trouvé")
+    @DisplayName("Doit retourner Optional.empty si non trouvé")
     void testFindById_NotFound() {
         // ÉTANT DONNÉ
         when(articleRepository.findById(999L)).thenReturn(Optional.empty());
@@ -118,7 +118,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("save - Doit enregistrer un article avec succès")
+    @DisplayName("Doit enregistrer un article avec succès")
     void testSave() {
         // ÉTANT DONNÉ
         when(articleRepository.save(any(Article.class))).thenReturn(testArticle);
@@ -133,7 +133,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("deleteById - Doit supprimer un article")
+    @DisplayName("Doit supprimer un article")
     void testDeleteById() {
         // QUAND
         articleService.deleteById(1L);
@@ -143,7 +143,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner une liste vide")
+    @DisplayName("Doit retourner une liste vide")
     void testFindAll_Empty() {
         // ÉTANT DONNÉ
         when(articleRepository.findAll()).thenReturn(Arrays.asList());
@@ -158,7 +158,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("save - Doit enregistrer plusieurs articles")
+    @DisplayName("Doit enregistrer plusieurs articles")
     void testSaveMultipleArticles() {
         // ÉTANT DONNÉ
         Article article2 = new Article();
@@ -180,5 +180,27 @@ class ArticleServiceTest {
         assertEquals("Test Article", result1.getTitle());
         assertEquals("Second Article", result2.getTitle());
         verify(articleRepository, times(2)).save(any(Article.class));
+    }
+
+    @Test
+    @DisplayName("Doit retourner plusieurs articles")
+    void testFindAll_MultipleArticles() {
+        // ÉTANT DONNÉ
+        Article article2 = new Article();
+        article2.setId(2L);
+        article2.setTitle("Second Article");
+
+        List<Article> articles = Arrays.asList(testArticle, article2);
+        when(articleRepository.findAll()).thenReturn(articles);
+
+        // QUAND
+        List<Article> result = articleService.findAll();
+
+        // ALORS
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Test Article", result.get(0).getTitle());
+        assertEquals("Second Article", result.get(1).getTitle());
+        verify(articleRepository, times(1)).findAll();
     }
 }

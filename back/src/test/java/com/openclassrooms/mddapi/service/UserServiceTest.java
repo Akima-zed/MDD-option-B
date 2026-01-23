@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -306,5 +308,44 @@ class UserServiceTest {
         assertEquals("new.email@example.com", result.getEmail());
         assertEquals("johndoe", result.getUsername()); // username inchangé
         verify(userRepository, times(1)).save(testUser);
+    }
+
+    @Test
+    @DisplayName("Doit retourner plusieurs utilisateurs")
+    void testFindAll_MultipleUsers() {
+        // ÉTANT DONNÉ
+        User user2 = new User();
+        user2.setId(2L);
+        user2.setUsername("janedoe");
+        user2.setEmail("jane@test.com");
+        user2.setPassword("hashedPassword456");
+
+        List<User> users = Arrays.asList(testUser, user2);
+        when(userRepository.findAll()).thenReturn(users);
+
+        // QUAND
+        List<User> result = userService.findAll();
+
+        // ALORS
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("johndoe", result.get(0).getUsername());
+        assertEquals("janedoe", result.get(1).getUsername());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Doit retourner une liste vide")
+    void testFindAll_Empty() {
+        // ÉTANT DONNÉ
+        when(userRepository.findAll()).thenReturn(Arrays.asList());
+
+        // QUAND
+        List<User> result = userService.findAll();
+
+        // ALORS
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(userRepository, times(1)).findAll();
     }
 }

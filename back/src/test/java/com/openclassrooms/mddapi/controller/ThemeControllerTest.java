@@ -47,7 +47,7 @@ class ThemeControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/themes - Doit retourner la liste des thèmes")
+    @DisplayName("Doit retourner la liste des thèmes")
     void getAllThemes_shouldReturnList() throws Exception {
         Theme t = new Theme();
         t.setId(10L);
@@ -62,7 +62,7 @@ class ThemeControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/themes/{id}/subscribe - Doit abonner l'utilisateur au thème")
+    @DisplayName("Doit abonner l'utilisateur au thème")
     void subscribe_shouldWork() throws Exception {
         User user = new User();
         user.setId(1L);
@@ -81,7 +81,7 @@ class ThemeControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/themes/{id}/unsubscribe - Doit désabonner l'utilisateur du thème")
+    @DisplayName("Doit désabonner l'utilisateur du thème")
     void unsubscribe_shouldWork() throws Exception {
         Theme theme = new Theme();
         theme.setId(10L);
@@ -98,5 +98,35 @@ class ThemeControllerTest {
                 .header("Authorization", "Bearer faketoken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Désabonnement réussi"));
+    }
+
+    @Test
+    @DisplayName("Doit retourner 403 sans authentification (subscribe)")
+    void subscribe_shouldReturn403_whenNotAuthenticated() throws Exception {
+        when(jwtUtil.validateToken(anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/api/themes/10/subscribe")
+                .header("Authorization", "Bearer invalid"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Doit retourner 403 sans authentification (unsubscribe)")
+    void unsubscribe_shouldReturn403_whenNotAuthenticated() throws Exception {
+        when(jwtUtil.validateToken(anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/api/themes/10/unsubscribe")
+                .header("Authorization", "Bearer invalid"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Doit retourner une liste vide")
+    void getAllThemes_shouldReturnEmptyList() throws Exception {
+        when(themeService.findAll()).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(get("/api/themes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 }

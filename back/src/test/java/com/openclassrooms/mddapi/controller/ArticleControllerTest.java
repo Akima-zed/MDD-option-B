@@ -3,7 +3,6 @@ package com.openclassrooms.mddapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.mddapi.dto.ArticleRequest;
 import com.openclassrooms.mddapi.model.Article;
-import com.openclassrooms.mddapi.model.Comment;
 import com.openclassrooms.mddapi.model.Theme;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.service.ArticleService;
@@ -22,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,7 +54,7 @@ class ArticleControllerTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @DisplayName("POST /api/articles - Doit créer un article lorsque l'utilisateur est authentifié")
+    @DisplayName("Doit créer un article lorsque l'utilisateur est authentifié")
     void testCreateArticle_Success() throws Exception {
 
         ArticleRequest request = new ArticleRequest();
@@ -91,7 +91,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/articles - Doit retourner 403 lorsque l'utilisateur n'est pas trouvé")
+    @DisplayName("Doit retourner 403 lorsque l'utilisateur n'est pas trouvé")
     void testCreateArticle_UserNotFound() throws Exception {
 
         ArticleRequest request = new ArticleRequest();
@@ -111,7 +111,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/articles/{id} - Doit retourner 404 lorsque article n'existe pas")
+    @DisplayName("Doit retourner 404 lorsque article n'existe pas")
     void testGetArticleById_NotFound() throws Exception {
 
         when(articleService.findById(999L)).thenReturn(Optional.empty());
@@ -121,7 +121,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/articles/{id} - Doit retourner l'article si existe")
+    @DisplayName("Doit retourner l'article si existe")
     void testGetArticleById_Success() throws Exception {
 
         User user = new User();
@@ -146,7 +146,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/articles - Doit retourner la liste des articles")
+    @DisplayName("Doit retourner la liste des articles")
     void testGetAllArticles() throws Exception {
 
         User user = new User();
@@ -169,7 +169,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("DELETE /api/articles/{id} - Doit retourner 403 sans authentification")
+    @DisplayName("Doit retourner 403 sans authentification")
     void testDeleteArticle_Unauthorized() throws Exception {
 
         when(jwtUtil.validateToken(anyString())).thenReturn(false);
@@ -177,5 +177,43 @@ class ArticleControllerTest {
         mockMvc.perform(delete("/api/articles/1")
                 .header("Authorization", "Bearer invalid"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Doit retourner une liste vide")
+    void testGetAllArticles_Empty() throws Exception {
+
+        when(articleService.findAllOrderByCreatedAtDesc())
+                .thenReturn(Arrays.asList());
+
+        mockMvc.perform(get("/api/articles"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("Doit retourner les commentaires d'un article")
+    void testGetArticleComments_Success() throws Exception {
+
+        User user = new User();
+        user.setId(2L);
+        user.setUsername("author");
+
+        Theme theme = new Theme();
+        theme.setId(1L);
+        theme.setNom("Java");
+
+        Article article = new Article();
+        article.setId(10L);
+        article.setTitle("Test Article");
+        article.setContent("Test Content");
+        article.setAuthor(user);
+        article.setTheme(theme);
+        article.setComments(new HashSet<>());
+
+        when(articleService.findById(10L)).thenReturn(Optional.of(article));
+
+        mockMvc.perform(get("/api/articles/10/comments"))
+                .andExpect(status().isOk());
     }
 }

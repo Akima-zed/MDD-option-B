@@ -91,7 +91,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/auth/register - Doit rejeter un email déjà utilisé")
+    @DisplayName("Doit retourner 400 si email déjà utilisé")
     void testRegister_DuplicateEmail() throws Exception {
         // Given
         RegisterRequest request = new RegisterRequest();
@@ -221,5 +221,28 @@ class AuthControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("fake-jwt-token"));
+    }
+
+    @Test
+    @DisplayName("Doit retourner 400 si email invalide")
+    void testRegister_InvalidEmail() throws Exception {
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("testuser");
+        request.setEmail("invalid-email");
+        request.setPassword("Password123!");
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Doit retourner 400 si body vide")
+    void testLogin_EmptyBody() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isBadRequest());
     }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -42,7 +42,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner tous les thèmes")
+    @DisplayName("Doit retourner tous les thèmes")
     void testFindAll() {
         // ÉTANT DONNÉ
         List<Theme> themes = Arrays.asList(testTheme);
@@ -59,7 +59,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner le thème si trouvé")
+    @DisplayName("Doit retourner le thème si trouvé")
     void testFindById_Success() {
         // ÉTANT DONNÉ
         when(themeRepository.findById(1L)).thenReturn(Optional.of(testTheme));
@@ -74,7 +74,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner Optional.empty si non trouvé")
+    @DisplayName("Doit retourner Optional.empty si non trouvé")
     void testFindById_NotFound() {
         // ÉTANT DONNÉ
         when(themeRepository.findById(999L)).thenReturn(Optional.empty());
@@ -88,7 +88,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("save - Doit enregistrer un thème avec succès")
+    @DisplayName("Doit enregistrer un thème avec succès")
     void testSave() {
         // ÉTANT DONNÉ
         when(themeRepository.save(any(Theme.class))).thenReturn(testTheme);
@@ -103,7 +103,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner une liste vide")
+    @DisplayName("Doit retourner une liste vide")
     void testFindAll_Empty() {
         // ÉTANT DONNÉ
         when(themeRepository.findAll()).thenReturn(Arrays.asList());
@@ -118,12 +118,36 @@ class ThemeServiceTest {
     }
 
     @Test
-    @DisplayName("deleteById - Doit supprimer un thème")
+    @DisplayName("Doit supprimer un thème")
     void testDeleteById() {
         // QUAND
         themeService.deleteById(1L);
 
         // ALORS
         verify(themeRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("Doit enregistrer plusieurs thèmes")
+    void testSaveMultipleThemes() {
+        // ÉTANT DONNÉ
+        Theme theme2 = new Theme();
+        theme2.setId(2L);
+        theme2.setNom("Angular");
+
+        when(themeRepository.save(any(Theme.class)))
+                .thenReturn(testTheme)
+                .thenReturn(theme2);
+
+        // QUAND
+        Theme result1 = themeService.save(testTheme);
+        Theme result2 = themeService.save(theme2);
+
+        // ALORS
+        assertNotNull(result1);
+        assertNotNull(result2);
+        assertEquals("Java", result1.getNom());
+        assertEquals("Angular", result2.getNom());
+        verify(themeRepository, times(2)).save(any(Theme.class));
     }
 }

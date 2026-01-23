@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -55,7 +55,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner tous les commentaires")
+    @DisplayName("Doit retourner tous les commentaires")
     void testFindAll() {
         // ÉTANT DONNÉ
         List<Comment> comments = Arrays.asList(testComment);
@@ -72,7 +72,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner le commentaire si trouvé")
+    @DisplayName("Doit retourner le commentaire si trouvé")
     void testFindById_Success() {
         // ÉTANT DONNÉ
         when(commentRepository.findById(1L)).thenReturn(Optional.of(testComment));
@@ -87,7 +87,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("findById - Doit retourner Optional.empty si non trouvé")
+    @DisplayName("Doit retourner Optional.empty si non trouvé")
     void testFindById_NotFound() {
         // ÉTANT DONNÉ
         when(commentRepository.findById(999L)).thenReturn(Optional.empty());
@@ -101,7 +101,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("save - Doit enregistrer un commentaire avec succès")
+    @DisplayName("Doit enregistrer un commentaire avec succès")
     void testSave() {
         // ÉTANT DONNÉ
         when(commentRepository.save(any(Comment.class))).thenReturn(testComment);
@@ -116,7 +116,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("deleteById - Doit supprimer un commentaire")
+    @DisplayName("Doit supprimer un commentaire")
     void testDeleteById() {
         // QUAND
         commentService.deleteById(1L);
@@ -126,7 +126,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("findAll - Doit retourner une liste vide")
+    @DisplayName("Doit retourner une liste vide")
     void testFindAll_Empty() {
         // ÉTANT DONNÉ
         when(commentRepository.findAll()).thenReturn(Arrays.asList());
@@ -138,5 +138,29 @@ class CommentServiceTest {
         assertNotNull(result);
         assertEquals(0, result.size());
         verify(commentRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Doit enregistrer plusieurs commentaires")
+    void testSaveMultipleComments() {
+        // ÉTANT DONNÉ
+        Comment comment2 = new Comment();
+        comment2.setId(2L);
+        comment2.setContent("Second comment");
+
+        when(commentRepository.save(any(Comment.class)))
+                .thenReturn(testComment)
+                .thenReturn(comment2);
+
+        // QUAND
+        Comment result1 = commentService.save(testComment);
+        Comment result2 = commentService.save(comment2);
+
+        // ALORS
+        assertNotNull(result1);
+        assertNotNull(result2);
+        assertEquals("Test comment", result1.getContent());
+        assertEquals("Second comment", result2.getContent());
+        verify(commentRepository, times(2)).save(any(Comment.class));
     }
 }
